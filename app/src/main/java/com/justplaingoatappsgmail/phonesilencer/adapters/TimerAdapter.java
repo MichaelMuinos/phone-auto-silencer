@@ -1,6 +1,5 @@
 package com.justplaingoatappsgmail.phonesilencer.adapters;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,18 +12,19 @@ import com.justplaingoatappsgmail.phonesilencer.models.Timer;
 import java.util.List;
 
 import butterknife.BindView;
+import io.realm.RealmResults;
 
 public class TimerAdapter extends RecyclerView.Adapter<TimerAdapter.TimerViewHolder> {
 
-    private List<Timer> timerList;
+    private RealmResults<Timer> timerList;
 
-    public TimerAdapter(List<Timer> timerList) {
+    public TimerAdapter(RealmResults<Timer> timerList) {
         this.timerList = timerList;
     }
 
     @Override
     public TimerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.timer_post, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.timer_post_item, parent, false);
         TimerViewHolder timerViewHolder = new TimerViewHolder(view);
         return timerViewHolder;
     }

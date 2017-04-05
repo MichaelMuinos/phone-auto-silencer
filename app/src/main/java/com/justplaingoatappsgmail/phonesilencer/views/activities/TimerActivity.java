@@ -2,17 +2,23 @@ package com.justplaingoatappsgmail.phonesilencer.views.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import com.justplaingoatappsgmail.phonesilencer.R;
+import com.justplaingoatappsgmail.phonesilencer.adapters.TimerAdapter;
+import com.justplaingoatappsgmail.phonesilencer.models.Timer;
+
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
+import io.realm.Realm;
+import io.realm.RealmResults;
 
 public class TimerActivity extends AppCompatActivity {
 
@@ -22,7 +28,7 @@ public class TimerActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_timer);
 
         // bind views
         ButterKnife.bind(this);
@@ -30,7 +36,13 @@ public class TimerActivity extends AppCompatActivity {
         // set action bar
         setSupportActionBar(toolbar);
 
+        Realm.init(this);
 
+        TimerAdapter timerAdapter = new TimerAdapter(Realm.getDefaultInstance().where(Timer.class).findAll());
+        recyclerView.setAdapter(timerAdapter);
+        LinearLayoutManager llm = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(llm);
+        timerAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -56,8 +68,10 @@ public class TimerActivity extends AppCompatActivity {
     }
 
     // floating action button on click listener method
+    @OnClick(R.id.fab)
     public void fabOnClick() {
-//        Intent intent = new Intent()
+        Intent intent = new Intent(TimerActivity.this, TimerPostActivity.class);
+        startActivity(intent);
     }
 
 }
