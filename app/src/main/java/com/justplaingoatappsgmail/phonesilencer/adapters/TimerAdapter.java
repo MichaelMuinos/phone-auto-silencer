@@ -1,25 +1,30 @@
 package com.justplaingoatappsgmail.phonesilencer.adapters;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.justplaingoatappsgmail.phonesilencer.CustomListeners.TimerRecyclerViewClickListener;
 import com.justplaingoatappsgmail.phonesilencer.R;
 import com.justplaingoatappsgmail.phonesilencer.models.Timer;
 
-import java.util.List;
-
 import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import io.realm.RealmResults;
 
 public class TimerAdapter extends RecyclerView.Adapter<TimerAdapter.TimerViewHolder> {
 
+    public static TimerRecyclerViewClickListener listener;
+    
     private RealmResults<Timer> timerList;
 
-    public TimerAdapter(RealmResults<Timer> timerList) {
+    public TimerAdapter(RealmResults<Timer> timerList, TimerRecyclerViewClickListener listener) {
         this.timerList = timerList;
+        this.listener = listener;
     }
 
     @Override
@@ -42,12 +47,19 @@ public class TimerAdapter extends RecyclerView.Adapter<TimerAdapter.TimerViewHol
         return timerList.size();
     }
 
-    static class TimerViewHolder extends RecyclerView.ViewHolder {
+    public static class TimerViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.timer_post_name) TextView timerPostName;
 
         public TimerViewHolder(View itemView) {
             super(itemView);
+            ButterKnife.bind(this, itemView);
+        }
+
+        @OnClick(R.id.card_view)
+        public void cardViewOnClick() {
+            listener.timerRecyclerViewOnClick(this.getLayoutPosition());
+            Log.d("click", "clicked: " + String.valueOf(this.getLayoutPosition()));
         }
 
     }

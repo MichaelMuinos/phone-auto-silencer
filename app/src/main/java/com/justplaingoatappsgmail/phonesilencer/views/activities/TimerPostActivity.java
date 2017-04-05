@@ -1,11 +1,14 @@
 package com.justplaingoatappsgmail.phonesilencer.views.activities;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.EditText;
 
+import com.google.gson.Gson;
 import com.justplaingoatappsgmail.phonesilencer.R;
 import com.justplaingoatappsgmail.phonesilencer.models.Timer;
 
@@ -30,6 +33,12 @@ public class TimerPostActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
         realm = Realm.getDefaultInstance();
+
+        Bundle extras = getIntent().getExtras();
+        if(extras != null) {
+            Timer timer = new Gson().fromJson(extras.getString("obj"), Timer.class);
+            timerName.setText(timer.getTimerName());
+        }
     }
 
     // save button on click listener
@@ -48,6 +57,11 @@ public class TimerPostActivity extends AppCompatActivity {
                 }
             }
         });
+
+        Intent returnIntent = new Intent();
+//        returnIntent.putExtra("choice", TimerActivity.CHOICE_GIVEN);
+        setResult(Activity.RESULT_OK, returnIntent);
+        finish();
     }
 
     @Override

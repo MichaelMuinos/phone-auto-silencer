@@ -35,4 +35,7 @@ dependencies {
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
     compile 'com.google.dagger:dagger:2.10'
     annotationProcessor "com.google.dagger:dagger-compiler:2.10"
+
+    // json serialization
+    compile 'com.google.code.gson:gson:2.8.0'
 }
