@@ -8,9 +8,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.EditText;
 
-import com.google.gson.Gson;
 import com.justplaingoatappsgmail.phonesilencer.R;
-import com.justplaingoatappsgmail.phonesilencer.models.Timer;
+import com.justplaingoatappsgmail.phonesilencer.models.Event;
 
 import java.util.UUID;
 
@@ -20,7 +19,7 @@ import butterknife.OnClick;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
-public class TimerPostActivity extends AppCompatActivity {
+public class EventPostActivity extends AppCompatActivity {
 
     @BindView(R.id.timer_name) EditText timerName;
 
@@ -34,10 +33,12 @@ public class TimerPostActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         realm = Realm.getDefaultInstance();
 
+        Log.d("click", "post on create");
+
         Bundle extras = getIntent().getExtras();
         if(extras != null) {
-            Timer timer = new Gson().fromJson(extras.getString("obj"), Timer.class);
-            timerName.setText(timer.getTimerName());
+            String name = extras.getString("objectName");
+            timerName.setText(name);
         }
     }
 
@@ -47,19 +48,19 @@ public class TimerPostActivity extends AppCompatActivity {
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                // create a timer object
-                Timer timer = realm.createObject(Timer.class, UUID.randomUUID().toString());
-                timer.setTimerName(timerName.getText().toString());
+                // create a event object
+                Event event = realm.createObject(Event.class, UUID.randomUUID().toString());
+                event.setTimerName(timerName.getText().toString());
 
-                RealmResults<Timer> timers = realm.where(Timer.class).findAll();
-                for(Timer t : timers) {
+                RealmResults<Event> events = realm.where(Event.class).findAll();
+                for(Event t : events) {
                     Log.d("Realm", t.getTimerName());
                 }
             }
         });
 
         Intent returnIntent = new Intent();
-//        returnIntent.putExtra("choice", TimerActivity.CHOICE_GIVEN);
+//        returnIntent.putExtra("choice", EventActivity.CHOICE_GIVEN);
         setResult(Activity.RESULT_OK, returnIntent);
         finish();
     }

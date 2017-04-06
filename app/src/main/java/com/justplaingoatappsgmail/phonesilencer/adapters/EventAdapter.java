@@ -7,23 +7,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.justplaingoatappsgmail.phonesilencer.CustomListeners.TimerRecyclerViewClickListener;
+import com.justplaingoatappsgmail.phonesilencer.customlisteners.EventRecyclerViewClickListener;
 import com.justplaingoatappsgmail.phonesilencer.R;
-import com.justplaingoatappsgmail.phonesilencer.models.Timer;
+import com.justplaingoatappsgmail.phonesilencer.models.Event;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.realm.RealmResults;
 
-public class TimerAdapter extends RecyclerView.Adapter<TimerAdapter.TimerViewHolder> {
+public class EventAdapter extends RecyclerView.Adapter<EventAdapter.TimerViewHolder> {
 
-    public static TimerRecyclerViewClickListener listener;
+    public static EventRecyclerViewClickListener listener;
     
-    private RealmResults<Timer> timerList;
+    private RealmResults<Event> eventList;
 
-    public TimerAdapter(RealmResults<Timer> timerList, TimerRecyclerViewClickListener listener) {
-        this.timerList = timerList;
+    public EventAdapter(RealmResults<Event> eventList, EventRecyclerViewClickListener listener) {
+        this.eventList = eventList;
         this.listener = listener;
     }
 
@@ -37,14 +37,14 @@ public class TimerAdapter extends RecyclerView.Adapter<TimerAdapter.TimerViewHol
     @Override
     public void onBindViewHolder(TimerViewHolder holder, int position) {
         // grab timer object
-        Timer timerObject = timerList.get(position);
+        Event eventObject = eventList.get(position);
         // set timer name
-        holder.timerPostName.setText(timerObject.getTimerName());
+        holder.timerPostName.setText(eventObject.getTimerName());
     }
 
     @Override
     public int getItemCount() {
-        return timerList.size();
+        return eventList.size();
     }
 
     public static class TimerViewHolder extends RecyclerView.ViewHolder {
@@ -58,8 +58,7 @@ public class TimerAdapter extends RecyclerView.Adapter<TimerAdapter.TimerViewHol
 
         @OnClick(R.id.card_view)
         public void cardViewOnClick() {
-            listener.timerRecyclerViewOnClick(this.getLayoutPosition());
-            Log.d("click", "clicked: " + String.valueOf(this.getLayoutPosition()));
+            listener.eventRecyclerViewOnClick(this.getLayoutPosition());
         }
 
     }

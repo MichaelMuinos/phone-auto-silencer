@@ -11,11 +11,10 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.google.gson.Gson;
-import com.justplaingoatappsgmail.phonesilencer.CustomListeners.TimerRecyclerViewClickListener;
+import com.justplaingoatappsgmail.phonesilencer.customlisteners.EventRecyclerViewClickListener;
 import com.justplaingoatappsgmail.phonesilencer.R;
-import com.justplaingoatappsgmail.phonesilencer.adapters.TimerAdapter;
-import com.justplaingoatappsgmail.phonesilencer.models.Timer;
+import com.justplaingoatappsgmail.phonesilencer.adapters.EventAdapter;
+import com.justplaingoatappsgmail.phonesilencer.models.Event;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -23,15 +22,15 @@ import butterknife.OnClick;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
-public class TimerActivity extends AppCompatActivity implements TimerRecyclerViewClickListener {
+public class EventActivity extends AppCompatActivity implements EventRecyclerViewClickListener {
 
     public static final int CHOICE_GIVEN = 9000;
 
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.timer_recycler_view) RecyclerView recyclerView;
 
-    private TimerAdapter timerAdapter;
-    private RealmResults<Timer> timerList;
+    private EventAdapter eventAdapter;
+    private RealmResults<Event> eventList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,9 +45,9 @@ public class TimerActivity extends AppCompatActivity implements TimerRecyclerVie
 
         Realm.init(this);
 
-        timerList = Realm.getDefaultInstance().where(Timer.class).findAll();
-        timerAdapter = new TimerAdapter(timerList, this);
-        recyclerView.setAdapter(timerAdapter);
+        eventList = Realm.getDefaultInstance().where(Event.class).findAll();
+        eventAdapter = new EventAdapter(eventList, this);
+        recyclerView.setAdapter(eventAdapter);
         LinearLayoutManager llm = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(llm);
     }
@@ -64,7 +63,7 @@ public class TimerActivity extends AppCompatActivity implements TimerRecyclerVie
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == CHOICE_GIVEN) {
             if(resultCode == Activity.RESULT_OK) {
-                timerAdapter.notifyDataSetChanged();
+                eventAdapter.notifyDataSetChanged();
             }
         }
     }
@@ -87,16 +86,17 @@ public class TimerActivity extends AppCompatActivity implements TimerRecyclerVie
     // floating action button on click listener method
     @OnClick(R.id.fab)
     public void fabOnClick() {
-        Intent intent = new Intent(TimerActivity.this, TimerPostActivity.class);
+        Intent intent = new Intent(EventActivity.this, EventPostActivity.class);
         startActivityForResult(intent, CHOICE_GIVEN);
     }
 
     @Override
-    public void timerRecyclerViewOnClick(int position) {
-        Log.d("click", "in timer activity");
-        Timer timer = timerList.get(position);
-        Intent intent = new Intent(TimerActivity.this, TimerPostActivity.class);
-        intent.putExtra("obj", new Gson().toJson(timer));
+    public void eventRecyclerViewOnClick(int position) {
+        Log.d("click", "in event activity");
+        Event event = eventList.get(position);
+        Log.d("click", event.getTimerName());
+        Intent intent = new Intent(EventActivity.this, EventPostActivity.class);
+        intent.putExtra("objectName", event.getTimerName());
         startActivityForResult(intent, CHOICE_GIVEN);
     }
 

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.justplaingoatappsgmail.phonesilencer.views.activities.TimerActivity">
+    tools:context="com.justplaingoatappsgmail.phonesilencer.views.activities.EventActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -30,7 +30,7 @@
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_vertical_margin"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:context="com.justplaingoatappsgmail.phonesilencer.views.activities.TimerActivity" />
+        tools:context="com.justplaingoatappsgmail.phonesilencer.views.activities.EventActivity" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"

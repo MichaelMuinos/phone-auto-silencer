@@ -38,4 +38,7 @@ dependencies {
 
     // json serialization
     compile 'com.google.code.gson:gson:2.8.0'
+
+    // time picker
+    compile 'com.wdullaer:materialdatetimepicker:3.1.3'
 }
