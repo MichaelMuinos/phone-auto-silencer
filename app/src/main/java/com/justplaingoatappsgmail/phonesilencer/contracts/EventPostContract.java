@@ -10,11 +10,13 @@ public interface EventPostContract {
         void showDaysSelectedError();
         void showRingerModeError();
         void showRepeatOptionError();
+        void returnToPreviousActivity();
     }
 
     interface Presenter {
         // might need to pass all attributes through method
-        boolean saveTimer();
+        boolean saveTimer(String title);
+        void closeRealmInstance();
     }
 
 }

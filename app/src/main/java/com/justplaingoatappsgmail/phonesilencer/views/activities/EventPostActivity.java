@@ -10,19 +10,19 @@ import android.widget.Spinner;
 
 import com.justplaingoatappsgmail.phonesilencer.R;
 import com.justplaingoatappsgmail.phonesilencer.contracts.EventPostContract;
-import com.justplaingoatappsgmail.phonesilencer.models.Event;
-import java.util.UUID;
+
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import io.realm.Realm;
 
-public class EventPostActivity extends AppCompatActivity {
+public class EventPostActivity extends AppCompatActivity implements EventPostContract.View {
 
     @BindView(R.id.timer_name) EditText timerName;
     @BindView(R.id.repeat_spinner) Spinner repeatSpinner;
 
-    private Realm realm;
+    @Inject EventPostContract.Presenter presenter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -30,7 +30,6 @@ public class EventPostActivity extends AppCompatActivity {
         setContentView(R.layout.activity_timer_post);
 
         ButterKnife.bind(this);
-        realm = Realm.getDefaultInstance();
 
         Bundle extras = getIntent().getExtras();
         if(extras != null) {
@@ -43,15 +42,46 @@ public class EventPostActivity extends AppCompatActivity {
     // save button on click listener
     @OnClick(R.id.save_button)
     public void saveOnClick() {
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                // create a event object
-                Event event = realm.createObject(Event.class, UUID.randomUUID().toString());
-                event.setTimerName(timerName.getText().toString());
-            }
-        });
+        presenter.saveTimer(timerName.getText().toString());
+    }
 
+    @Override
+    public void showTimerNameError() {
+
+    }
+
+    @Override
+    public void showTimerNameConflictError() {
+
+    }
+
+    @Override
+    public void showStartTimeError() {
+
+    }
+
+    @Override
+    public void showEndTimeError() {
+
+    }
+
+    @Override
+    public void showDaysSelectedError() {
+
+    }
+
+    @Override
+    public void showRingerModeError() {
+
+    }
+
+    @Override
+    public void showRepeatOptionError() {
+
+    }
+
+    @Override
+    public void returnToPreviousActivity() {
         Intent returnIntent = new Intent();
 //        returnIntent.putExtra("choice", EventActivity.CHOICE_GIVEN);
         setResult(Activity.RESULT_OK, returnIntent);
@@ -61,7 +91,7 @@ public class EventPostActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        realm.close();
+        presenter.closeRealmInstance();
     }
 
 }

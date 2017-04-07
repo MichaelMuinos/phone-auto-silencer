@@ -4,9 +4,12 @@ import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+
 import javax.inject.Singleton;
+
 import dagger.Module;
 import dagger.Provides;
+import io.realm.Realm;
 
 @Module
 public class ApplicationModule {
@@ -27,6 +30,12 @@ public class ApplicationModule {
     @Singleton
     public SharedPreferences provideSharedPreferences(Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context);
+    }
+
+    @Provides
+    @Singleton
+    public Realm provideRealmInstance() {
+        return Realm.getDefaultInstance();
     }
 
 }
