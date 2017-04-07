@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -10,20 +11,23 @@
         android:layout_margin="@dimen/activity_horizontal_margin">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/event_post_name"
-            android:textColor="@color/colorPrimary" />
+            android:textColor="@color/colorPrimary"
+            android:textSize="20sp"
+            android:layout_marginBottom="5dp"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_marginBottom="10dp">
 
             <ImageView
-                android:layout_width="55dp"
-                android:layout_height="44dp"
-                android:src="@drawable/nametag"/>
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@drawable/nametag" />
 
             <EditText
                 android:id="@+id/timer_name"
@@ -43,7 +47,194 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/time_post"
-            android:textColor="@color/colorPrimary" />
+            android:textColor="@color/colorPrimary"
+            android:textSize="20sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                app:srcCompat="@drawable/clock" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/start_time_post" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/end_time_post" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dip"
+            android:layout_alignParentTop="true"
+            android:layout_centerVertical="true"
+            android:background="@color/mdtp_accent_color" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/schedule_post"
+            android:textColor="@color/colorPrimary"
+            android:textSize="20sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="1"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@drawable/calender" />
+
+            <Spinner
+                android:id="@+id/repeat_spinner"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="0.1"
+                android:entries="@array/repeat_array"
+                android:paddingLeft="20dp"
+                android:prompt="@string/repeat_prompt"
+                android:spinnerMode="dialog" />
+
+            <android.support.v4.widget.Space
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="0.4"/>
+
+            <CheckBox
+                android:id="@+id/checkBox"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5"
+                android:text="All Days" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="7">
+
+            <TextView
+                android:id="@+id/monday_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/rounded_text_view"
+                android:gravity="center"
+                android:text="@string/monday_abrev"
+                android:textColor="@android:color/white"
+                android:textSize="15sp"
+                android:layout_marginRight="2dp"/>
+
+            <TextView
+                android:id="@+id/tuesday_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/rounded_text_view"
+                android:gravity="center"
+                android:text="@string/tuesday_abrev"
+                android:textColor="@android:color/white"
+                android:textSize="15sp"
+                android:layout_marginRight="2dp"/>
+
+            <TextView
+                android:id="@+id/wednesday_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/rounded_text_view"
+                android:gravity="center"
+                android:text="@string/wednesday_abrev"
+                android:textColor="@android:color/white"
+                android:textSize="15sp"
+                android:layout_marginRight="2dp"/>
+
+            <TextView
+                android:id="@+id/thursday_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/rounded_text_view"
+                android:gravity="center"
+                android:text="@string/thursday_abrev"
+                android:textColor="@android:color/white"
+                android:textSize="15sp"
+                android:layout_marginRight="2dp"/>
+
+            <TextView
+                android:id="@+id/friday_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/rounded_text_view"
+                android:gravity="center"
+                android:text="@string/friday_abrev"
+                android:textColor="@android:color/white"
+                android:textSize="15sp"
+                android:layout_marginRight="2dp"/>
+
+            <TextView
+                android:id="@+id/saturday_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="15sp"
+                android:background="@drawable/rounded_text_view"
+                android:textColor="@android:color/white"
+                android:gravity="center"
+                android:text="@string/saturday_abrev"
+                android:layout_weight="1"
+                android:layout_marginRight="2dp"/>
+
+            <TextView
+                android:id="@+id/sunday_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rounded_text_view"
+                android:gravity="center"
+                android:text="@string/sunday_abrev"
+                android:textColor="@android:color/white"
+                android:textSize="15sp"
+                android:layout_weight="1"/>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dip"
+            android:layout_alignParentTop="true"
+            android:layout_centerVertical="true"
+            android:background="@color/mdtp_accent_color" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/ringer_post"
+            android:textColor="@color/colorPrimary"
+            android:textSize="20sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -52,32 +243,26 @@
 
             <ImageView
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent" />
-
-            <TextView
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/start_time_post" />
+                android:src="@drawable/ringer" />
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="Vibrate" />
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="Silence" />
 
         </LinearLayout>
 
-        <LinearLayout
+        <Button
+            android:id="@+id/save_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/end_time_post" />
-
-        </LinearLayout>
-
-        <!--<Button-->
-            <!--android:id="@+id/save_button"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:text="Save" />-->
+            android:text="Save" />
 
     </LinearLayout>
 

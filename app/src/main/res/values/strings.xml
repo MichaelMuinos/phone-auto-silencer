@@ -5,4 +5,23 @@
     <string name="start_time_post">Start Time</string>
     <string name="end_time_post">End Time</string>
     <string name="time_post">Time</string>
+    <string name="ringer_post">Ringer</string>
+    <string name="schedule_post">Schedule</string>
+    <string name="monday_abrev">MO</string>
+    <string name="tuesday_abrev">TU</string>
+    <string name="wednesday_abrev">WE</string>
+    <string name="thursday_abrev">TH</string>
+    <string name="friday_abrev">FR</string>
+    <string name="saturday_abrev">SA</string>
+    <string name="sunday_abrev">SU</string>
+    <string name="schedule_msg_post">(You may select more than one day.)</string>
+    <string name="ringer_mode_post">Ringer</string>
+
+    <string name="repeat_prompt">Repeat Option</string>
+    <string-array name="repeat_array">
+        <item>Weekly</item>
+        <item>Once</item>
+        <item>Bi-Weekly</item>
+        <item>Monthly</item>
+    </string-array>
 </resources>

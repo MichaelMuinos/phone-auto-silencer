@@ -20,6 +20,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.realm.Realm;
+import io.realm.RealmConfiguration;
 import io.realm.RealmResults;
 
 public class EventActivity extends AppCompatActivity implements EventRecyclerViewClickListener {
@@ -92,9 +93,7 @@ public class EventActivity extends AppCompatActivity implements EventRecyclerVie
 
     @Override
     public void eventRecyclerViewOnClick(int position) {
-        Log.d("click", "in event activity");
         Event event = eventList.get(position);
-        Log.d("click", event.getTimerName());
         Intent intent = new Intent(EventActivity.this, EventPostActivity.class);
         intent.putExtra("objectName", event.getTimerName());
         startActivityForResult(intent, CHOICE_GIVEN);
