@@ -25,7 +25,7 @@
 
             <ImageView
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:src="@drawable/nametag" />
 
             <EditText
@@ -61,24 +61,33 @@
             <ImageView
                 android:id="@+id/imageView"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 app:srcCompat="@drawable/clock" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:paddingLeft="15dp">
+                android:paddingLeft="15dp"
+                android:weightSum="1">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:id="@+id/start_time_id"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:clickable="true"
+                    android:gravity="center_vertical"
                     android:text="@string/start_time_post"
                     android:textSize="15sp" />
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:id="@+id/end_time_id"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:clickable="true"
+                    android:gravity="center_vertical"
                     android:text="@string/end_time_post"
                     android:textSize="15sp" />
 
@@ -123,18 +132,6 @@
                 android:paddingLeft="10dp"
                 android:prompt="@string/repeat_prompt"
                 android:spinnerMode="dialog" />
-
-            <!--<android.support.v4.widget.Space-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="match_parent"-->
-                <!--android:layout_weight="0.4"/>-->
-
-            <!--<CheckBox-->
-                <!--android:id="@+id/checkBox"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="match_parent"-->
-                <!--android:layout_weight="0.5"-->
-                <!--android:text="All Days" />-->
 
         </LinearLayout>
 
@@ -264,18 +261,26 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/ringer" />
 
-            <CheckBox
-                android:layout_width="wrap_content"
+            <RadioGroup
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="Vibrate"
-                android:layout_weight="0.2"
-                android:layout_marginLeft="15dp"/>
+                android:orientation="horizontal">
 
-            <CheckBox
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="Silence"
-                android:layout_weight="0.8"/>
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="@string/silence_post"
+                    android:layout_weight="0.2"
+                    android:layout_marginLeft="15dp"
+                    android:checked="true"/>
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="@string/vibrate_post"
+                    android:layout_weight="0.8"/>
+
+            </RadioGroup>
 
         </LinearLayout>
 

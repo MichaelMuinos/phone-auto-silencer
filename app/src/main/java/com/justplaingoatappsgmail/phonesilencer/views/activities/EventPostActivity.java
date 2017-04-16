@@ -10,6 +10,10 @@ import android.widget.Spinner;
 
 import com.justplaingoatappsgmail.phonesilencer.R;
 import com.justplaingoatappsgmail.phonesilencer.contracts.EventPostContract;
+import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
+import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
+
+import java.util.Calendar;
 
 import javax.inject.Inject;
 
@@ -17,7 +21,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class EventPostActivity extends AppCompatActivity implements EventPostContract.View {
+public class EventPostActivity extends AppCompatActivity implements EventPostContract.View, com.wdullaer.materialdatetimepicker.time.TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener {
 
     @BindView(R.id.timer_name) EditText timerName;
     @BindView(R.id.repeat_spinner) Spinner repeatSpinner;
@@ -39,7 +43,18 @@ public class EventPostActivity extends AppCompatActivity implements EventPostCon
 //        repeatSpinner.getSelectedItem().toString();
     }
 
-    // save button on click listener
+    @OnClick(R.id.start_time_id)
+    public void startTimeClick() {
+        Calendar now = Calendar.getInstance();
+        DatePickerDialog dpd = DatePickerDialog.newInstance(
+                EventPostActivity.this,
+                now.get(Calendar.YEAR),
+                now.get(Calendar.MONTH),
+                now.get(Calendar.DAY_OF_MONTH)
+        );
+        dpd.show(getFragmentManager(), "Datepickerdialog");
+    }
+
     @OnClick(R.id.save_button)
     public void saveOnClick() {
         presenter.saveTimer(timerName.getText().toString());
@@ -92,6 +107,16 @@ public class EventPostActivity extends AppCompatActivity implements EventPostCon
     protected void onDestroy() {
         super.onDestroy();
         presenter.closeRealmInstance();
+    }
+
+    @Override
+    public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
+
+    }
+
+    @Override
+    public void onTimeSet(TimePickerDialog view, int hourOfDay, int minute, int second) {
+
     }
 
 }

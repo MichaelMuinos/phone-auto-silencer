@@ -18,6 +18,8 @@
     <string name="ringer_mode_post">Ringer</string>
 
     <string name="repeat_prompt">Repeat Option</string>
+    <string name="silence_post">Silence</string>
+    <string name="vibrate_post">Vibrate</string>
     <string-array name="repeat_array">
         <item>Weekly</item>
         <item>Once</item>
