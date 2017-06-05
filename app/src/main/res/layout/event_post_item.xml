@@ -4,13 +4,13 @@
     android:layout_height="wrap_content">
 
     <android.support.v7.widget.CardView
-        android:id="@+id/card_view"
+        android:id="@+id/event_card_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp">
 
         <TextView
-            android:id="@+id/timer_post_name"
+            android:id="@+id/event_name"
             android:layout_width="match_parent"
             android:layout_height="75dp"
             android:gravity="center"

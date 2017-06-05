@@ -2,19 +2,21 @@ package com.justplaingoatappsgmail.phonesilencer.contracts;
 
 import com.justplaingoatappsgmail.phonesilencer.BasePresenter;
 import com.justplaingoatappsgmail.phonesilencer.BaseView;
+import com.justplaingoatappsgmail.phonesilencer.model.Event;
 
-public interface EventPostContract {
+import java.util.List;
+
+
+public interface EventListContract {
 
     interface View extends BaseView {
-        void showEventNameError();
-        void showEventNameDuplicateError();
-        void showStartEndTimeConflictError();
-        void showNoDaysSelectedError();
-        void returnToEventListActivity();
+        void showEvents();
+        void showSnackBarNoEventsMessage();
+        void showSnackBarUndoMessage();
     }
 
     interface Presenter extends BasePresenter<View> {
-        void saveEvent(String title);
+        List<Event> getEvents();
     }
 
 }

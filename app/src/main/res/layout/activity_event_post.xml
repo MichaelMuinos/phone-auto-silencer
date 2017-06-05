@@ -29,7 +29,7 @@
                 android:src="@drawable/nametag" />
 
             <EditText
-                android:id="@+id/timer_name"
+                android:id="@+id/event_post_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="13dp" />
@@ -72,17 +72,18 @@
                 android:weightSum="1">
 
                 <TextView
-                    android:id="@+id/start_time_id"
+                    android:id="@+id/event_post_start_time"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
                     android:clickable="true"
+                    android:contextClickable="false"
                     android:gravity="center_vertical"
                     android:text="@string/start_time_post"
                     android:textSize="15sp" />
 
                 <TextView
-                    android:id="@+id/end_time_id"
+                    android:id="@+id/event_post_end_time"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
@@ -125,7 +126,7 @@
                 android:src="@drawable/calender" />
 
             <Spinner
-                android:id="@+id/repeat_spinner"
+                android:id="@+id/event_post_repeat_spinner"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:entries="@array/repeat_array"
@@ -143,95 +144,95 @@
             android:layout_marginBottom="5dp">
 
             <TextView
-                android:id="@+id/monday_text_view"
+                android:id="@+id/event_post_monday_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="2dp"
                 android:layout_weight="1"
-                android:background="@drawable/rounded_text_view"
+                android:background="@drawable/circle_green"
                 android:gravity="center"
                 android:text="@string/monday_abrev"
                 android:textColor="@android:color/white"
-                android:textSize="15sp"
-                android:layout_marginRight="2dp"/>
+                android:textSize="15sp" />
 
             <TextView
-                android:id="@+id/tuesday_text_view"
+                android:id="@+id/event_post_tuesday_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="2dp"
                 android:layout_weight="1"
-                android:background="@drawable/rounded_text_view"
+                android:background="@drawable/circle_green"
                 android:gravity="center"
                 android:text="@string/tuesday_abrev"
                 android:textColor="@android:color/white"
-                android:textSize="15sp"
-                android:layout_marginRight="2dp"/>
+                android:textSize="15sp" />
 
             <TextView
-                android:id="@+id/wednesday_text_view"
+                android:id="@+id/event_post_wednesday_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="2dp"
                 android:layout_weight="1"
-                android:background="@drawable/rounded_text_view"
+                android:background="@drawable/circle_green"
                 android:gravity="center"
                 android:text="@string/wednesday_abrev"
                 android:textColor="@android:color/white"
-                android:textSize="15sp"
-                android:layout_marginRight="2dp"/>
+                android:textSize="15sp" />
 
             <TextView
-                android:id="@+id/thursday_text_view"
+                android:id="@+id/event_post_thursday_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="2dp"
                 android:layout_weight="1"
-                android:background="@drawable/rounded_text_view"
+                android:background="@drawable/circle_green"
                 android:gravity="center"
                 android:text="@string/thursday_abrev"
                 android:textColor="@android:color/white"
-                android:textSize="15sp"
-                android:layout_marginRight="2dp"/>
+                android:textSize="15sp" />
 
             <TextView
-                android:id="@+id/friday_text_view"
+                android:id="@+id/event_post_friday_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="2dp"
                 android:layout_weight="1"
-                android:background="@drawable/rounded_text_view"
+                android:background="@drawable/circle_green"
                 android:gravity="center"
                 android:text="@string/friday_abrev"
                 android:textColor="@android:color/white"
-                android:textSize="15sp"
-                android:layout_marginRight="2dp"/>
+                android:textSize="15sp" />
 
             <TextView
-                android:id="@+id/saturday_text_view"
+                android:id="@+id/event_post_saturday_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="15sp"
-                android:background="@drawable/rounded_text_view"
-                android:textColor="@android:color/white"
+                android:layout_marginRight="2dp"
+                android:layout_weight="1"
+                android:background="@drawable/circle_green"
                 android:gravity="center"
                 android:text="@string/saturday_abrev"
-                android:layout_weight="1"
-                android:layout_marginRight="2dp"/>
+                android:textColor="@android:color/white"
+                android:textSize="15sp" />
 
             <TextView
-                android:id="@+id/sunday_text_view"
+                android:id="@+id/event_post_sunday_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/rounded_text_view"
+                android:layout_weight="1"
+                android:background="@drawable/circle_green"
                 android:gravity="center"
                 android:text="@string/sunday_abrev"
                 android:textColor="@android:color/white"
-                android:textSize="15sp"
-                android:layout_weight="1"/>
+                android:textSize="15sp" />
 
         </LinearLayout>
 
         <CheckBox
-        android:id="@+id/checkBox"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:text="All Days" />
+            android:id="@+id/event_post_check_box"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="All Days" />
 
         <View
             android:layout_width="fill_parent"
@@ -285,7 +286,7 @@
         </LinearLayout>
 
         <Button
-            android:id="@+id/save_button"
+            android:id="@+id/event_post_save_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Save" />
