@@ -2,7 +2,7 @@ package com.justplaingoatappsgmail.phonesilencer.presenter;
 
 import com.justplaingoatappsgmail.phonesilencer.contracts.EventListContract;
 import com.justplaingoatappsgmail.phonesilencer.model.Event;
-import com.justplaingoatappsgmail.phonesilencer.model.RealmService;
+import com.justplaingoatappsgmail.phonesilencer.model.database.RealmService;
 import java.util.List;
 
 public class EventListPresenter implements EventListContract.Presenter {

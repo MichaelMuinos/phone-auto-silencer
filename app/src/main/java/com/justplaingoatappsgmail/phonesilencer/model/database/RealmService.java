@@ -1,6 +1,8 @@
-package com.justplaingoatappsgmail.phonesilencer.model;
+package com.justplaingoatappsgmail.phonesilencer.model.database;
 
 import android.content.Context;
+
+import com.justplaingoatappsgmail.phonesilencer.model.Event;
 
 import java.util.ArrayList;
 import java.util.List;

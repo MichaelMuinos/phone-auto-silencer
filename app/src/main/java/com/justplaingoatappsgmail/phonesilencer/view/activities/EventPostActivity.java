@@ -81,6 +81,11 @@ public class EventPostActivity extends AppCompatActivity implements EventPostCon
     }
 
     @Override
+    public void showStartEndTimeNotSetError() {
+
+    }
+
+    @Override
     public void showNoDaysSelectedError() {
 
     }

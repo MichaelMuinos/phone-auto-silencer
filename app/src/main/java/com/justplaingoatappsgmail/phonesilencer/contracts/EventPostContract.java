@@ -14,6 +14,7 @@ public interface EventPostContract {
         void showEventNameError();
         void showEventNameDuplicateError();
         void showStartEndTimeConflictError();
+        void showStartEndTimeNotSetError();
         void showNoDaysSelectedError();
         void returnToEventListActivity();
     }

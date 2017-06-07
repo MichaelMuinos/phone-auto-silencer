@@ -1,9 +1,10 @@
 package com.justplaingoatappsgmail.phonesilencer.presenter;
 
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.widget.TextView;
 import com.justplaingoatappsgmail.phonesilencer.contracts.EventPostContract;
-import com.justplaingoatappsgmail.phonesilencer.model.RealmService;
+import com.justplaingoatappsgmail.phonesilencer.model.database.RealmService;
 import java.util.List;
 
 public class EventPostPresenter implements EventPostContract.Presenter {
@@ -22,10 +23,10 @@ public class EventPostPresenter implements EventPostContract.Presenter {
 
     @Override
     public void saveEvent(String title, String startTime, String endTime, List<TextView> days, Drawable drawable) {
-//        if(isValidName(title) && isValidTimeInterval(startTime, endTime) && hasAtLeastOneDaySelected(days, drawable)) {
+        if(isValidName(title) && isValidTimeInterval(startTime, endTime) && hasAtLeastOneDaySelected(days, drawable)) {
             realmService.addEvent(title);
             view.returnToEventListActivity();
-//        }
+        }
     }
 
     @Override
@@ -64,7 +65,10 @@ public class EventPostPresenter implements EventPostContract.Presenter {
      * @return
      */
     private boolean isValidTimeInterval(String startTime, String endTime) {
-        if(startTime.equals(endTime)) {
+        if(startTime.equals("Start Time") || endTime.equals("End Time")) {
+            view.showStartEndTimeNotSetError();
+            return false;
+        } else if(startTime.equals(endTime)) {
             view.showStartEndTimeConflictError();
             return false;
         }
@@ -81,7 +85,7 @@ public class EventPostPresenter implements EventPostContract.Presenter {
      */
     private boolean hasAtLeastOneDaySelected(List<TextView> days, Drawable drawable) {
         for(TextView textView : days) {
-            if(textView.getBackground().getConstantState().equals(drawable)) {
+            if(textView.getBackground().getConstantState().equals(drawable.getConstantState())) {
                 return true;
             }
         }

@@ -20,6 +20,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".view.activities.EventPostActivity" />
+
+        <service android:name=".model.services.SetSilentService" />
+        <service android:name=".model.services.SetNormalService" />
     </application>
 
 </manifest>

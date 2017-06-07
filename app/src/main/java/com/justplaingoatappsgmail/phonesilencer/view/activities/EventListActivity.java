@@ -1,8 +1,11 @@
 package com.justplaingoatappsgmail.phonesilencer.view.activities;
 
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
@@ -10,14 +13,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Switch;
 
 import com.justplaingoatappsgmail.phonesilencer.PhoneSilencerApplication;
 import com.justplaingoatappsgmail.phonesilencer.R;
 import com.justplaingoatappsgmail.phonesilencer.customlisteners.EventListListener;
+import com.justplaingoatappsgmail.phonesilencer.model.services.SetNormalService;
 import com.justplaingoatappsgmail.phonesilencer.view.adapters.EventListAdapter;
 import com.justplaingoatappsgmail.phonesilencer.contracts.EventListContract;
+
+import java.util.Calendar;
 
 import javax.inject.Inject;
 import butterknife.BindView;
@@ -101,9 +108,18 @@ public class EventListActivity extends AppCompatActivity implements EventListCon
     public void onEventListSwitchCheckedChanged(int position, View switchView, boolean isChecked) {
         Switch eventSwitch = (Switch) switchView;
         if(isChecked) {
+            Log.e("Silent", "Setting to silent");
             eventSwitch.setText("Enabled\t");
             // also set tag
-            // start service
+            // set phone silent
+            AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+            audioManager.setRingerMode(AudioManager.RINGER_MODE_SILENT);
+            // initialize alarm manager
+            Intent intent = new Intent(context, SetNormalService.class);
+            PendingIntent pendingIntent = PendingIntent.getService(context, 0, intent, 0);
+            AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+            // RTC: Fires pending intent but does not wake up device
+            alarmManager.setRepeating(AlarmManager.RTC, System.currentTimeMillis() + 30000, 24 * 60 * 60 * 1000, pendingIntent);
         } else {
             eventSwitch.setText("Disabled\t");
             // also set tag

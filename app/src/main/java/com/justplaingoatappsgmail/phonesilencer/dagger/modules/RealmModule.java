@@ -1,7 +1,7 @@
 package com.justplaingoatappsgmail.phonesilencer.dagger.modules;
 
 import android.content.Context;
-import com.justplaingoatappsgmail.phonesilencer.model.RealmService;
+import com.justplaingoatappsgmail.phonesilencer.model.database.RealmService;
 import dagger.Module;
 import dagger.Provides;
 import io.realm.Realm;

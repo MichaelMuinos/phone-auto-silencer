@@ -2,7 +2,7 @@ package com.justplaingoatappsgmail.phonesilencer.dagger.modules;
 
 import com.justplaingoatappsgmail.phonesilencer.contracts.EventListContract;
 import com.justplaingoatappsgmail.phonesilencer.contracts.EventPostContract;
-import com.justplaingoatappsgmail.phonesilencer.model.RealmService;
+import com.justplaingoatappsgmail.phonesilencer.model.database.RealmService;
 import com.justplaingoatappsgmail.phonesilencer.presenter.EventListPresenter;
 import com.justplaingoatappsgmail.phonesilencer.presenter.EventPostPresenter;
 import javax.inject.Singleton;
