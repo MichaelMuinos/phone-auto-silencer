@@ -2,7 +2,6 @@ package com.justplaingoatappsgmail.phonesilencer.view.activities;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -15,10 +14,7 @@ import android.widget.TextView;
 import com.justplaingoatappsgmail.phonesilencer.PhoneSilencerApplication;
 import com.justplaingoatappsgmail.phonesilencer.R;
 import com.justplaingoatappsgmail.phonesilencer.contracts.EventPostContract;
-import com.veinhorn.tagview.TagView;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
-
-import java.util.Calendar;
 import java.util.List;
 import javax.inject.Inject;
 import butterknife.BindView;
@@ -67,8 +63,6 @@ public class EventPostActivity extends AppCompatActivity implements EventPostCon
         super.onDestroy();
         // set view to null to avoid memory leak
         presenter.setView(null);
-        // close our realm instance
-        presenter.closeRealm();
     }
 
     @Override

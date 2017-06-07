@@ -4,23 +4,25 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Switch;
 import android.widget.TextView;
 import com.justplaingoatappsgmail.phonesilencer.R;
-import com.justplaingoatappsgmail.phonesilencer.customlisteners.EventListCardViewClickListener;
+import com.justplaingoatappsgmail.phonesilencer.customlisteners.EventListListener;
 import com.justplaingoatappsgmail.phonesilencer.model.Event;
 
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 
 public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.EventListViewHolder> {
 
     private List<Event> eventList;
-    private EventListCardViewClickListener listener;
+    private EventListListener listener;
 
-    public EventListAdapter(EventListCardViewClickListener listener) {
+    public EventListAdapter(EventListListener listener) {
         this.listener = listener;
     }
 
@@ -49,11 +51,12 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
 
     public static class EventListViewHolder extends RecyclerView.ViewHolder {
 
-        private EventListCardViewClickListener listener;
+        private EventListListener listener;
 
         @BindView(R.id.event_post_item_title) TextView eventName;
+        @BindView(R.id.event_post_item_switch) Switch switchEvent;
 
-        public EventListViewHolder(View itemView, EventListCardViewClickListener listener) {
+        public EventListViewHolder(View itemView, EventListListener listener) {
             super(itemView);
             this.listener = listener;
             ButterKnife.bind(this, itemView);
@@ -62,6 +65,16 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
         @OnClick(R.id.event_card_view)
         public void onEventCardViewClick() {
             listener.onEventListCardViewClick(this.getLayoutPosition());
+        }
+
+        @OnCheckedChanged(R.id.event_post_item_switch)
+        public void onSwitchCheckedChanged(boolean isChecked) {
+            listener.onEventListSwitchCheckedChanged(this.getLayoutPosition(), switchEvent, isChecked);
+        }
+
+        @OnClick(R.id.event_post_item_close_button)
+        public void onCloseButtonClick() {
+            listener.onEventListDeleteClickListener(this.getLayoutPosition());
         }
 
     }

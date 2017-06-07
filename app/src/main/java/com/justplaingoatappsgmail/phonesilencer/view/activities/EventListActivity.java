@@ -10,20 +10,21 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
+import android.view.View;
+import android.widget.Switch;
 
 import com.justplaingoatappsgmail.phonesilencer.PhoneSilencerApplication;
 import com.justplaingoatappsgmail.phonesilencer.R;
+import com.justplaingoatappsgmail.phonesilencer.customlisteners.EventListListener;
 import com.justplaingoatappsgmail.phonesilencer.view.adapters.EventListAdapter;
 import com.justplaingoatappsgmail.phonesilencer.contracts.EventListContract;
-import com.justplaingoatappsgmail.phonesilencer.customlisteners.EventListCardViewClickListener;
 
 import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class EventListActivity extends AppCompatActivity implements EventListContract.View, EventListCardViewClickListener {
+public class EventListActivity extends AppCompatActivity implements EventListContract.View, EventListListener {
 
     private static final int CHOICE_GIVEN = 9000;
     private EventListAdapter eventListAdapter;
@@ -87,13 +88,41 @@ public class EventListActivity extends AppCompatActivity implements EventListCon
     }
 
     /**
-     * Method for interface EventListCardViewClickListener
+     * Method for interface EventListListener
      * When a card view is clicked, we enter the EventPostActivity with the details
      * @param position
      */
     @Override
     public void onEventListCardViewClick(int position) {
+//        presenter.getEvents().get(position);
+    }
 
+    @Override
+    public void onEventListSwitchCheckedChanged(int position, View switchView, boolean isChecked) {
+        Switch eventSwitch = (Switch) switchView;
+        if(isChecked) {
+            eventSwitch.setText("Enabled\t");
+            // also set tag
+            // start service
+        } else {
+            eventSwitch.setText("Disabled\t");
+            // also set tag
+            // kill service
+        }
+    }
+
+    /**
+     * Removes an event from the recycler view when clicking on the close button
+     * @param position
+     */
+    @Override
+    public void onEventListDeleteClickListener(int position) {
+        // delete the event at the particular position in the list
+        presenter.deleteEvent(presenter.getEvents().get(position));
+        // reset our event list for our adapter
+        eventListAdapter.setEventList(presenter.getEvents());
+        // notify the adapter that the list has changed and to update the view
+        eventListAdapter.notifyDataSetChanged();
     }
 
     @Override

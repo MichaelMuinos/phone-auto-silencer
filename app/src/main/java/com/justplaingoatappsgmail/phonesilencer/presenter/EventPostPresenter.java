@@ -22,10 +22,10 @@ public class EventPostPresenter implements EventPostContract.Presenter {
 
     @Override
     public void saveEvent(String title, String startTime, String endTime, List<TextView> days, Drawable drawable) {
-        if(isValidName(title) && isValidTimeInterval(startTime, endTime) && hasAtLeastOneDaySelected(days, drawable)) {
+//        if(isValidName(title) && isValidTimeInterval(startTime, endTime) && hasAtLeastOneDaySelected(days, drawable)) {
             realmService.addEvent(title);
             view.returnToEventListActivity();
-        }
+//        }
     }
 
     @Override

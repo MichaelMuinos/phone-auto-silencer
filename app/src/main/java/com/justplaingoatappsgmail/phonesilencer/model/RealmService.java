@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.UUID;
 
 import io.realm.Realm;
+import io.realm.RealmResults;
 
 public class RealmService {
 
@@ -30,7 +31,7 @@ public class RealmService {
      * @return
      */
     public boolean containsName(String eventName) {
-        Event event = realm.where(Event.class).equalTo("eventName", eventName).findFirst();
+        Event event = realm.where(Event.class).equalTo(Event.EVENT_NAME, eventName).findFirst();
         return event == null ? false : true;
     }
 
@@ -40,6 +41,16 @@ public class RealmService {
             public void execute(Realm realm) {
                 Event event = realm.createObject(Event.class, UUID.randomUUID().toString());
                 event.setEventName(title);
+            }
+        });
+    }
+
+    public void deleteEvent(final Event event) {
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmResults<Event> deleteEvent = realm.where(Event.class).equalTo(Event.ID, event.getId()).findAll();
+                deleteEvent.deleteAllFromRealm();
             }
         });
     }

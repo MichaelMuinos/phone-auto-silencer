@@ -31,6 +31,11 @@ public class EventListPresenter implements EventListContract.Presenter {
     }
 
     @Override
+    public void deleteEvent(Event event) {
+        realmService.deleteEvent(event);
+    }
+
+    @Override
     public void closeRealm() {
         realmService.closeRealmInstance();
     }

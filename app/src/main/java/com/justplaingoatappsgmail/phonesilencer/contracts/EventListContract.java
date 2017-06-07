@@ -17,6 +17,7 @@ public interface EventListContract {
 
     interface Presenter extends BasePresenter<View> {
         List<Event> getEvents();
+        void deleteEvent(Event event);
     }
 
 }
