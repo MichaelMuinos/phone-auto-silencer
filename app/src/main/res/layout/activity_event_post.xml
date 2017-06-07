@@ -268,6 +268,7 @@
                 android:orientation="horizontal">
 
                 <RadioButton
+                    android:id="@+id/event_post_silence_button"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:text="@string/silence_post"
@@ -276,6 +277,7 @@
                     android:checked="true"/>
 
                 <RadioButton
+                    android:id="@+id/event_post_vibrate_button"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:text="@string/vibrate_post"

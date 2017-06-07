@@ -38,8 +38,7 @@ public class RealmService {
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                Event event = realm.createObject(Event.class);
-                event.setId(UUID.randomUUID().toString());
+                Event event = realm.createObject(Event.class, UUID.randomUUID().toString());
                 event.setEventName(title);
             }
         });

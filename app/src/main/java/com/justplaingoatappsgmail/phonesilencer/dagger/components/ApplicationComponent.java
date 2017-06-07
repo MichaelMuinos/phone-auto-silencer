@@ -1,13 +1,11 @@
-package com.justplaingoatappsgmail.phonesilencer.dagger;
+package com.justplaingoatappsgmail.phonesilencer.dagger.components;
 
 import com.justplaingoatappsgmail.phonesilencer.dagger.modules.ApplicationModule;
 import com.justplaingoatappsgmail.phonesilencer.dagger.modules.PresenterModule;
 import com.justplaingoatappsgmail.phonesilencer.dagger.modules.RealmModule;
 import com.justplaingoatappsgmail.phonesilencer.view.activities.EventListActivity;
 import com.justplaingoatappsgmail.phonesilencer.view.activities.EventPostActivity;
-
 import javax.inject.Singleton;
-
 import dagger.Component;
 
 /**

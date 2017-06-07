@@ -1,6 +1,5 @@
-package com.justplaingoatappsgmail.phonesilencer.adapters;
+package com.justplaingoatappsgmail.phonesilencer.view.adapters;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +14,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import io.realm.RealmResults;
 
 public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.EventListViewHolder> {
 
@@ -53,7 +51,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
 
         private EventListCardViewClickListener listener;
 
-        @BindView(R.id.event_name) TextView eventName;
+        @BindView(R.id.event_post_item_title) TextView eventName;
 
         public EventListViewHolder(View itemView, EventListCardViewClickListener listener) {
             super(itemView);

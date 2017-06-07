@@ -1,8 +1,8 @@
 package com.justplaingoatappsgmail.phonesilencer;
 
 import android.app.Application;
-import com.justplaingoatappsgmail.phonesilencer.dagger.ApplicationComponent;
-import com.justplaingoatappsgmail.phonesilencer.dagger.DaggerApplicationComponent;
+import com.justplaingoatappsgmail.phonesilencer.dagger.components.ApplicationComponent;
+import com.justplaingoatappsgmail.phonesilencer.dagger.components.DaggerApplicationComponent;
 import com.justplaingoatappsgmail.phonesilencer.dagger.modules.ApplicationModule;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;

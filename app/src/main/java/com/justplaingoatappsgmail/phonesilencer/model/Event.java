@@ -2,7 +2,9 @@ package com.justplaingoatappsgmail.phonesilencer.model;
 
 import io.realm.RealmModel;
 import io.realm.annotations.PrimaryKey;
+import io.realm.annotations.RealmClass;
 
+@RealmClass
 public class Event implements RealmModel {
 
     @PrimaryKey

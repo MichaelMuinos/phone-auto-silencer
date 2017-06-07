@@ -1,7 +1,10 @@
 package com.justplaingoatappsgmail.phonesilencer.presenter;
 
+import android.graphics.drawable.Drawable;
+import android.widget.TextView;
 import com.justplaingoatappsgmail.phonesilencer.contracts.EventPostContract;
 import com.justplaingoatappsgmail.phonesilencer.model.RealmService;
+import java.util.List;
 
 public class EventPostPresenter implements EventPostContract.Presenter {
 
@@ -18,11 +21,20 @@ public class EventPostPresenter implements EventPostContract.Presenter {
     }
 
     @Override
-    public void saveEvent(String title) {
-        if(isValidName(title)) {
+    public void saveEvent(String title, String startTime, String endTime, List<TextView> days, Drawable drawable) {
+        if(isValidName(title) && isValidTimeInterval(startTime, endTime) && hasAtLeastOneDaySelected(days, drawable)) {
             realmService.addEvent(title);
             view.returnToEventListActivity();
         }
+    }
+
+    @Override
+    public String convertTimeToString(int hourOfDay, int minute) {
+        String partOfDay = hourOfDay < 12 ? "AM" : "PM";
+        int hour = hourOfDay % 12;
+        String hourToString = hour < 10 ? "0" + String.valueOf(hour) : String.valueOf(hour);
+        String minuteToString = minute < 10 ? "0" + String.valueOf(minute) : String.valueOf(minute);
+        return hourToString + ":" + minuteToString + " " + partOfDay;
     }
 
     @Override
@@ -43,6 +55,38 @@ public class EventPostPresenter implements EventPostContract.Presenter {
         } else {
             return true;
         }
+    }
+
+    /**
+     * Method checks to see if the time interval is the exact same. If so, it is invalid.
+     * @param startTime
+     * @param endTime
+     * @return
+     */
+    private boolean isValidTimeInterval(String startTime, String endTime) {
+        if(startTime.equals(endTime)) {
+            view.showStartEndTimeConflictError();
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Method checks to see if there is at least one day in the week that is marked.
+     * It loops through all the text view days to see if the drawable background is
+     * of the type circle_red.
+     * @param days
+     * @param drawable
+     * @return
+     */
+    private boolean hasAtLeastOneDaySelected(List<TextView> days, Drawable drawable) {
+        for(TextView textView : days) {
+            if(textView.getBackground().getConstantState().equals(drawable)) {
+                return true;
+            }
+        }
+        view.showNoDaysSelectedError();
+        return false;
     }
 
 }

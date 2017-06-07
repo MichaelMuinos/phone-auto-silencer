@@ -1,27 +1,26 @@
 package com.justplaingoatappsgmail.phonesilencer.view.activities;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.TextView;
-
 import com.justplaingoatappsgmail.phonesilencer.PhoneSilencerApplication;
 import com.justplaingoatappsgmail.phonesilencer.R;
 import com.justplaingoatappsgmail.phonesilencer.contracts.EventPostContract;
+import com.veinhorn.tagview.TagView;
+import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
+import java.util.Calendar;
 import java.util.List;
-
 import javax.inject.Inject;
-
 import butterknife.BindView;
 import butterknife.BindViews;
 import butterknife.ButterKnife;
@@ -31,6 +30,10 @@ import butterknife.OnClick;
 public class EventPostActivity extends AppCompatActivity implements EventPostContract.View {
 
     @BindView(R.id.event_post_name) EditText eventName;
+    @BindView(R.id.event_post_silence_button) RadioButton silenceButton;
+    @BindView(R.id.event_post_vibrate_button) RadioButton vibrateButton;
+    @BindView(R.id.event_post_start_time) TextView startTime;
+    @BindView(R.id.event_post_end_time) TextView endTime;
     @BindViews({R.id.event_post_monday_text_view,
                 R.id.event_post_tuesday_text_view,
                 R.id.event_post_wednesday_text_view,
@@ -90,18 +93,26 @@ public class EventPostActivity extends AppCompatActivity implements EventPostCon
 
     @Override
     public void returnToEventListActivity() {
-        Intent intent = new Intent(EventPostActivity.this, EventListActivity.class);
-        startActivity(intent);
+        setResult(Activity.RESULT_OK);
+        finish();
     }
 
-    @OnClick(R.id.event_post_start_time)
-    public void onStartTimeClick() {
-
-    }
-
-    @OnClick(R.id.event_post_end_time)
-    public void onEndTimeClick() {
-
+    @OnClick({R.id.event_post_start_time, R.id.event_post_end_time})
+    public void onTimeClick(View timeView) {
+        // convert our view to a textview so that we can set the time string
+        final TextView textView = (TextView) timeView;
+        // set the callback method and call our presenter to convert what the user selected into a string
+        TimePickerDialog.OnTimeSetListener listener = new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePickerDialog view, int hourOfDay, int minute, int second) {
+                textView.setText(presenter.convertTimeToString(hourOfDay, minute));
+            }
+        };
+        // create our dialog
+        TimePickerDialog tpd = TimePickerDialog.newInstance(listener, false);
+        tpd.setTitle(timeView.getId() == R.id.event_post_start_time ? "Start Time" : "End Time");
+        tpd.vibrate(false);
+        tpd.show(getFragmentManager(), "Timerpickerdialog");
     }
 
     /**
@@ -131,12 +142,30 @@ public class EventPostActivity extends AppCompatActivity implements EventPostCon
         else setDrawableForAllDays(ContextCompat.getDrawable(context, R.drawable.circle_green));
     }
 
+    @OnClick({R.id.event_post_vibrate_button, R.id.event_post_silence_button})
+    public void onRingerModeClick(View view) {
+        switch(view.getId()) {
+            case R.id.event_post_vibrate_button:
+                if(silenceButton.isChecked()) silenceButton.setChecked(false);
+                break;
+            case R.id.event_post_silence_button:
+                if(vibrateButton.isChecked()) vibrateButton.setChecked(false);
+                break;
+            default:
+                break;
+        }
+    }
+
     /**
      * On click method for save button to save the Event
      */
     @OnClick(R.id.event_post_save_button)
     public void onSaveButtonClick() {
-        presenter.saveEvent(eventName.getText().toString());
+        presenter.saveEvent(eventName.getText().toString(),
+                startTime.getText().toString(),
+                endTime.getText().toString(),
+                days,
+                ContextCompat.getDrawable(context, R.drawable.circle_red));
     }
 
     /**

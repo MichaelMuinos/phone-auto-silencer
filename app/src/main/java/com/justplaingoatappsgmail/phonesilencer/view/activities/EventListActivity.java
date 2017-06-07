@@ -3,7 +3,6 @@ package com.justplaingoatappsgmail.phonesilencer.view.activities;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
@@ -11,14 +10,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
+import android.util.Log;
 
 import com.justplaingoatappsgmail.phonesilencer.PhoneSilencerApplication;
 import com.justplaingoatappsgmail.phonesilencer.R;
-import com.justplaingoatappsgmail.phonesilencer.adapters.EventListAdapter;
+import com.justplaingoatappsgmail.phonesilencer.view.adapters.EventListAdapter;
 import com.justplaingoatappsgmail.phonesilencer.contracts.EventListContract;
 import com.justplaingoatappsgmail.phonesilencer.customlisteners.EventListCardViewClickListener;
-import com.justplaingoatappsgmail.phonesilencer.model.Event;
+
 import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
