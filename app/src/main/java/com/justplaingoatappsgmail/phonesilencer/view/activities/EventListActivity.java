@@ -112,8 +112,8 @@ public class EventListActivity extends AppCompatActivity implements EventListCon
             eventSwitch.setText("Enabled\t");
             // also set tag
             // set phone silent
-            AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-            audioManager.setRingerMode(AudioManager.RINGER_MODE_SILENT);
+//            AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+//            audioManager.setRingerMode(AudioManager.RINGER_MODE_SILENT);
             // initialize alarm manager
             Intent intent = new Intent(context, SetNormalService.class);
             PendingIntent pendingIntent = PendingIntent.getService(context, 0, intent, 0);
@@ -163,6 +163,12 @@ public class EventListActivity extends AppCompatActivity implements EventListCon
     @Override
     public void showSnackBarUndoMessage() {
 
+    }
+
+    private void setupComponents(Class service) {
+        Intent intent = new Intent(context, service);
+        PendingIntent pendingIntent = PendingIntent.getService(context, 0, intent, 0);
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
     }
 
 }

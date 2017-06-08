@@ -1,16 +1,32 @@
 package com.justplaingoatappsgmail.phonesilencer.presenter;
 
 import android.graphics.drawable.Drawable;
-import android.util.Log;
 import android.widget.TextView;
 import com.justplaingoatappsgmail.phonesilencer.contracts.EventPostContract;
 import com.justplaingoatappsgmail.phonesilencer.model.database.RealmService;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class EventPostPresenter implements EventPostContract.Presenter {
 
     private EventPostContract.View view;
     private RealmService realmService;
+    private static Map<String,Integer> dayMap;
+
+    static {
+        dayMap = new HashMap<>();
+        dayMap.put("MO", Calendar.MONDAY);
+        dayMap.put("TU", Calendar.TUESDAY);
+        dayMap.put("WE", Calendar.WEDNESDAY);
+        dayMap.put("TH", Calendar.THURSDAY);
+        dayMap.put("FR", Calendar.FRIDAY);
+        dayMap.put("SA", Calendar.SATURDAY);
+        dayMap.put("SU", Calendar.SUNDAY);
+    }
 
     public EventPostPresenter(RealmService realmService) {
         this.realmService = realmService;
@@ -24,7 +40,12 @@ public class EventPostPresenter implements EventPostContract.Presenter {
     @Override
     public void saveEvent(String title, String startTime, String endTime, List<TextView> days, Drawable drawable) {
         if(isValidName(title) && isValidTimeInterval(startTime, endTime) && hasAtLeastOneDaySelected(days, drawable)) {
-            realmService.addEvent(title);
+            int startTimeHour = Integer.parseInt(startTime.substring(0, 2));
+            int startTimeMinute = Integer.parseInt(startTime.substring(3, 5));
+            int endTimeHour = Integer.parseInt(endTime.substring(0, 2));
+            int endTimeMinute = Integer.parseInt(endTime.substring(3, 5));
+            List<Integer> dayList = getDays(days, drawable);
+            realmService.addEvent(title, startTimeHour, startTimeMinute, endTimeHour, endTimeMinute, dayList, );
             view.returnToEventListActivity();
         }
     }
@@ -91,6 +112,16 @@ public class EventPostPresenter implements EventPostContract.Presenter {
         }
         view.showNoDaysSelectedError();
         return false;
+    }
+
+    private List<Integer> getDays(List<TextView> days, Drawable drawable) {
+        List<Integer> list = new ArrayList<>();
+        for(TextView textView : days) {
+            if(textView.getBackground().getConstantState().equals(drawable.getConstantState())) {
+                list.add(dayMap.get(textView.getText().toString()));
+            }
+        }
+        return list;
     }
 
 }

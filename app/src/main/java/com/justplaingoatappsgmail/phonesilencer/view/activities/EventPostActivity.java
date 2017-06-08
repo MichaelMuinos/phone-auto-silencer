@@ -3,6 +3,7 @@ package com.justplaingoatappsgmail.phonesilencer.view.activities;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -164,7 +165,8 @@ public class EventPostActivity extends AppCompatActivity implements EventPostCon
                 startTime.getText().toString(),
                 endTime.getText().toString(),
                 days,
-                ContextCompat.getDrawable(context, R.drawable.circle_red));
+                ContextCompat.getDrawable(context, R.drawable.circle_red),
+                vibrateButton.isChecked() ? AudioManager);
     }
 
     /**
