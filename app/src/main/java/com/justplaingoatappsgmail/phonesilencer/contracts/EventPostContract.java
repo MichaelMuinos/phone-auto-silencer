@@ -20,7 +20,7 @@ public interface EventPostContract {
     }
 
     interface Presenter extends BasePresenter<View> {
-        void saveEvent(String title, String startTime, String endTime, List<TextView> days, Drawable drawable);
+        void saveEvent(String title, String startTime, String endTime, List<TextView> days, Drawable drawable, int ringerMode);
         String convertTimeToString(int hourOfDay, int minute);
     }
 

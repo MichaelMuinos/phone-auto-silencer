@@ -1,14 +1,12 @@
 package com.justplaingoatappsgmail.phonesilencer.model.database;
 
 import android.content.Context;
-
-import com.justplaingoatappsgmail.phonesilencer.model.Day;
 import com.justplaingoatappsgmail.phonesilencer.model.Event;
+import com.justplaingoatappsgmail.phonesilencer.model.RealmInteger;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-
 import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmResults;
@@ -41,7 +39,7 @@ public class RealmService {
 
     public void addEvent(final String title, final int startTimeHour, final int startTimeMinute,
                          final int startTimeAmOrPm, final int endTimeHour, final int endTimeMinute,
-                         final int endTimeAmOrPm, final int ringerMode, final RealmList<Day> days) {
+                         final int endTimeAmOrPm, final int ringerMode, final List<Integer> days) {
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
@@ -54,7 +52,15 @@ public class RealmService {
                 event.setEndTimeMinute(endTimeMinute);
                 event.setEndTimeAmOrPm(endTimeAmOrPm);
                 event.setRingerMode(ringerMode);
-                event.setDays(days);
+                // generate RealmList of RealmIntegers for the days. Need to create RealmInteger objects first
+                // before adding them to the RealmList
+                RealmList<RealmInteger> dayList = new RealmList<>();
+                for(int i : days) {
+                    RealmInteger realmInteger = realm.createObject(RealmInteger.class);
+                    realmInteger.setRealmInt(i);
+                    dayList.add(realmInteger);
+                }
+                event.setDays(dayList);
             }
         });
     }

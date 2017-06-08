@@ -2,6 +2,8 @@ package com.justplaingoatappsgmail.phonesilencer.model;
 
 import com.justplaingoatappsgmail.phonesilencer.enums.Repeat;
 import java.util.List;
+
+import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 import io.realm.annotations.RealmClass;
@@ -32,7 +34,7 @@ public class Event extends RealmObject {
     private int endTimeMinute;
     private int endTimeAmOrPm;
     private int ringerMode;
-    private List<Day> days;
+    private RealmList<RealmInteger> days;
 
     public void setId(String id) {
         this.id = id;
@@ -98,11 +100,11 @@ public class Event extends RealmObject {
         this.endTimeAmOrPm = endTimeAmOrPm;
     }
 
-    public List<Day> getDays() {
+    public RealmList<RealmInteger> getDays() {
         return days;
     }
 
-    public void setDays(List<Day> days) {
+    public void setDays(RealmList<RealmInteger> days) {
         this.days = days;
     }
 

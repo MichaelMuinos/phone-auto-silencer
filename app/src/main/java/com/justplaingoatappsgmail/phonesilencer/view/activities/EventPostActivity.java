@@ -161,12 +161,9 @@ public class EventPostActivity extends AppCompatActivity implements EventPostCon
      */
     @OnClick(R.id.event_post_save_button)
     public void onSaveButtonClick() {
-        presenter.saveEvent(eventName.getText().toString(),
-                startTime.getText().toString(),
-                endTime.getText().toString(),
-                days,
-                ContextCompat.getDrawable(context, R.drawable.circle_red),
-                vibrateButton.isChecked() ? AudioManager);
+        presenter.saveEvent(eventName.getText().toString(), startTime.getText().toString(),
+                endTime.getText().toString(), days, ContextCompat.getDrawable(context, R.drawable.circle_red),
+                vibrateButton.isChecked() ? AudioManager.RINGER_MODE_VIBRATE : AudioManager.RINGER_MODE_SILENT);
     }
 
     /**

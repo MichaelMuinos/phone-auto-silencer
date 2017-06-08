@@ -8,17 +8,16 @@ import io.realm.annotations.RealmClass;
  * does not support storing primitives inside of the RealmList.
  */
 @RealmClass
-public class Day extends RealmObject {
+public class RealmInteger extends RealmObject {
 
-    private int day;
+    private int realmInt;
 
-    public int getDay() {
-        return day;
+    public void setRealmInt(int realmInt) {
+        this.realmInt = realmInt;
     }
 
-    public void setDay(int day) {
-        this.day = day;
+    public int getRealmInt() {
+        return realmInt;
     }
 
 }
-

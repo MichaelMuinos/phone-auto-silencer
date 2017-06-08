@@ -3,13 +3,14 @@ package com.justplaingoatappsgmail.phonesilencer.presenter;
 import android.graphics.drawable.Drawable;
 import android.widget.TextView;
 import com.justplaingoatappsgmail.phonesilencer.contracts.EventPostContract;
+import com.justplaingoatappsgmail.phonesilencer.model.RealmInteger;
 import com.justplaingoatappsgmail.phonesilencer.model.database.RealmService;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import io.realm.RealmList;
 
 public class EventPostPresenter implements EventPostContract.Presenter {
 
@@ -38,14 +39,16 @@ public class EventPostPresenter implements EventPostContract.Presenter {
     }
 
     @Override
-    public void saveEvent(String title, String startTime, String endTime, List<TextView> days, Drawable drawable) {
+    public void saveEvent(String title, String startTime, String endTime, List<TextView> days, Drawable drawable, int ringerMode) {
         if(isValidName(title) && isValidTimeInterval(startTime, endTime) && hasAtLeastOneDaySelected(days, drawable)) {
             int startTimeHour = Integer.parseInt(startTime.substring(0, 2));
             int startTimeMinute = Integer.parseInt(startTime.substring(3, 5));
+            int startTimeAmOrPm = startTime.substring(startTime.length() - 2, startTime.length()) == "AM" ? Calendar.AM : Calendar.PM;
             int endTimeHour = Integer.parseInt(endTime.substring(0, 2));
             int endTimeMinute = Integer.parseInt(endTime.substring(3, 5));
-            List<Integer> dayList = getDays(days, drawable);
-            realmService.addEvent(title, startTimeHour, startTimeMinute, endTimeHour, endTimeMinute, dayList, );
+            int endTimeAmOrPm = endTime.substring(endTime.length() - 2, endTime.length()) == "AM" ? Calendar.AM : Calendar.PM;
+            realmService.addEvent(title, startTimeHour, startTimeMinute, startTimeAmOrPm, endTimeHour,
+                    endTimeMinute, endTimeAmOrPm, ringerMode, getDays(days, drawable));
             view.returnToEventListActivity();
         }
     }
