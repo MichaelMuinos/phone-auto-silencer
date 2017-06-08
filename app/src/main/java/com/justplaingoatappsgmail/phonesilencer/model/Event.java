@@ -1,8 +1,5 @@
 package com.justplaingoatappsgmail.phonesilencer.model;
 
-import com.justplaingoatappsgmail.phonesilencer.enums.Repeat;
-import java.util.List;
-
 import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
@@ -108,12 +105,12 @@ public class Event extends RealmObject {
         this.days = days;
     }
 
-    public Repeat getRepeat() {
-        return Repeat.valueOf(repeat);
+    public String getRepeat() {
+        return repeat;
     }
 
-    public void setRepeat(Repeat repeat) {
-        this.repeat = repeat.toString();
+    public void setRepeat(String repeat) {
+        this.repeat = repeat;
     }
 
     public int getRingerMode() {

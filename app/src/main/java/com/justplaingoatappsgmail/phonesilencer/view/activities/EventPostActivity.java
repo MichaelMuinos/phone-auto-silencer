@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioButton;
+import android.widget.Spinner;
 import android.widget.TextView;
 import com.justplaingoatappsgmail.phonesilencer.PhoneSilencerApplication;
 import com.justplaingoatappsgmail.phonesilencer.R;
@@ -31,6 +32,7 @@ public class EventPostActivity extends AppCompatActivity implements EventPostCon
     @BindView(R.id.event_post_vibrate_button) RadioButton vibrateButton;
     @BindView(R.id.event_post_start_time) TextView startTime;
     @BindView(R.id.event_post_end_time) TextView endTime;
+    @BindView(R.id.event_post_repeat_spinner) Spinner repeatSpinner;
     @BindViews({R.id.event_post_monday_text_view,
                 R.id.event_post_tuesday_text_view,
                 R.id.event_post_wednesday_text_view,
@@ -163,7 +165,8 @@ public class EventPostActivity extends AppCompatActivity implements EventPostCon
     public void onSaveButtonClick() {
         presenter.saveEvent(eventName.getText().toString(), startTime.getText().toString(),
                 endTime.getText().toString(), days, ContextCompat.getDrawable(context, R.drawable.circle_red),
-                vibrateButton.isChecked() ? AudioManager.RINGER_MODE_VIBRATE : AudioManager.RINGER_MODE_SILENT);
+                vibrateButton.isChecked() ? AudioManager.RINGER_MODE_VIBRATE : AudioManager.RINGER_MODE_SILENT,
+                repeatSpinner.getSelectedItem().toString());
     }
 
     /**
@@ -177,6 +180,10 @@ public class EventPostActivity extends AppCompatActivity implements EventPostCon
                 textView.setBackground(drawable);
             }
         }
+    }
+
+    private void s() {
+
     }
 
 }

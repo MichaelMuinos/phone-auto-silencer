@@ -3,6 +3,7 @@ package com.justplaingoatappsgmail.phonesilencer.presenter;
 import android.graphics.drawable.Drawable;
 import android.widget.TextView;
 import com.justplaingoatappsgmail.phonesilencer.contracts.EventPostContract;
+import com.justplaingoatappsgmail.phonesilencer.enums.Repeat;
 import com.justplaingoatappsgmail.phonesilencer.model.RealmInteger;
 import com.justplaingoatappsgmail.phonesilencer.model.database.RealmService;
 import java.util.ArrayList;
@@ -39,7 +40,7 @@ public class EventPostPresenter implements EventPostContract.Presenter {
     }
 
     @Override
-    public void saveEvent(String title, String startTime, String endTime, List<TextView> days, Drawable drawable, int ringerMode) {
+    public void saveEvent(String title, String startTime, String endTime, List<TextView> days, Drawable drawable, int ringerMode, String repeat) {
         if(isValidName(title) && isValidTimeInterval(startTime, endTime) && hasAtLeastOneDaySelected(days, drawable)) {
             int startTimeHour = Integer.parseInt(startTime.substring(0, 2));
             int startTimeMinute = Integer.parseInt(startTime.substring(3, 5));
@@ -48,7 +49,7 @@ public class EventPostPresenter implements EventPostContract.Presenter {
             int endTimeMinute = Integer.parseInt(endTime.substring(3, 5));
             int endTimeAmOrPm = endTime.substring(endTime.length() - 2, endTime.length()) == "AM" ? Calendar.AM : Calendar.PM;
             realmService.addEvent(title, startTimeHour, startTimeMinute, startTimeAmOrPm, endTimeHour,
-                    endTimeMinute, endTimeAmOrPm, ringerMode, getDays(days, drawable));
+                    endTimeMinute, endTimeAmOrPm, ringerMode, getDays(days, drawable), repeat);
             view.returnToEventListActivity();
         }
     }

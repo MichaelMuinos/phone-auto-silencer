@@ -4,6 +4,6 @@ import android.view.View;
 
 public interface EventListListener {
     void onEventListCardViewClick(int position);
-    void onEventListSwitchCheckedChanged(int position, View view, boolean isChecked);
+    void onEventListSwitchCheckedChanged(int position, View switchView, View positionTagView, boolean isChecked);
     void onEventListDeleteClickListener(int position);
 }

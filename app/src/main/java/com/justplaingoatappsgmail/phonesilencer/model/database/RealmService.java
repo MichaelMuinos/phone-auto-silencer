@@ -1,6 +1,8 @@
 package com.justplaingoatappsgmail.phonesilencer.model.database;
 
 import android.content.Context;
+
+import com.justplaingoatappsgmail.phonesilencer.enums.Repeat;
 import com.justplaingoatappsgmail.phonesilencer.model.Event;
 import com.justplaingoatappsgmail.phonesilencer.model.RealmInteger;
 
@@ -39,7 +41,8 @@ public class RealmService {
 
     public void addEvent(final String title, final int startTimeHour, final int startTimeMinute,
                          final int startTimeAmOrPm, final int endTimeHour, final int endTimeMinute,
-                         final int endTimeAmOrPm, final int ringerMode, final List<Integer> days) {
+                         final int endTimeAmOrPm, final int ringerMode, final List<Integer> days,
+                         final String repeat) {
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
@@ -52,6 +55,7 @@ public class RealmService {
                 event.setEndTimeMinute(endTimeMinute);
                 event.setEndTimeAmOrPm(endTimeAmOrPm);
                 event.setRingerMode(ringerMode);
+                event.setRepeat(repeat);
                 // generate RealmList of RealmIntegers for the days. Need to create RealmInteger objects first
                 // before adding them to the RealmList
                 RealmList<RealmInteger> dayList = new RealmList<>();

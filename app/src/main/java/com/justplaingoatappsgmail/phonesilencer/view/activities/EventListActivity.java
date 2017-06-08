@@ -23,6 +23,7 @@ import com.justplaingoatappsgmail.phonesilencer.customlisteners.EventListListene
 import com.justplaingoatappsgmail.phonesilencer.model.services.SetNormalService;
 import com.justplaingoatappsgmail.phonesilencer.view.adapters.EventListAdapter;
 import com.justplaingoatappsgmail.phonesilencer.contracts.EventListContract;
+import com.veinhorn.tagview.TagView;
 
 import java.util.Calendar;
 
@@ -105,12 +106,13 @@ public class EventListActivity extends AppCompatActivity implements EventListCon
     }
 
     @Override
-    public void onEventListSwitchCheckedChanged(int position, View switchView, boolean isChecked) {
+    public void onEventListSwitchCheckedChanged(int position, View switchView, View positionTagView, boolean isChecked) {
         Switch eventSwitch = (Switch) switchView;
+        TagView eventTag = (TagView) positionTagView;
         if(isChecked) {
             Log.e("Silent", "Setting to silent");
             eventSwitch.setText("Enabled\t");
-            // also set tag
+            eventTag.setText("Enabled");
             // set phone silent
 //            AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 //            audioManager.setRingerMode(AudioManager.RINGER_MODE_SILENT);
@@ -122,7 +124,7 @@ public class EventListActivity extends AppCompatActivity implements EventListCon
             alarmManager.setRepeating(AlarmManager.RTC, System.currentTimeMillis() + 30000, 24 * 60 * 60 * 1000, pendingIntent);
         } else {
             eventSwitch.setText("Disabled\t");
-            // also set tag
+            eventTag.setText("Disabled");
             // kill service
         }
     }

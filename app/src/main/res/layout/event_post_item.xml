@@ -53,6 +53,7 @@
                 android:orientation="horizontal">
 
                 <com.veinhorn.tagview.TagView
+                    android:id="@+id/event_post_item_days_tag"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
@@ -64,6 +65,7 @@
                     app:tagBorderRadius="20" />
 
                 <com.veinhorn.tagview.TagView
+                    android:id="@+id/event_post_item_time_tag"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="5dp"
@@ -74,6 +76,7 @@
                     app:tagBorderRadius="20" />
 
                 <com.veinhorn.tagview.TagView
+                    android:id="@+id/event_post_item_ringer_tag"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="5dp"
@@ -92,6 +95,7 @@
                 android:layout_marginTop="5dp">
 
                 <com.veinhorn.tagview.TagView
+                    android:id="@+id/event_post_item_repeat_tag"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
@@ -103,6 +107,7 @@
                     app:tagBorderRadius="20" />
 
                 <com.veinhorn.tagview.TagView
+                    android:id="@+id/event_post_item_position_tag"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="5dp"
