@@ -177,10 +177,4 @@ public class EventListActivity extends AppCompatActivity implements EventListCon
         return PendingIntent.getService(context, (int) System.currentTimeMillis(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
-    private void setupComponents(Class service) {
-        Intent intent = new Intent(context, service);
-        PendingIntent pendingIntent = PendingIntent.getService(context, 0, intent, 0);
-        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-    }
-
 }

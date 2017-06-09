@@ -3,15 +3,12 @@ package com.justplaingoatappsgmail.phonesilencer.presenter;
 import android.graphics.drawable.Drawable;
 import android.widget.TextView;
 import com.justplaingoatappsgmail.phonesilencer.contracts.EventPostContract;
-import com.justplaingoatappsgmail.phonesilencer.enums.Repeat;
-import com.justplaingoatappsgmail.phonesilencer.model.RealmInteger;
 import com.justplaingoatappsgmail.phonesilencer.model.database.RealmService;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import io.realm.RealmList;
 
 public class EventPostPresenter implements EventPostContract.Presenter {
 
@@ -40,16 +37,15 @@ public class EventPostPresenter implements EventPostContract.Presenter {
     }
 
     @Override
-    public void saveEvent(String title, String startTime, String endTime, List<TextView> days, Drawable drawable, int ringerMode, String repeat) {
-        if(isValidName(title) && isValidTimeInterval(startTime, endTime) && hasAtLeastOneDaySelected(days, drawable)) {
+    public void saveEvent(String title, String startTime, String endTime, int ringerMode, List<Integer> days, String repeat) {
+        if(isValidName(title) && isValidTimeInterval(startTime, endTime) && hasAtLeastOneDaySelected(days)) {
             int startTimeHour = Integer.parseInt(startTime.substring(0, 2));
             int startTimeMinute = Integer.parseInt(startTime.substring(3, 5));
             int startTimeAmOrPm = startTime.substring(startTime.length() - 2, startTime.length()) == "AM" ? Calendar.AM : Calendar.PM;
             int endTimeHour = Integer.parseInt(endTime.substring(0, 2));
             int endTimeMinute = Integer.parseInt(endTime.substring(3, 5));
             int endTimeAmOrPm = endTime.substring(endTime.length() - 2, endTime.length()) == "AM" ? Calendar.AM : Calendar.PM;
-            realmService.addEvent(title, startTimeHour, startTimeMinute, startTimeAmOrPm, endTimeHour,
-                    endTimeMinute, endTimeAmOrPm, ringerMode, getDays(days, drawable), repeat);
+            realmService.addEvent(title, startTimeHour, startTimeMinute, startTimeAmOrPm, endTimeHour, endTimeMinute, endTimeAmOrPm, ringerMode, days, repeat);
             view.returnToEventListActivity();
         }
     }
@@ -61,6 +57,11 @@ public class EventPostPresenter implements EventPostContract.Presenter {
         String hourToString = hour < 10 ? "0" + String.valueOf(hour) : String.valueOf(hour);
         String minuteToString = minute < 10 ? "0" + String.valueOf(minute) : String.valueOf(minute);
         return hourToString + ":" + minuteToString + " " + partOfDay;
+    }
+
+    @Override
+    public int getDay(String day) {
+        return dayMap.get(day);
     }
 
     @Override
@@ -100,32 +101,12 @@ public class EventPostPresenter implements EventPostContract.Presenter {
         return true;
     }
 
-    /**
-     * Method checks to see if there is at least one day in the week that is marked.
-     * It loops through all the text view days to see if the drawable background is
-     * of the type circle_red.
-     * @param days
-     * @param drawable
-     * @return
-     */
-    private boolean hasAtLeastOneDaySelected(List<TextView> days, Drawable drawable) {
-        for(TextView textView : days) {
-            if(textView.getBackground().getConstantState().equals(drawable.getConstantState())) {
-                return true;
-            }
+    private boolean hasAtLeastOneDaySelected(List<Integer> days) {
+        if(days.size() == 0) {
+            view.showNoDaysSelectedError();
+            return false;
         }
-        view.showNoDaysSelectedError();
-        return false;
-    }
-
-    private List<Integer> getDays(List<TextView> days, Drawable drawable) {
-        List<Integer> list = new ArrayList<>();
-        for(TextView textView : days) {
-            if(textView.getBackground().getConstantState().equals(drawable.getConstantState())) {
-                list.add(dayMap.get(textView.getText().toString()));
-            }
-        }
-        return list;
+        return true;
     }
 
 }

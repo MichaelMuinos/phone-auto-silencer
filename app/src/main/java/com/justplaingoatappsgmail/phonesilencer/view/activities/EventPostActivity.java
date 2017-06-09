@@ -17,6 +17,8 @@ import com.justplaingoatappsgmail.phonesilencer.PhoneSilencerApplication;
 import com.justplaingoatappsgmail.phonesilencer.R;
 import com.justplaingoatappsgmail.phonesilencer.contracts.EventPostContract;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
+
+import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 import butterknife.BindView;
@@ -163,10 +165,9 @@ public class EventPostActivity extends AppCompatActivity implements EventPostCon
      */
     @OnClick(R.id.event_post_save_button)
     public void onSaveButtonClick() {
-        presenter.saveEvent(eventName.getText().toString(), startTime.getText().toString(),
-                endTime.getText().toString(), days, ContextCompat.getDrawable(context, R.drawable.circle_red),
+        presenter.saveEvent(eventName.getText().toString(), startTime.getText().toString(), endTime.getText().toString(),
                 vibrateButton.isChecked() ? AudioManager.RINGER_MODE_VIBRATE : AudioManager.RINGER_MODE_SILENT,
-                repeatSpinner.getSelectedItem().toString());
+                getDays(days, ContextCompat.getDrawable(context, R.drawable.circle_red)), repeatSpinner.getSelectedItem().toString());
     }
 
     /**
@@ -182,8 +183,14 @@ public class EventPostActivity extends AppCompatActivity implements EventPostCon
         }
     }
 
-    private void s() {
-
+    private List<Integer> getDays(List<TextView> days, Drawable drawable) {
+        List<Integer> list = new ArrayList<>();
+        for(TextView textView : days) {
+            if(textView.getBackground().getConstantState().equals(drawable.getConstantState())) {
+                list.add(presenter.getDay(textView.getText().toString()));
+            }
+        }
+        return list;
     }
 
 }
