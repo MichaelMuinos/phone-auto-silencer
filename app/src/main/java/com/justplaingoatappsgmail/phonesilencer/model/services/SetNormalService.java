@@ -26,6 +26,7 @@ public class SetNormalService extends IntentService {
         // set the phone ringer to normal
         AudioManager mAudioManager =(AudioManager) getApplicationContext().getSystemService(Context.AUDIO_SERVICE);
         mAudioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
-        Log.e("Normal", "Back to normal");
+        Log.d("Test", "Back to normal");
     }
+
 }

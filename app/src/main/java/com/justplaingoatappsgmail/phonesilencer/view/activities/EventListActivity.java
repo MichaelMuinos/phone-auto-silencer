@@ -20,7 +20,9 @@ import android.widget.Switch;
 import com.justplaingoatappsgmail.phonesilencer.PhoneSilencerApplication;
 import com.justplaingoatappsgmail.phonesilencer.R;
 import com.justplaingoatappsgmail.phonesilencer.customlisteners.EventListListener;
+import com.justplaingoatappsgmail.phonesilencer.model.Event;
 import com.justplaingoatappsgmail.phonesilencer.model.services.SetNormalService;
+import com.justplaingoatappsgmail.phonesilencer.model.services.SetSilentService;
 import com.justplaingoatappsgmail.phonesilencer.view.adapters.EventListAdapter;
 import com.justplaingoatappsgmail.phonesilencer.contracts.EventListContract;
 import com.veinhorn.tagview.TagView;
@@ -106,22 +108,24 @@ public class EventListActivity extends AppCompatActivity implements EventListCon
     }
 
     @Override
-    public void onEventListSwitchCheckedChanged(int position, View switchView, View positionTagView, boolean isChecked) {
+    public void onEventListSwitchCheckedChanged(Event event, View switchView, View positionTagView, boolean isChecked) {
         Switch eventSwitch = (Switch) switchView;
         TagView eventTag = (TagView) positionTagView;
         if(isChecked) {
-            Log.e("Silent", "Setting to silent");
             eventSwitch.setText("Enabled\t");
             eventTag.setText("Enabled");
-            // set phone silent
-//            AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-//            audioManager.setRingerMode(AudioManager.RINGER_MODE_SILENT);
-            // initialize alarm manager
-            Intent intent = new Intent(context, SetNormalService.class);
-            PendingIntent pendingIntent = PendingIntent.getService(context, 0, intent, 0);
+            // create pending intent and initialize alarm manager
+            PendingIntent start = createPendingIntent(SetSilentService.class, event.getRingerMode());
+            PendingIntent end = createPendingIntent(SetNormalService.class, AudioManager.RINGER_MODE_NORMAL);
             AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-            // RTC: Fires pending intent but does not wake up device
-            alarmManager.setRepeating(AlarmManager.RTC, System.currentTimeMillis() + 30000, 24 * 60 * 60 * 1000, pendingIntent);
+            // cycle through our days and set the calendars
+            for(int i = 0; i < event.getDays().size(); i++) {
+                Calendar startCalendar = presenter.setCalendar(event.getDays().get(i).getRealmInt(), event.getStartTimeHour(), event.getStartTimeMinute(), event.getStartTimeAmOrPm());
+                Calendar endCalendar = presenter.setCalendar(event.getDays().get(i).getRealmInt(), event.getEndTimeHour(), event.getEndTimeMinute(), event.getEndTimeAmOrPm());
+                // RTC: Fires pending intent but does not wake up device
+                alarmManager.setRepeating(AlarmManager.RTC, startCalendar.getTimeInMillis(), 24 * 60 * 60 * 1000, start);
+                alarmManager.setRepeating(AlarmManager.RTC, endCalendar.getTimeInMillis(), 24 * 60 * 60 * 1000, end);
+            }
         } else {
             eventSwitch.setText("Disabled\t");
             eventTag.setText("Disabled");
@@ -131,12 +135,12 @@ public class EventListActivity extends AppCompatActivity implements EventListCon
 
     /**
      * Removes an event from the recycler view when clicking on the close button
-     * @param position
+     * @param event
      */
     @Override
-    public void onEventListDeleteClickListener(int position) {
+    public void onEventListDeleteClickListener(Event event) {
         // delete the event at the particular position in the list
-        presenter.deleteEvent(presenter.getEvents().get(position));
+        presenter.deleteEvent(event);
         // reset our event list for our adapter
         eventListAdapter.setEventList(presenter.getEvents());
         // notify the adapter that the list has changed and to update the view
@@ -165,6 +169,12 @@ public class EventListActivity extends AppCompatActivity implements EventListCon
     @Override
     public void showSnackBarUndoMessage() {
 
+    }
+
+    private PendingIntent createPendingIntent(Class service, int ringerMode) {
+        Intent intent = new Intent(context, service);
+        intent.putExtra(Event.RINGER_MODE, ringerMode);
+        return PendingIntent.getService(context, (int) System.currentTimeMillis(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
     private void setupComponents(Class service) {

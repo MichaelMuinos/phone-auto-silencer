@@ -46,7 +46,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
     @Override
     public EventListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.event_post_item, parent, false);
-        return new EventListViewHolder(view, listener);
+        return new EventListViewHolder(view, listener, eventList);
     }
 
     @Override
@@ -93,6 +93,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
     public static class EventListViewHolder extends RecyclerView.ViewHolder {
 
         private EventListListener listener;
+        private List<Event> eventList;
 
         @BindView(R.id.event_post_item_title) TextView eventName;
         @BindView(R.id.event_post_item_days_tag) TagView daysTag;
@@ -102,9 +103,10 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
         @BindView(R.id.event_post_item_position_tag) TagView positionTag;
         @BindView(R.id.event_post_item_switch) Switch switchEvent;
 
-        public EventListViewHolder(View itemView, EventListListener listener) {
+        public EventListViewHolder(View itemView, EventListListener listener, List<Event> eventList) {
             super(itemView);
             this.listener = listener;
+            this.eventList = eventList;
             ButterKnife.bind(this, itemView);
         }
 
@@ -115,12 +117,12 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
 
         @OnCheckedChanged(R.id.event_post_item_switch)
         public void onSwitchCheckedChanged(boolean isChecked) {
-            listener.onEventListSwitchCheckedChanged(this.getLayoutPosition(), switchEvent, positionTag, isChecked);
+            listener.onEventListSwitchCheckedChanged(eventList.get(this.getLayoutPosition()), switchEvent, positionTag, isChecked);
         }
 
         @OnClick(R.id.event_post_item_close_button)
         public void onCloseButtonClick() {
-            listener.onEventListDeleteClickListener(this.getLayoutPosition());
+            listener.onEventListDeleteClickListener(eventList.get(this.getLayoutPosition()));
         }
 
     }
