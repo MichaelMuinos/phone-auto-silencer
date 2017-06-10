@@ -167,7 +167,7 @@ public class EventPostActivity extends AppCompatActivity implements EventPostCon
     public void onSaveButtonClick() {
         presenter.saveEvent(eventName.getText().toString(), startTime.getText().toString(), endTime.getText().toString(),
                 vibrateButton.isChecked() ? AudioManager.RINGER_MODE_VIBRATE : AudioManager.RINGER_MODE_SILENT,
-                getDays(days, ContextCompat.getDrawable(context, R.drawable.circle_red)), repeatSpinner.getSelectedItem().toString());
+                getDays(), repeatSpinner.getSelectedItem().toString());
     }
 
     /**
@@ -183,10 +183,10 @@ public class EventPostActivity extends AppCompatActivity implements EventPostCon
         }
     }
 
-    private List<Integer> getDays(List<TextView> days, Drawable drawable) {
+    private List<Integer> getDays() {
         List<Integer> list = new ArrayList<>();
         for(TextView textView : days) {
-            if(textView.getBackground().getConstantState().equals(drawable.getConstantState())) {
+            if(textView.getBackground().getConstantState().equals(ContextCompat.getDrawable(context, R.drawable.circle_red).getConstantState())) {
                 list.add(presenter.getDay(textView.getText().toString()));
             }
         }

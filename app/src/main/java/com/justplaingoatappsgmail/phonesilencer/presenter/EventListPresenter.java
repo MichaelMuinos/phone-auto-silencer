@@ -8,14 +8,17 @@ import com.justplaingoatappsgmail.phonesilencer.model.database.RealmService;
 
 import java.util.Calendar;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class EventListPresenter implements EventListContract.Presenter {
 
     private EventListContract.View view;
     private RealmService realmService;
+    private AtomicInteger atomicInteger;
 
-    public EventListPresenter(RealmService realmService) {
+    public EventListPresenter(RealmService realmService, AtomicInteger atomicInteger) {
         this.realmService = realmService;
+        this.atomicInteger = atomicInteger;
     }
 
     @Override
@@ -35,13 +38,24 @@ public class EventListPresenter implements EventListContract.Presenter {
     }
 
     @Override
+    public void addPendingIntentRequestCodes(String eventName, List<Integer> requestCodes) {
+        realmService.addPendingIntentRequestCodes(eventName, requestCodes);
+        view.showEventEnabledMessage(eventName);
+    }
+
+    @Override
+    public int getIncrementedRequestCode() {
+        if(atomicInteger.get() == Integer.MAX_VALUE) atomicInteger.set(0);
+        return atomicInteger.incrementAndGet();
+    }
+
+    @Override
     public Calendar setCalendar(int day, int hour, int minute, int aMOrPm) {
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.DAY_OF_WEEK, day);
         calendar.set(Calendar.HOUR, hour);
         calendar.set(Calendar.MINUTE, minute);
         calendar.set(Calendar.AM_PM, aMOrPm);
-        Log.d("Test", calendar.getTime().toString());
         return calendar;
     }
 

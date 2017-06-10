@@ -14,10 +14,14 @@ public interface EventListContract {
         void showEvents();
         void showSnackBarNoEventsMessage();
         void showSnackBarUndoMessage();
+        void showEventEnabledMessage(String eventName);
+        void showEventDisabledMessage(String eventName);
     }
 
     interface Presenter extends BasePresenter<View> {
         List<Event> getEvents();
+        void addPendingIntentRequestCodes(String eventName, List<Integer> requestCodes);
+        int getIncrementedRequestCode();
         Calendar setCalendar(int day, int hour, int minute, int aMOrPm);
         void deleteEvent(Event event);
     }

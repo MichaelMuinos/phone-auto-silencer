@@ -2,7 +2,6 @@ package com.justplaingoatappsgmail.phonesilencer.contracts;
 
 import com.justplaingoatappsgmail.phonesilencer.BasePresenter;
 import com.justplaingoatappsgmail.phonesilencer.BaseView;
-
 import java.util.List;
 
 public interface EventPostContract {

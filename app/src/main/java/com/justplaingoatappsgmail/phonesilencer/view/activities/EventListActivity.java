@@ -27,7 +27,9 @@ import com.justplaingoatappsgmail.phonesilencer.view.adapters.EventListAdapter;
 import com.justplaingoatappsgmail.phonesilencer.contracts.EventListContract;
 import com.veinhorn.tagview.TagView;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import javax.inject.Inject;
 import butterknife.BindView;
@@ -38,6 +40,7 @@ public class EventListActivity extends AppCompatActivity implements EventListCon
 
     private static final int CHOICE_GIVEN = 9000;
     private EventListAdapter eventListAdapter;
+    private Snackbar snackBar;
 
     @BindView(R.id.activity_event_recycler_view) RecyclerView recyclerView;
     @BindView(R.id.activity_event_coordinator_layout) CoordinatorLayout coordinatorLayout;
@@ -111,25 +114,17 @@ public class EventListActivity extends AppCompatActivity implements EventListCon
     public void onEventListSwitchCheckedChanged(Event event, View switchView, View positionTagView, boolean isChecked) {
         Switch eventSwitch = (Switch) switchView;
         TagView eventTag = (TagView) positionTagView;
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         if(isChecked) {
             eventSwitch.setText("Enabled\t");
             eventTag.setText("Enabled");
-            // create pending intent and initialize alarm manager
-            PendingIntent start = createPendingIntent(SetSilentService.class, event.getRingerMode());
-            PendingIntent end = createPendingIntent(SetNormalService.class, AudioManager.RINGER_MODE_NORMAL);
-            AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-            // cycle through our days and set the calendars
-            for(int i = 0; i < event.getDays().size(); i++) {
-                Calendar startCalendar = presenter.setCalendar(event.getDays().get(i).getRealmInt(), event.getStartTimeHour(), event.getStartTimeMinute(), event.getStartTimeAmOrPm());
-                Calendar endCalendar = presenter.setCalendar(event.getDays().get(i).getRealmInt(), event.getEndTimeHour(), event.getEndTimeMinute(), event.getEndTimeAmOrPm());
-                // RTC: Fires pending intent but does not wake up device
-                alarmManager.setRepeating(AlarmManager.RTC, startCalendar.getTimeInMillis(), 24 * 60 * 60 * 1000, start);
-                alarmManager.setRepeating(AlarmManager.RTC, endCalendar.getTimeInMillis(), 24 * 60 * 60 * 1000, end);
-            }
+            // set our alarms
+            setAlarms(event, alarmManager);
         } else {
             eventSwitch.setText("Disabled\t");
             eventTag.setText("Disabled");
-            // kill service
+            // cancel our alarms // TODO:
+            cancelAlarms(event, alarmManager);
         }
     }
 
@@ -158,8 +153,8 @@ public class EventListActivity extends AppCompatActivity implements EventListCon
      */
     @Override
     public void showSnackBarNoEventsMessage() {
-        Snackbar snackbar = Snackbar.make(coordinatorLayout, "You have no events created!", Snackbar.LENGTH_INDEFINITE);
-        snackbar.show();
+        snackBar = Snackbar.make(coordinatorLayout, "You have no events created!", Snackbar.LENGTH_INDEFINITE);
+        snackBar.show();
     }
 
     /**
@@ -171,10 +166,50 @@ public class EventListActivity extends AppCompatActivity implements EventListCon
 
     }
 
-    private PendingIntent createPendingIntent(Class service, int ringerMode) {
+    @Override
+    public void showEventEnabledMessage(String eventName) {
+        snackBar = Snackbar.make(coordinatorLayout, eventName + " has been enabled.", Snackbar.LENGTH_LONG);
+        snackBar.show();
+    }
+
+    @Override
+    public void showEventDisabledMessage(String eventName) {
+        snackBar = Snackbar.make(coordinatorLayout, eventName + " has been disabled.", Snackbar.LENGTH_LONG);
+        snackBar.show();
+    }
+
+    private PendingIntent createPendingIntent(Class service, int ringerMode, int requestCode) {
         Intent intent = new Intent(context, service);
         intent.putExtra(Event.RINGER_MODE, ringerMode);
-        return PendingIntent.getService(context, (int) System.currentTimeMillis(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        return PendingIntent.getService(context, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+    }
+
+    private void setAlarms(Event event, AlarmManager alarmManager) {
+        List<Integer> requestCodes = new ArrayList<>();
+        // cycle through our days and set the calendars
+        for(int i = 0; i < event.getDays().size(); i++) {
+            // create start and end request code
+            int startRequestCode = presenter.getIncrementedRequestCode();
+            int endRequestCode = presenter.getIncrementedRequestCode();
+            // add both to our request code list
+            requestCodes.add(startRequestCode);
+            requestCodes.add(endRequestCode);
+            // create pending intent
+            PendingIntent start = createPendingIntent(SetSilentService.class, event.getRingerMode(), startRequestCode);
+            PendingIntent end = createPendingIntent(SetNormalService.class, AudioManager.RINGER_MODE_NORMAL, endRequestCode);
+            // create calendars
+            Calendar startCalendar = presenter.setCalendar(event.getDays().get(i).getRealmInt(), event.getStartTimeHour(), event.getStartTimeMinute(), event.getStartTimeAmOrPm());
+            Calendar endCalendar = presenter.setCalendar(event.getDays().get(i).getRealmInt(), event.getEndTimeHour(), event.getEndTimeMinute(), event.getEndTimeAmOrPm());
+            // set our alarm manager triggers
+            // RTC: Fires pending intent but does not wake up device
+            alarmManager.setRepeating(AlarmManager.RTC, startCalendar.getTimeInMillis(), 24 * 60 * 60 * 1000, start);
+            alarmManager.setRepeating(AlarmManager.RTC, endCalendar.getTimeInMillis(), 24 * 60 * 60 * 1000, end);
+        }
+        presenter.addPendingIntentRequestCodes(event.getEventName(), requestCodes);
+    }
+
+    private void cancelAlarms(Event event, AlarmManager alarmManager) {
+
     }
 
 }

@@ -2,8 +2,8 @@ package com.justplaingoatappsgmail.phonesilencer.model.database;
 
 import android.content.Context;
 
-import com.justplaingoatappsgmail.phonesilencer.enums.Repeat;
 import com.justplaingoatappsgmail.phonesilencer.model.Event;
+import com.justplaingoatappsgmail.phonesilencer.model.RealmPendingIntent;
 import com.justplaingoatappsgmail.phonesilencer.model.RealmInteger;
 
 import java.util.ArrayList;
@@ -75,6 +75,23 @@ public class RealmService {
             public void execute(Realm realm) {
                 RealmResults<Event> deleteEvent = realm.where(Event.class).equalTo(Event.ID, event.getId()).findAll();
                 deleteEvent.deleteAllFromRealm();
+            }
+        });
+    }
+
+    public void addPendingIntentRequestCodes(final String eventName, final List<Integer> requestCodes) {
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmPendingIntent realmPendingIntent = realm.createObject(RealmPendingIntent.class, UUID.randomUUID().toString());
+                realmPendingIntent.setEventName(eventName);
+                RealmList<RealmInteger> realmListRequestCodes = new RealmList<>();
+                for(int i : requestCodes) {
+                    RealmInteger realmInteger = realm.createObject(RealmInteger.class);
+                    realmInteger.setRealmInt(i);
+                    realmListRequestCodes.add(realmInteger);
+                }
+                realmPendingIntent.setRequestCodes(realmListRequestCodes);
             }
         });
     }
