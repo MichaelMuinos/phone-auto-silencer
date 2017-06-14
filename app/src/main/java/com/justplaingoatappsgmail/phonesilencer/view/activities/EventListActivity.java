@@ -5,18 +5,23 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.Switch;
+import android.widget.TextView;
 
 import com.justplaingoatappsgmail.phonesilencer.AppConstants;
 import com.justplaingoatappsgmail.phonesilencer.PhoneSilencerApplication;
@@ -161,7 +166,14 @@ public class EventListActivity extends AppCompatActivity implements EventListCon
      */
     @Override
     public void showSnackBarNoEventsMessage() {
-        snackBar = Snackbar.make(coordinatorLayout, "You have no events created!", Snackbar.LENGTH_INDEFINITE);
+        snackBar = Snackbar.make(coordinatorLayout, "No events created. Go make some!", Snackbar.LENGTH_LONG);
+        snackBar.setDuration(5000);
+        TextView textView = (TextView) snackBar.getView().findViewById(android.support.design.R.id.snackbar_text);
+        // set text to center
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+        else textView.setGravity(Gravity.CENTER_HORIZONTAL);
+        // set text color
+        textView.setTextColor(ContextCompat.getColor(context, R.color.yellow_color));
         snackBar.show();
     }
 

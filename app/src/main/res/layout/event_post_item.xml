@@ -14,6 +14,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
             android:orientation="vertical">
 
             <RelativeLayout
@@ -50,7 +51,9 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp">
 
                 <com.veinhorn.tagview.TagView
                     android:id="@+id/event_post_item_days_tag"
@@ -62,7 +65,8 @@
                     android:gravity="center_horizontal"
                     android:padding="5dp"
                     android:text="Days"
-                    app:tagBorderRadius="20" />
+                    app:tagBorderRadius="20"
+                    app:tagColor="@color/dark_blue_color" />
 
                 <com.veinhorn.tagview.TagView
                     android:id="@+id/event_post_item_time_tag"
@@ -73,7 +77,8 @@
                     android:layout_weight="1"
                     android:gravity="center_horizontal"
                     android:text="Time"
-                    app:tagBorderRadius="20" />
+                    app:tagBorderRadius="20"
+                    app:tagColor="@color/green_color" />
 
                 <com.veinhorn.tagview.TagView
                     android:id="@+id/event_post_item_ringer_tag"
@@ -84,7 +89,8 @@
                     android:layout_weight="1"
                     android:gravity="center_horizontal"
                     android:text="Ringer"
-                    app:tagBorderRadius="20" />
+                    app:tagBorderRadius="20"
+                    app:tagColor="@color/dark_blue_color" />
 
             </LinearLayout>
 
@@ -92,7 +98,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginTop="5dp">
+                android:padding="5dp">
 
                 <com.veinhorn.tagview.TagView
                     android:id="@+id/event_post_item_repeat_tag"
@@ -104,7 +110,8 @@
                     android:gravity="center_horizontal"
                     android:padding="5dp"
                     android:text="Repeat"
-                    app:tagBorderRadius="20" />
+                    app:tagBorderRadius="20"
+                    app:tagColor="@color/yellow_color" />
 
                 <com.veinhorn.tagview.TagView
                     android:id="@+id/event_post_item_position_tag"
@@ -115,7 +122,8 @@
                     android:layout_weight="1"
                     android:gravity="center_horizontal"
                     android:text="Position"
-                    app:tagBorderRadius="20" />
+                    app:tagBorderRadius="20"
+                    app:tagColor="@color/yellow_color" />
 
             </LinearLayout>
 
