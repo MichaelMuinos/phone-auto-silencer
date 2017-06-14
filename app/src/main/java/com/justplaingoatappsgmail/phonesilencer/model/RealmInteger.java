@@ -1,5 +1,7 @@
 package com.justplaingoatappsgmail.phonesilencer.model;
 
+import java.io.Serializable;
+
 import io.realm.RealmObject;
 import io.realm.annotations.RealmClass;
 

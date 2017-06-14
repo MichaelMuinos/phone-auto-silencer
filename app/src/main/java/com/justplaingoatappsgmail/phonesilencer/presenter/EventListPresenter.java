@@ -38,7 +38,12 @@ public class EventListPresenter implements EventListContract.Presenter {
     }
 
     @Override
-    public void addPendingIntentRequestCodes(String eventName, List<Integer> requestCodes) {
+    public List<Integer> getEventRequestCodes(Event event) {
+        return realmService.getRealmPendingIntentRequestCodes(event);
+    }
+
+    @Override
+    public void addRequestCodes(String eventName, List<Integer> requestCodes) {
         realmService.addPendingIntentRequestCodes(eventName, requestCodes);
         view.showEventEnabledMessage(eventName);
     }
@@ -50,18 +55,26 @@ public class EventListPresenter implements EventListContract.Presenter {
     }
 
     @Override
-    public Calendar setCalendar(int day, int hour, int minute, int aMOrPm) {
+    public Calendar setCalendar(int day, int hour, int minute) {
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.DAY_OF_WEEK, day);
-        calendar.set(Calendar.HOUR, hour);
+        calendar.set(Calendar.HOUR_OF_DAY, hour);
         calendar.set(Calendar.MINUTE, minute);
-        calendar.set(Calendar.AM_PM, aMOrPm);
+
+        Log.d("Test", "Calender Time: " + calendar.getTime().toString());
+
         return calendar;
     }
 
     @Override
     public void deleteEvent(Event event) {
         realmService.deleteEvent(event);
+    }
+
+    @Override
+    public void deleteRequestCodes(Event event) {
+        realmService.deleteRealmPendingIntent(event);
+        view.showEventDisabledMessage(event.getEventName());
     }
 
     @Override

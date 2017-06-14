@@ -64,13 +64,9 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
         // set days tag
         holder.daysTag.setText(sb.toString());
         // create start time string
-        String startTime = (event.getStartTimeHour() < 10 ? "0" + String.valueOf(event.getStartTimeHour()) : String.valueOf(event.getStartTimeHour()))
-                + ":" + (event.getStartTimeMinute() < 10 ? "0" + String.valueOf(event.getStartTimeMinute()) : String.valueOf(event.getStartTimeMinute()))
-                + (event.getStartTimeAmOrPm() == Calendar.AM ? "AM" : "PM");
+        String startTime = convertTimeToString(event.getStartTimeHour(), event.getStartTimeMinute());
         // create end time string
-        String endTime = (event.getEndTimeHour() < 10 ? "0" + String.valueOf(event.getEndTimeHour()) : String.valueOf(event.getEndTimeHour()))
-                + ":" + (event.getEndTimeMinute() < 10 ? "0" + String.valueOf(event.getEndTimeMinute()) : String.valueOf(event.getEndTimeMinute()))
-                + (event.getEndTimeAmOrPm() == Calendar.AM ? "AM" : "PM");
+        String endTime = convertTimeToString(event.getEndTimeHour(), event.getEndTimeMinute());
         // set time tag
         holder.timeTag.setText(startTime + " to " + endTime);
         // set ringer tag
@@ -88,6 +84,14 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
 
     public void setEventList(List<Event> eventList) {
         this.eventList = eventList;
+    }
+
+    private String convertTimeToString(int hourOfDay, int minute) {
+        String partOfDay = hourOfDay < 12 ? "AM" : "PM";
+        int hour = hourOfDay % 12;
+        String hourToString = hour == 0 ? "12" : (hour < 10 ? "0" + String.valueOf(hour) : String.valueOf(hour));
+        String minuteToString = minute < 10 ? "0" + String.valueOf(minute) : String.valueOf(minute);
+        return hourToString + ":" + minuteToString + " " + partOfDay;
     }
 
     public static class EventListViewHolder extends RecyclerView.ViewHolder {

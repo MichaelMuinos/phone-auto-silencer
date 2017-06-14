@@ -1,22 +1,22 @@
 package com.justplaingoatappsgmail.phonesilencer.model;
 
+import java.io.Serializable;
+
 import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 import io.realm.annotations.RealmClass;
 
 @RealmClass
-public class Event extends RealmObject {
+public class Event extends RealmObject implements Serializable {
 
     public static final String ID = "id";
     public static final String EVENT_NAME = "eventName";
     public static final String REPEAT = "repeat";
     public static final String START_TIME_HOUR = "startTimeHour";
     public static final String START_TIME_MINUTE = "startTimeMinute";
-    public static final String START_TIME_AM_OR_PM = "startTimeAmOrPm";
     public static final String END_TIME_HOUR = "endTimeHour";
     public static final String END_TIME_MINUTE = "endTimeMinute";
-    public static final String END_TIME_AM_OR_PM = "endTimeAmOrPm";
     public static final String RINGER_MODE = "ringerMode";
     public static final String DAYS = "days";
 
@@ -26,10 +26,8 @@ public class Event extends RealmObject {
     private String repeat;
     private int startTimeHour;
     private int startTimeMinute;
-    private int startTimeAmOrPm;
     private int endTimeHour;
     private int endTimeMinute;
-    private int endTimeAmOrPm;
     private int ringerMode;
     private RealmList<RealmInteger> days;
 
@@ -65,14 +63,6 @@ public class Event extends RealmObject {
         this.startTimeMinute = startTimeMinute;
     }
 
-    public int getStartTimeAmOrPm() {
-        return startTimeAmOrPm;
-    }
-
-    public void setStartTimeAmOrPm(int startTimeAmOrPm) {
-        this.startTimeAmOrPm = startTimeAmOrPm;
-    }
-
     public int getEndTimeHour() {
         return endTimeHour;
     }
@@ -87,14 +77,6 @@ public class Event extends RealmObject {
 
     public void setEndTimeMinute(int endTimeMinute) {
         this.endTimeMinute = endTimeMinute;
-    }
-
-    public int getEndTimeAmOrPm() {
-        return endTimeAmOrPm;
-    }
-
-    public void setEndTimeAmOrPm(int endTimeAmOrPm) {
-        this.endTimeAmOrPm = endTimeAmOrPm;
     }
 
     public RealmList<RealmInteger> getDays() {

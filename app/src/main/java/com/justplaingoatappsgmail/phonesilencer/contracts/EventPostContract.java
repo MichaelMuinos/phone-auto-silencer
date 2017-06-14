@@ -10,13 +10,12 @@ public interface EventPostContract {
         void showEventNameError();
         void showEventNameDuplicateError();
         void showStartEndTimeConflictError();
-        void showStartEndTimeNotSetError();
         void showNoDaysSelectedError();
         void returnToEventListActivity();
     }
 
     interface Presenter extends BasePresenter<View> {
-        void saveEvent(String title, String startTime, String endTime, int ringerMode, List<Integer> days, String repeat);
+        void saveEvent(String title, int startTimeHour, int startTimeMinute, int endTimeHour, int endTimeMinute, int ringerMode, List<Integer> days, String repeat);
         String convertTimeToString(int hourOfDay, int minute);
         int getDay(String day);
     }

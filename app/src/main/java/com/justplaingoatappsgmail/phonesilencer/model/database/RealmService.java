@@ -40,9 +40,8 @@ public class RealmService {
     }
 
     public void addEvent(final String title, final int startTimeHour, final int startTimeMinute,
-                         final int startTimeAmOrPm, final int endTimeHour, final int endTimeMinute,
-                         final int endTimeAmOrPm, final int ringerMode, final List<Integer> days,
-                         final String repeat) {
+                         final int endTimeHour, final int endTimeMinute, final int ringerMode,
+                         final List<Integer> days, final String repeat) {
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
@@ -50,10 +49,8 @@ public class RealmService {
                 event.setEventName(title);
                 event.setStartTimeHour(startTimeHour);
                 event.setStartTimeMinute(startTimeMinute);
-                event.setStartTimeAmOrPm(startTimeAmOrPm);
                 event.setEndTimeHour(endTimeHour);
                 event.setEndTimeMinute(endTimeMinute);
-                event.setEndTimeAmOrPm(endTimeAmOrPm);
                 event.setRingerMode(ringerMode);
                 event.setRepeat(repeat);
                 // generate RealmList of RealmIntegers for the days. Need to create RealmInteger objects first
@@ -96,8 +93,25 @@ public class RealmService {
         });
     }
 
+    public void deleteRealmPendingIntent(final Event event) {
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmResults<RealmPendingIntent> pendingIntentCodes = realm.where(RealmPendingIntent.class).equalTo(RealmPendingIntent.EVENT_NAME, event.getEventName()).findAll();
+                pendingIntentCodes.deleteAllFromRealm();
+            }
+        });
+    }
+
     public List<Event> getAllEvents() {
         return realm.isEmpty() ? new ArrayList<Event>() : new ArrayList<>(realm.where(Event.class).findAll());
+    }
+
+    public List<Integer> getRealmPendingIntentRequestCodes(Event event) {
+        RealmPendingIntent realmPendingIntent = realm.where(RealmPendingIntent.class).equalTo(RealmPendingIntent.EVENT_NAME, event.getEventName()).findFirst();
+        List<Integer> list = new ArrayList<>();
+        for(RealmInteger realmInteger : realmPendingIntent.getRequestCodes()) list.add(realmInteger.getRealmInt());
+        return list;
     }
 
     public void closeRealmInstance() {

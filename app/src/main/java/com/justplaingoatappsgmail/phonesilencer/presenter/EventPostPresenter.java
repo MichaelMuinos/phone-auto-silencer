@@ -1,6 +1,7 @@
 package com.justplaingoatappsgmail.phonesilencer.presenter;
 
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.widget.TextView;
 import com.justplaingoatappsgmail.phonesilencer.contracts.EventPostContract;
 import com.justplaingoatappsgmail.phonesilencer.model.database.RealmService;
@@ -37,15 +38,9 @@ public class EventPostPresenter implements EventPostContract.Presenter {
     }
 
     @Override
-    public void saveEvent(String title, String startTime, String endTime, int ringerMode, List<Integer> days, String repeat) {
-        if(isValidName(title) && isValidTimeInterval(startTime, endTime) && hasAtLeastOneDaySelected(days)) {
-            int startTimeHour = Integer.parseInt(startTime.substring(0, 2));
-            int startTimeMinute = Integer.parseInt(startTime.substring(3, 5));
-            int startTimeAmOrPm = startTime.substring(startTime.length() - 2, startTime.length()) == "AM" ? Calendar.AM : Calendar.PM;
-            int endTimeHour = Integer.parseInt(endTime.substring(0, 2));
-            int endTimeMinute = Integer.parseInt(endTime.substring(3, 5));
-            int endTimeAmOrPm = endTime.substring(endTime.length() - 2, endTime.length()) == "AM" ? Calendar.AM : Calendar.PM;
-            realmService.addEvent(title, startTimeHour, startTimeMinute, startTimeAmOrPm, endTimeHour, endTimeMinute, endTimeAmOrPm, ringerMode, days, repeat);
+    public void saveEvent(String title, int startTimeHour, int startTimeMinute, int endTimeHour, int endTimeMinute, int ringerMode, List<Integer> days, String repeat) {
+        if(isValidName(title) && isValidTimeInterval(startTimeHour, startTimeMinute, endTimeHour, endTimeMinute) && hasAtLeastOneDaySelected(days)) {
+            realmService.addEvent(title, startTimeHour, startTimeMinute, endTimeHour, endTimeMinute, ringerMode, days, repeat);
             view.returnToEventListActivity();
         }
     }
@@ -54,7 +49,7 @@ public class EventPostPresenter implements EventPostContract.Presenter {
     public String convertTimeToString(int hourOfDay, int minute) {
         String partOfDay = hourOfDay < 12 ? "AM" : "PM";
         int hour = hourOfDay % 12;
-        String hourToString = hour < 10 ? "0" + String.valueOf(hour) : String.valueOf(hour);
+        String hourToString = hour == 0 ? "12" : (hour < 10 ? "0" + String.valueOf(hour) : String.valueOf(hour));
         String minuteToString = minute < 10 ? "0" + String.valueOf(minute) : String.valueOf(minute);
         return hourToString + ":" + minuteToString + " " + partOfDay;
     }
@@ -86,15 +81,10 @@ public class EventPostPresenter implements EventPostContract.Presenter {
 
     /**
      * Method checks to see if the time interval is the exact same. If so, it is invalid.
-     * @param startTime
-     * @param endTime
      * @return
      */
-    private boolean isValidTimeInterval(String startTime, String endTime) {
-        if(startTime.equals("Start Time") || endTime.equals("End Time")) {
-            view.showStartEndTimeNotSetError();
-            return false;
-        } else if(startTime.equals(endTime)) {
+    private boolean isValidTimeInterval(int startTimeHour, int startTimeMinute, int endTimeHour, int endTimeMinute) {
+        if(startTimeHour == endTimeHour && startTimeMinute == endTimeMinute) {
             view.showStartEndTimeConflictError();
             return false;
         }

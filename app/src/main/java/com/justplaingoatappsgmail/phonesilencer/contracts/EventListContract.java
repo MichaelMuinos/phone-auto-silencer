@@ -20,10 +20,12 @@ public interface EventListContract {
 
     interface Presenter extends BasePresenter<View> {
         List<Event> getEvents();
-        void addPendingIntentRequestCodes(String eventName, List<Integer> requestCodes);
+        List<Integer> getEventRequestCodes(Event event);
+        Calendar setCalendar(int day, int hour, int minute);
         int getIncrementedRequestCode();
-        Calendar setCalendar(int day, int hour, int minute, int aMOrPm);
+        void addRequestCodes(String eventName, List<Integer> requestCodes);
         void deleteEvent(Event event);
+        void deleteRequestCodes(Event event);
     }
 
 }

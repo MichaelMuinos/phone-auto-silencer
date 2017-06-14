@@ -47,6 +47,11 @@ public class EventPostActivity extends AppCompatActivity implements EventPostCon
     @Inject EventPostContract.Presenter presenter;
     @Inject Context context;
 
+    private int startTimeHour = 0;
+    private int startTimeMinute = 0;
+    private int endTimeHour = 0;
+    private int endTimeMinute = 0;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,11 +91,6 @@ public class EventPostActivity extends AppCompatActivity implements EventPostCon
     }
 
     @Override
-    public void showStartEndTimeNotSetError() {
-
-    }
-
-    @Override
     public void showNoDaysSelectedError() {
 
     }
@@ -110,6 +110,13 @@ public class EventPostActivity extends AppCompatActivity implements EventPostCon
             @Override
             public void onTimeSet(TimePickerDialog view, int hourOfDay, int minute, int second) {
                 textView.setText(presenter.convertTimeToString(hourOfDay, minute));
+                if(textView.getId() == R.id.event_post_start_time) {
+                    startTimeHour = hourOfDay;
+                    startTimeMinute = minute;
+                } else if(textView.getId() == R.id.event_post_end_time){
+                    endTimeHour = hourOfDay;
+                    endTimeMinute = minute;
+                }
             }
         };
         // create our dialog
@@ -165,7 +172,7 @@ public class EventPostActivity extends AppCompatActivity implements EventPostCon
      */
     @OnClick(R.id.event_post_save_button)
     public void onSaveButtonClick() {
-        presenter.saveEvent(eventName.getText().toString(), startTime.getText().toString(), endTime.getText().toString(),
+        presenter.saveEvent(eventName.getText().toString(), startTimeHour, startTimeMinute, endTimeHour, endTimeMinute,
                 vibrateButton.isChecked() ? AudioManager.RINGER_MODE_VIBRATE : AudioManager.RINGER_MODE_SILENT,
                 getDays(), repeatSpinner.getSelectedItem().toString());
     }

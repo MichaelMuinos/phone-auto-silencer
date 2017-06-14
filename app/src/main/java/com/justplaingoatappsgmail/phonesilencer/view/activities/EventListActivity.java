@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
@@ -17,12 +18,13 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Switch;
 
+import com.justplaingoatappsgmail.phonesilencer.AppConstants;
 import com.justplaingoatappsgmail.phonesilencer.PhoneSilencerApplication;
 import com.justplaingoatappsgmail.phonesilencer.R;
 import com.justplaingoatappsgmail.phonesilencer.customlisteners.EventListListener;
 import com.justplaingoatappsgmail.phonesilencer.model.Event;
 import com.justplaingoatappsgmail.phonesilencer.model.services.SetNormalService;
-import com.justplaingoatappsgmail.phonesilencer.model.services.SetSilentService;
+import com.justplaingoatappsgmail.phonesilencer.model.services.SetRingerService;
 import com.justplaingoatappsgmail.phonesilencer.view.adapters.EventListAdapter;
 import com.justplaingoatappsgmail.phonesilencer.contracts.EventListContract;
 import com.veinhorn.tagview.TagView;
@@ -118,12 +120,18 @@ public class EventListActivity extends AppCompatActivity implements EventListCon
         if(isChecked) {
             eventSwitch.setText("Enabled\t");
             eventTag.setText("Enabled");
+
+            Log.d("Test", "Is checked = true");
+
             // set our alarms
             setAlarms(event, alarmManager);
         } else {
             eventSwitch.setText("Disabled\t");
             eventTag.setText("Disabled");
-            // cancel our alarms // TODO:
+
+            Log.d("Test", "Is checked = false");
+
+            // cancel our alarms
             cancelAlarms(event, alarmManager);
         }
     }
@@ -178,10 +186,16 @@ public class EventListActivity extends AppCompatActivity implements EventListCon
         snackBar.show();
     }
 
-    private PendingIntent createPendingIntent(Class service, int ringerMode, int requestCode) {
+    private PendingIntent createPendingIntentForSettingAlarms(Class service, int ringerMode, Calendar calendar, int requestCode) {
         Intent intent = new Intent(context, service);
-        intent.putExtra(Event.RINGER_MODE, ringerMode);
+        intent.putExtra(AppConstants.RINGER_MODE_KEY, ringerMode);
+        intent.putExtra(AppConstants.CALENDAR_KEY, calendar);
+        intent.putExtra(AppConstants.REQUEST_CODE_KEY, requestCode);
         return PendingIntent.getService(context, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+    }
+
+    private PendingIntent createPendingIntentForDeletingAlarms(Class service, int requestCode) {
+        return PendingIntent.getService(context, requestCode, new Intent(context, service), PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
     private void setAlarms(Event event, AlarmManager alarmManager) {
@@ -194,22 +208,36 @@ public class EventListActivity extends AppCompatActivity implements EventListCon
             // add both to our request code list
             requestCodes.add(startRequestCode);
             requestCodes.add(endRequestCode);
-            // create pending intent
-            PendingIntent start = createPendingIntent(SetSilentService.class, event.getRingerMode(), startRequestCode);
-            PendingIntent end = createPendingIntent(SetNormalService.class, AudioManager.RINGER_MODE_NORMAL, endRequestCode);
             // create calendars
-            Calendar startCalendar = presenter.setCalendar(event.getDays().get(i).getRealmInt(), event.getStartTimeHour(), event.getStartTimeMinute(), event.getStartTimeAmOrPm());
-            Calendar endCalendar = presenter.setCalendar(event.getDays().get(i).getRealmInt(), event.getEndTimeHour(), event.getEndTimeMinute(), event.getEndTimeAmOrPm());
+            Calendar startCalendar = presenter.setCalendar(event.getDays().get(i).getRealmInt(), event.getStartTimeHour(), event.getStartTimeMinute());
+            Calendar endCalendar = presenter.setCalendar(event.getDays().get(i).getRealmInt(), event.getEndTimeHour(), event.getEndTimeMinute());
+            // create pending intent
+            PendingIntent start = createPendingIntentForSettingAlarms(SetRingerService.class, event.getRingerMode(), startCalendar, startRequestCode);
+            PendingIntent end = createPendingIntentForSettingAlarms(SetNormalService.class, AudioManager.RINGER_MODE_NORMAL, endCalendar, endRequestCode);
             // set our alarm manager triggers
             // RTC: Fires pending intent but does not wake up device
-            alarmManager.setRepeating(AlarmManager.RTC, startCalendar.getTimeInMillis(), 24 * 60 * 60 * 1000, start);
-            alarmManager.setRepeating(AlarmManager.RTC, endCalendar.getTimeInMillis(), 24 * 60 * 60 * 1000, end);
+            // if build version is less than 19, we can use set repeating. If it is greater than 19, setRepeating is unreliable
+            // and will cause an inexact repeating alarm, thus we must use setExact.
+            if(Build.VERSION.SDK_INT < 19) {
+                alarmManager.setRepeating(AlarmManager.RTC, startCalendar.getTimeInMillis(), 24 * 60 * 60 * 1000, start);
+                alarmManager.setRepeating(AlarmManager.RTC, endCalendar.getTimeInMillis(), 24 * 60 * 60 * 1000, end);
+            } else {
+                alarmManager.setExact(AlarmManager.RTC, startCalendar.getTimeInMillis(), start);
+                alarmManager.setExact(AlarmManager.RTC, endCalendar.getTimeInMillis(), end);
+            }
         }
-        presenter.addPendingIntentRequestCodes(event.getEventName(), requestCodes);
+        presenter.addRequestCodes(event.getEventName(), requestCodes);
     }
 
     private void cancelAlarms(Event event, AlarmManager alarmManager) {
-
+        List<Integer> requestCodes = presenter.getEventRequestCodes(event);
+        for(int i = 0; i < requestCodes.size(); i+=2) {
+            PendingIntent start = createPendingIntentForDeletingAlarms(SetRingerService.class, requestCodes.get(i));
+            PendingIntent end = createPendingIntentForDeletingAlarms(SetNormalService.class, requestCodes.get(i + 1));
+            alarmManager.cancel(start);
+            alarmManager.cancel(end);
+        }
+        presenter.deleteRequestCodes(event);
     }
 
 }

@@ -9,19 +9,17 @@ import android.content.Intent;
 import android.media.AudioManager;
 import android.os.Build;
 import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
 import android.util.Log;
 import com.justplaingoatappsgmail.phonesilencer.AppConstants;
-import com.justplaingoatappsgmail.phonesilencer.model.Event;
 import java.util.Calendar;
 
-public class SetNormalService extends IntentService {
+public class SetRingerService extends IntentService {
 
     private Calendar calendar;
     private int ringerMode;
     private int requestCode;
 
-    public SetNormalService() {
+    public SetRingerService() {
         super(null);
     }
 
@@ -35,18 +33,21 @@ public class SetNormalService extends IntentService {
 
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
-        // set the phone ringer to normal
-        AudioManager audioManager =(AudioManager) getApplicationContext().getSystemService(Context.AUDIO_SERVICE);
-        audioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+        // set phone silent
+        AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+        audioManager.setRingerMode(ringerMode);
         // set repeating alarm depending on build version and repeat option
         if(Build.VERSION.SDK_INT >= 19) setAlarm();
 
-        Log.d("Test", "Back to normal");
+        Log.d("Test", "Silenced");
 
     }
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
     private void setAlarm() {
+
+        Log.d("Test", "Reset alarm confirmed");
+
         // create intent and put extras
         Intent intent = new Intent(getApplicationContext(), SetNormalService.class);
         intent.putExtra(AppConstants.RINGER_MODE_KEY, ringerMode);
