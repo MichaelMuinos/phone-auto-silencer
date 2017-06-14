@@ -1,22 +1,23 @@
 package com.justplaingoatappsgmail.phonesilencer.view.adapters;
 
+import android.content.Context;
 import android.media.AudioManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 import com.justplaingoatappsgmail.phonesilencer.R;
 import com.justplaingoatappsgmail.phonesilencer.customlisteners.EventListListener;
 import com.justplaingoatappsgmail.phonesilencer.model.Event;
 import com.veinhorn.tagview.TagView;
-
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnCheckedChanged;
@@ -26,6 +27,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
 
     private List<Event> eventList;
     private EventListListener listener;
+    private Context context;
     private static Map<Integer,String> dayMap;
 
     static {
@@ -39,8 +41,9 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
         dayMap.put(7, "SA");
     }
 
-    public EventListAdapter(EventListListener listener) {
+    public EventListAdapter(EventListListener listener, Context context) {
         this.listener = listener;
+        this.context = context;
     }
 
     @Override
@@ -75,6 +78,8 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
         holder.repeatTag.setText(event.getRepeat().toString());
         // set position tag
         holder.positionTag.setText(holder.switchEvent.getText());
+        // set close button color
+        holder.closeButton.setColorFilter(ContextCompat.getColor(context, R.color.colorAccent));
     }
 
     @Override
@@ -106,6 +111,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
         @BindView(R.id.event_post_item_repeat_tag) TagView repeatTag;
         @BindView(R.id.event_post_item_position_tag) TagView positionTag;
         @BindView(R.id.event_post_item_switch) Switch switchEvent;
+        @BindView(R.id.event_post_item_close_button) ImageView closeButton;
 
         public EventListViewHolder(View itemView, EventListListener listener, List<Event> eventList) {
             super(itemView);

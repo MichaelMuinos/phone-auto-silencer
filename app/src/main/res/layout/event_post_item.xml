@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -9,17 +10,20 @@
         android:id="@+id/event_card_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp">
+        android:layout_margin="5dp"
+        app:cardElevation="1dp"
+        card_view:cardUseCompatPadding="true">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
             android:orientation="vertical">
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="60dp">
+                android:layout_height="40dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp">
 
                 <TextView
                     android:id="@+id/event_post_item_title"
@@ -27,8 +31,12 @@
                     android:layout_height="match_parent"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
-                    android:padding="20dp"
-                    android:text="Event Title" />
+                    android:layout_toLeftOf="@+id/event_post_item_switch"
+                    android:layout_toStartOf="@+id/event_post_item_switch"
+                    android:gravity="center_vertical"
+                    android:padding="8dp"
+                    android:text="Event Title"
+                    android:textColor="@color/colorPrimary" />
 
                 <Switch
                     android:id="@+id/event_post_item_switch"
@@ -36,14 +44,15 @@
                     android:layout_height="match_parent"
                     android:layout_alignParentTop="true"
                     android:layout_toLeftOf="@+id/event_post_item_close_button"
-                    android:text="Disabled\t" />
+                    android:text="Disabled\t"
+                    android:textColor="@color/colorPrimary" />
 
                 <ImageView
                     android:id="@+id/event_post_item_close_button"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_alignParentRight="true"
-                    android:padding="20dp"
+                    android:padding="5dp"
                     android:src="@android:drawable/ic_delete" />
 
             </RelativeLayout>
@@ -66,7 +75,7 @@
                     android:padding="5dp"
                     android:text="Days"
                     app:tagBorderRadius="20"
-                    app:tagColor="@color/dark_blue_color" />
+                    app:tagColor="#000" />
 
                 <com.veinhorn.tagview.TagView
                     android:id="@+id/event_post_item_time_tag"
@@ -78,7 +87,7 @@
                     android:gravity="center_horizontal"
                     android:text="Time"
                     app:tagBorderRadius="20"
-                    app:tagColor="@color/green_color" />
+                    app:tagColor="#000" />
 
                 <com.veinhorn.tagview.TagView
                     android:id="@+id/event_post_item_ringer_tag"
@@ -90,7 +99,7 @@
                     android:gravity="center_horizontal"
                     android:text="Ringer"
                     app:tagBorderRadius="20"
-                    app:tagColor="@color/dark_blue_color" />
+                    app:tagColor="#000" />
 
             </LinearLayout>
 
@@ -111,7 +120,7 @@
                     android:padding="5dp"
                     android:text="Repeat"
                     app:tagBorderRadius="20"
-                    app:tagColor="@color/yellow_color" />
+                    app:tagColor="#000" />
 
                 <com.veinhorn.tagview.TagView
                     android:id="@+id/event_post_item_position_tag"
@@ -123,7 +132,7 @@
                     android:gravity="center_horizontal"
                     android:text="Position"
                     app:tagBorderRadius="20"
-                    app:tagColor="@color/yellow_color" />
+                    app:tagColor="#000" />
 
             </LinearLayout>
 

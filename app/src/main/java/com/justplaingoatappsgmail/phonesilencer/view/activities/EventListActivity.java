@@ -67,7 +67,7 @@ public class EventListActivity extends AppCompatActivity implements EventListCon
         // set action bar
         setSupportActionBar(toolbar);
         // create event list adapter
-        eventListAdapter = new EventListAdapter(this);
+        eventListAdapter = new EventListAdapter(this, context);
         // set adapter and layout manager for the recycler view
         recyclerView.setAdapter(eventListAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
