@@ -22,7 +22,6 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.Switch;
 import android.widget.TextView;
-
 import com.justplaingoatappsgmail.phonesilencer.AppConstants;
 import com.justplaingoatappsgmail.phonesilencer.PhoneSilencerApplication;
 import com.justplaingoatappsgmail.phonesilencer.R;
@@ -33,11 +32,9 @@ import com.justplaingoatappsgmail.phonesilencer.model.services.SetRingerService;
 import com.justplaingoatappsgmail.phonesilencer.view.adapters.EventListAdapter;
 import com.justplaingoatappsgmail.phonesilencer.contracts.EventListContract;
 import com.veinhorn.tagview.TagView;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-
 import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -166,14 +163,7 @@ public class EventListActivity extends AppCompatActivity implements EventListCon
      */
     @Override
     public void showSnackBarNoEventsMessage() {
-        snackBar = Snackbar.make(coordinatorLayout, "No events created. Go make some!", Snackbar.LENGTH_LONG);
-        TextView textView = (TextView) snackBar.getView().findViewById(android.support.design.R.id.snackbar_text);
-        // set text to center
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-        else textView.setGravity(Gravity.CENTER_HORIZONTAL);
-        // set text color
-        textView.setTextColor(ContextCompat.getColor(context, R.color.yellow_color));
-        snackBar.show();
+        showSnackBarMessage("No events created. Go make some!");
     }
 
     /**
@@ -187,13 +177,22 @@ public class EventListActivity extends AppCompatActivity implements EventListCon
 
     @Override
     public void showEventEnabledMessage(String eventName) {
-        snackBar = Snackbar.make(coordinatorLayout, eventName + " has been enabled.", Snackbar.LENGTH_LONG);
-        snackBar.show();
+        showSnackBarMessage(eventName + " has been enabled.");
     }
 
     @Override
     public void showEventDisabledMessage(String eventName) {
-        snackBar = Snackbar.make(coordinatorLayout, eventName + " has been disabled.", Snackbar.LENGTH_LONG);
+        showSnackBarMessage(eventName + " has been disabled.");
+    }
+
+    private void showSnackBarMessage(String str) {
+        snackBar = Snackbar.make(coordinatorLayout, str, Snackbar.LENGTH_LONG);
+        TextView textView = (TextView) snackBar.getView().findViewById(android.support.design.R.id.snackbar_text);
+        // set text to center
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+        else textView.setGravity(Gravity.CENTER_HORIZONTAL);
+        // set text color
+        textView.setTextColor(ContextCompat.getColor(context, R.color.yellow_color));
         snackBar.show();
     }
 
