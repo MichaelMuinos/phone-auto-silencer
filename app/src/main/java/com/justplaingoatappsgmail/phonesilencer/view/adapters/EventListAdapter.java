@@ -24,6 +24,8 @@ import butterknife.OnClick;
 
 public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.EventListViewHolder> {
 
+    // testing
+
     private List<Event> eventList;
     private EventListListener listener;
     private Context context;
