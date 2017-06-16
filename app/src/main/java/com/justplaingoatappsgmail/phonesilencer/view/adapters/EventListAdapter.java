@@ -14,6 +14,8 @@ import com.justplaingoatappsgmail.phonesilencer.R;
 import com.justplaingoatappsgmail.phonesilencer.customlisteners.EventListListener;
 import com.justplaingoatappsgmail.phonesilencer.model.Event;
 import com.veinhorn.tagview.TagView;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,8 +25,6 @@ import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 
 public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.EventListViewHolder> {
-
-    // testing
 
     private List<Event> eventList;
     private EventListListener listener;
@@ -45,6 +45,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
     public EventListAdapter(EventListListener listener, Context context) {
         this.listener = listener;
         this.context = context;
+        eventList = new ArrayList<>();
     }
 
     @Override
@@ -89,7 +90,8 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
     }
 
     public void setEventList(List<Event> eventList) {
-        this.eventList = eventList;
+        this.eventList.clear();
+        this.eventList.addAll(eventList);
     }
 
     private String convertTimeToString(int hourOfDay, int minute) {

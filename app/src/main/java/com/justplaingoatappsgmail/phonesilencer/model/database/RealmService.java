@@ -102,7 +102,7 @@ public class RealmService {
     }
 
     public List<Event> getAllEvents() {
-        return realm.isEmpty() ? new ArrayList<Event>() : new ArrayList<>(realm.where(Event.class).findAll());
+        return realm.isEmpty() ? new ArrayList<Event>() : new ArrayList<>(realm.where(Event.class).findAll().sort(Event.EVENT_NAME));
     }
 
     public List<Integer> getRealmPendingIntentRequestCodes(Event event) {

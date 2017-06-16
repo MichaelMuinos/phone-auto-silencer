@@ -150,7 +150,7 @@ public class EventListActivity extends AppCompatActivity implements EventListCon
         // delete the event at the particular position in the list
         presenter.deleteEvent(event);
         // reset our event list for our adapter
-//        eventListAdapter.setEventList(presenter.getEvents());
+        eventListAdapter.setEventList(presenter.getEvents());
         // notify the adapter that the list has changed and to update the view
         eventListAdapter.notifyDataSetChanged();
     }
