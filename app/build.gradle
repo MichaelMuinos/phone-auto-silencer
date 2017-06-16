@@ -39,4 +39,6 @@ dependencies {
     compile 'com.wdullaer:materialdatetimepicker:3.2.2'
     // tag view
     compile 'com.veinhorn.tagview:library:1.0.4'
+    // realm adapters
+    compile 'io.realm:android-adapters:2.0.0'
 }

@@ -14,7 +14,6 @@ import com.justplaingoatappsgmail.phonesilencer.R;
 import com.justplaingoatappsgmail.phonesilencer.customlisteners.EventListListener;
 import com.justplaingoatappsgmail.phonesilencer.model.Event;
 import com.veinhorn.tagview.TagView;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -126,8 +125,8 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
         }
 
         @OnCheckedChanged(R.id.event_post_item_switch)
-        public void onSwitchCheckedChanged(boolean isChecked) {
-            listener.onEventListSwitchCheckedChanged(eventList.get(this.getLayoutPosition()), switchEvent, positionTag, isChecked);
+        public void onSwitchCheckedChanged() {
+            listener.onEventListSwitchCheckedChanged(eventList.get(this.getLayoutPosition()), switchEvent, positionTag);
         }
 
         @OnClick(R.id.event_post_item_close_button)

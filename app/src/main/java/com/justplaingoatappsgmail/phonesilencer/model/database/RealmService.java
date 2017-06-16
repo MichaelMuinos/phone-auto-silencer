@@ -1,11 +1,9 @@
 package com.justplaingoatappsgmail.phonesilencer.model.database;
 
 import android.content.Context;
-
 import com.justplaingoatappsgmail.phonesilencer.model.Event;
 import com.justplaingoatappsgmail.phonesilencer.model.RealmPendingIntent;
 import com.justplaingoatappsgmail.phonesilencer.model.RealmInteger;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;

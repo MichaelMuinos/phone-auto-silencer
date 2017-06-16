@@ -118,11 +118,11 @@ public class EventListActivity extends AppCompatActivity implements EventListCon
     }
 
     @Override
-    public void onEventListSwitchCheckedChanged(Event event, View switchView, View positionTagView, boolean isChecked) {
+    public void onEventListSwitchCheckedChanged(Event event, View switchView, View positionTagView) {
         Switch eventSwitch = (Switch) switchView;
         TagView eventTag = (TagView) positionTagView;
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        if(isChecked) {
+        if(eventSwitch.isChecked()) {
             eventSwitch.setText("Enabled\t");
             eventTag.setText("Enabled");
 
@@ -150,7 +150,7 @@ public class EventListActivity extends AppCompatActivity implements EventListCon
         // delete the event at the particular position in the list
         presenter.deleteEvent(event);
         // reset our event list for our adapter
-        eventListAdapter.setEventList(presenter.getEvents());
+//        eventListAdapter.setEventList(presenter.getEvents());
         // notify the adapter that the list has changed and to update the view
         eventListAdapter.notifyDataSetChanged();
     }
@@ -167,7 +167,6 @@ public class EventListActivity extends AppCompatActivity implements EventListCon
     @Override
     public void showSnackBarNoEventsMessage() {
         snackBar = Snackbar.make(coordinatorLayout, "No events created. Go make some!", Snackbar.LENGTH_LONG);
-        snackBar.setDuration(5000);
         TextView textView = (TextView) snackBar.getView().findViewById(android.support.design.R.id.snackbar_text);
         // set text to center
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
