@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
+import android.media.Image;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
@@ -14,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -60,7 +63,7 @@ public class EventPostActivity extends AppCompatActivity implements EventPostCon
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_post);
-        // bind our views
+        // bind our views that are part of the activity
         ButterKnife.bind(this);
         // allow injection of presenter
         ((PhoneSilencerApplication) getApplication()).getComponent().inject(this);
@@ -69,23 +72,30 @@ public class EventPostActivity extends AppCompatActivity implements EventPostCon
     }
 
     private void initActionBar() {
-        LayoutInflater inflator = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view = inflator.inflate(R.layout.activity_event_post_action_bar, null);
+        LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View view = inflater.inflate(R.layout.activity_event_post_action_bar, null);
+        // add button
+        TextView addEventButton = ButterKnife.findById(view, R.id.event_post_add_event);
+        addEventButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                presenter.saveEvent(eventName.getText().toString(), startTimeHour, startTimeMinute, endTimeHour, endTimeMinute,
+                        vibrateButton.isChecked() ? AudioManager.RINGER_MODE_VIBRATE : AudioManager.RINGER_MODE_SILENT,
+                        getDays(), repeatSpinner.getSelectedItem().toString());
+            }
+        });
+        // cancel button
+        ImageView cancelButton = ButterKnife.findById(view, R.id.event_post_cancel_event);
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // do something
+            }
+        });
+        // actionbar
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayShowCustomEnabled(true);
         actionBar.setCustomView(view);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-//            case R.id.event_post_action_cancel:
-//                return true;
-            default:
-                // If we got here, the user's action was not recognized.
-                // Invoke the superclass to handle it.
-                return super.onOptionsItemSelected(item);
-        }
     }
 
     @Override
@@ -126,6 +136,13 @@ public class EventPostActivity extends AppCompatActivity implements EventPostCon
         setResult(Activity.RESULT_OK);
         finish();
     }
+
+//    @OnClick(R.id.event_post_add_event)
+//    public void onAddEventClick() {
+//        presenter.saveEvent(eventName.getText().toString(), startTimeHour, startTimeMinute, endTimeHour, endTimeMinute,
+//                vibrateButton.isChecked() ? AudioManager.RINGER_MODE_VIBRATE : AudioManager.RINGER_MODE_SILENT,
+//                getDays(), repeatSpinner.getSelectedItem().toString());
+//    }
 
     @OnClick({R.id.event_post_start_time, R.id.event_post_end_time})
     public void onTimeClick(View timeView) {
@@ -191,16 +208,6 @@ public class EventPostActivity extends AppCompatActivity implements EventPostCon
             default:
                 break;
         }
-    }
-
-    /**
-     * On click method for save button to save the Event
-     */
-    @OnClick(R.id.event_post_save_button)
-    public void onSaveButtonClick() {
-        presenter.saveEvent(eventName.getText().toString(), startTimeHour, startTimeMinute, endTimeHour, endTimeMinute,
-                vibrateButton.isChecked() ? AudioManager.RINGER_MODE_VIBRATE : AudioManager.RINGER_MODE_SILENT,
-                getDays(), repeatSpinner.getSelectedItem().toString());
     }
 
     /**

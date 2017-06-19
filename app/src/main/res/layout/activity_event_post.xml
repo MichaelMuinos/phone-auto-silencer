@@ -145,7 +145,7 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:src="@drawable/calender" />
+                android:src="@drawable/calendar" />
 
             <Spinner
                 android:id="@+id/event_post_repeat_spinner"
