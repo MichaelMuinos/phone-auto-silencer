@@ -5,7 +5,6 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -19,7 +18,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import com.justplaingoatappsgmail.phonesilencer.AppConstants;
@@ -81,7 +79,7 @@ public class EventListActivity extends AppCompatActivity implements EventListCon
         super.onDestroy();
         // set view to null to avoid memory leak
         presenter.setView(null);
-        // close our realm instance
+        // close.png.png.png.png.png our realm instance
         presenter.closeRealm();
     }
 
@@ -139,7 +137,7 @@ public class EventListActivity extends AppCompatActivity implements EventListCon
     }
 
     /**
-     * Removes an event from the recycler view when clicking on the close button
+     * Removes an event from the recycler view when clicking on the close.png.png.png.png.png button
      * @param event
      */
     @Override

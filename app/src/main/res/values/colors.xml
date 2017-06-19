@@ -5,4 +5,5 @@
     <color name="colorAccent">#951f48</color>
     <color name="circular_text_view_solid_color">#9FE554</color>
     <color name="yellow_color">#d8c316</color>
+    <color name="gray_color">#9a9a9a</color>
 </resources>

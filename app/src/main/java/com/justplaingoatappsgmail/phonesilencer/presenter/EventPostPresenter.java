@@ -80,7 +80,7 @@ public class EventPostPresenter implements EventPostContract.Presenter {
     }
 
     /**
-     * Method checks to see if the time interval is the exact same. If so, it is invalid.
+     * Method checks to see if the time.png.png.png.png interval is the exact same. If so, it is invalid.
      * @return
      */
     private boolean isValidTimeInterval(int startTimeHour, int startTimeMinute, int endTimeHour, int endTimeMinute) {

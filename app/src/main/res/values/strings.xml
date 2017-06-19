@@ -16,10 +16,10 @@
     <string name="sunday_abrev">SU</string>
     <string name="schedule_msg_post">(You may select more than one day.)</string>
     <string name="ringer_mode_post">Ringer</string>
-
     <string name="repeat_prompt">Repeat Option</string>
     <string name="silence_post">Silence</string>
     <string name="vibrate_post">Vibrate</string>
+    <string name="cancel_post">Cancel</string>
     <string-array name="repeat_array">
         <item>Weekly</item>
         <item>Once</item>

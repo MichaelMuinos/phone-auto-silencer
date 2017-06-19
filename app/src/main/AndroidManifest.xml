@@ -19,7 +19,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.activities.EventPostActivity" />
+        <activity android:name=".view.activities.EventPostActivity" android:theme = "@style/AppTheme"/>
 
         <service android:name=".model.services.SetRingerService" />
         <service android:name=".model.services.SetNormalService" />

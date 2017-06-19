@@ -7,7 +7,11 @@ import android.media.AudioManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -60,6 +64,28 @@ public class EventPostActivity extends AppCompatActivity implements EventPostCon
         ButterKnife.bind(this);
         // allow injection of presenter
         ((PhoneSilencerApplication) getApplication()).getComponent().inject(this);
+        // setup components for actionbar
+        initActionBar();
+    }
+
+    private void initActionBar() {
+        LayoutInflater inflator = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View view = inflator.inflate(R.layout.activity_event_post_action_bar, null);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayShowCustomEnabled(true);
+        actionBar.setCustomView(view);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+//            case R.id.event_post_action_cancel:
+//                return true;
+            default:
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override
@@ -103,7 +129,7 @@ public class EventPostActivity extends AppCompatActivity implements EventPostCon
 
     @OnClick({R.id.event_post_start_time, R.id.event_post_end_time})
     public void onTimeClick(View timeView) {
-        // convert our view to a textview so that we can set the time string
+        // convert our view to a textview so that we can set the time.png.png.png.png.png string
         final TextView textView = (TextView) timeView;
         // set the callback method and call our presenter to convert what the user selected into a string
         TimePickerDialog.OnTimeSetListener listener = new TimePickerDialog.OnTimeSetListener() {
@@ -123,12 +149,12 @@ public class EventPostActivity extends AppCompatActivity implements EventPostCon
         TimePickerDialog tpd = TimePickerDialog.newInstance(listener, false);
         tpd.setTitle(timeView.getId() == R.id.event_post_start_time ? "Start Time" : "End Time");
         tpd.vibrate(false);
-        tpd.show(getFragmentManager(), "Timerpickerdialog");
+        tpd.show(getFragmentManager(), "Timer");
     }
 
     /**
      * On click for the monday - sunday text views. When clicked, they will transition into a different drawable.
-     * The method will check to see if the current drawable in the view is equal to the circle_green drawable.
+     * The method will check.png.png.png.png.png to see if the current drawable in the view is equal to the circle_green drawable.
      * This is my workaround currently because the getColor method part of GradientDrawable is only available in API 24
      * and above.
      * https://stackoverflow.com/questions/9125229/comparing-two-drawables-in-android
@@ -142,7 +168,7 @@ public class EventPostActivity extends AppCompatActivity implements EventPostCon
     }
 
     /**
-     * On Check Changed method for the all days check box.
+     * On Check Changed method for the all days check.png.png.png.png.png box.
      * This will determine whether we need to color all of the days
      * with the red or green drawable.
      * @param isChecked

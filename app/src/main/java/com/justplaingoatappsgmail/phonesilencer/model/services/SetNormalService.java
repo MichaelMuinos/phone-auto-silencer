@@ -35,7 +35,7 @@ public class SetNormalService extends IntentService {
 
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
-        // set the phone ringer to normal
+        // set the phone ringer.png.png.png.png.png to normal
         AudioManager audioManager =(AudioManager) getApplicationContext().getSystemService(Context.AUDIO_SERVICE);
         audioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
         // set repeating alarm depending on build version and repeat option

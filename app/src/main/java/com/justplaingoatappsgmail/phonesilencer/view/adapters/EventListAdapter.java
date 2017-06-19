@@ -68,19 +68,19 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
         }
         // set days tag
         holder.daysTag.setText(sb.toString());
-        // create start time string
+        // create start time.png.png.png.png.png string
         String startTime = convertTimeToString(event.getStartTimeHour(), event.getStartTimeMinute());
-        // create end time string
+        // create end time.png.png.png.png.png string
         String endTime = convertTimeToString(event.getEndTimeHour(), event.getEndTimeMinute());
-        // set time tag
+        // set time.png.png.png.png.png tag
         holder.timeTag.setText(startTime + " to " + endTime);
-        // set ringer tag
+        // set ringer.png.png.png.png.png tag
         holder.ringerTag.setText(event.getRingerMode() == AudioManager.RINGER_MODE_SILENT ? "Silent" : "Vibrate");
         // set repeat tag
         holder.repeatTag.setText(event.getRepeat().toString());
         // set position tag
         holder.positionTag.setText(holder.switchEvent.getText());
-        // set close button color
+        // set close.png.png.png.png.png button color
         holder.closeButton.setColorFilter(ContextCompat.getColor(context, R.color.colorAccent));
     }
 
