@@ -1,22 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_below="@+id/event_post_app_bar_layout">
+    android:layout_below="@+id/event_post_app_bar_layout"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="@dimen/activity_horizontal_margin"
         android:orientation="vertical"
-        android:layout_margin="@dimen/activity_horizontal_margin">
+        android:paddingBottom="30dp">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="8dp"
             android:text="@string/event_post_name"
-            android:textColor="@color/colorPrimary" />
+            android:textColor="@color/colorPrimary"
+            android:textSize="15sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -25,7 +28,7 @@
 
             <ImageView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:src="@drawable/edit_tag" />
 
             <EditText
@@ -41,106 +44,90 @@
             android:layout_height="1dip"
             android:layout_alignParentTop="true"
             android:layout_centerVertical="true"
-            android:layout_marginBottom="10dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="20dp"
             android:background="@color/gray_color" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="20dp"
             android:text="@string/time_post"
             android:textColor="@color/colorPrimary" />
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content">
 
             <ImageView
-                android:id="@+id/imageView"
+                android:id="@+id/time_icon"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 app:srcCompat="@drawable/time" />
 
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:weightSum="1"
-                android:paddingLeft="15dp"
-                android:layout_weight="0.5">
+                android:paddingLeft="40dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/start_time_post"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/event_post_start_time"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.5"
+                    android:layout_marginBottom="10dp"
                     android:gravity="center_vertical"
+                    android:text="00:00AM"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/end_time_post"
                     android:textSize="15sp"
-                    android:text="00:00AM"/>
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/event_post_end_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.5"
                     android:gravity="center_vertical"
-                    android:textSize="15sp"
-                    android:text="00:00AM"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:weightSum="1"
-                android:layout_weight="0.5">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.5"
-                    android:contextClickable="false"
-                    android:gravity="center_vertical"
-                    android:text="@string/start_time_post"
-                    android:textSize="15sp" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.5"
-                    android:gravity="center_vertical"
-                    android:text="@string/end_time_post"
+                    android:text="00:00AM"
                     android:textSize="15sp" />
 
             </LinearLayout>
 
-        </LinearLayout>
+        </RelativeLayout>
 
         <View
             android:layout_width="fill_parent"
             android:layout_height="1dip"
             android:layout_alignParentTop="true"
             android:layout_centerVertical="true"
-            android:layout_marginBottom="10dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="20dp"
             android:background="@color/gray_color" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="20dp"
             android:text="@string/schedule_post"
             android:textColor="@color/colorPrimary" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
             android:orientation="horizontal"
-            android:weightSum="1"
-            android:layout_marginBottom="10dp">
+            android:weightSum="1">
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -152,7 +139,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:entries="@array/repeat_array"
-                android:paddingLeft="10dp"
+                android:paddingLeft="8dp"
                 android:prompt="@string/repeat_prompt"
                 android:spinnerMode="dialog" />
 
@@ -161,9 +148,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
             android:orientation="horizontal"
-            android:weightSum="7"
-            android:layout_marginBottom="5dp">
+            android:weightSum="7">
 
             <TextView
                 android:id="@+id/event_post_monday_text_view"
@@ -261,22 +248,22 @@
             android:layout_height="1dip"
             android:layout_alignParentTop="true"
             android:layout_centerVertical="true"
-            android:layout_marginBottom="10dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="20dp"
             android:background="@color/gray_color" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="20dp"
             android:text="@string/ringer_post"
             android:textColor="@color/colorPrimary" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:orientation="horizontal">
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -292,17 +279,17 @@
                     android:id="@+id/event_post_silence_button"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="@string/silence_post"
-                    android:layout_weight="0.2"
                     android:layout_marginLeft="15dp"
-                    android:checked="true"/>
+                    android:layout_weight="0.2"
+                    android:checked="true"
+                    android:text="@string/silence_post" />
 
                 <RadioButton
                     android:id="@+id/event_post_vibrate_button"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="@string/vibrate_post"
-                    android:layout_weight="0.8"/>
+                    android:layout_weight="0.8"
+                    android:text="@string/vibrate_post" />
 
             </RadioGroup>
 
