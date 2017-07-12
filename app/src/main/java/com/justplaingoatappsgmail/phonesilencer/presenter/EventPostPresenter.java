@@ -1,8 +1,5 @@
 package com.justplaingoatappsgmail.phonesilencer.presenter;
 
-import android.graphics.drawable.Drawable;
-import android.util.Log;
-import android.widget.TextView;
 import com.justplaingoatappsgmail.phonesilencer.contracts.EventPostContract;
 import com.justplaingoatappsgmail.phonesilencer.model.database.RealmService;
 import java.util.ArrayList;
@@ -69,11 +66,11 @@ public class EventPostPresenter implements EventPostContract.Presenter {
         if(title.isEmpty() || title.trim().length() == 0) {
             view.showEventNameError();
             return false;
-            // if the name is a duplicate, show our name dup error message
+        // if the name is a duplicate, show our name dup error message
         } else if(realmService.containsName(title)) {
             view.showEventNameDuplicateError();
             return false;
-            // otherwise, it must be a valid name
+        // otherwise, it must be a valid name
         } else {
             return true;
         }

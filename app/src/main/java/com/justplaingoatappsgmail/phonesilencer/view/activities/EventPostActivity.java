@@ -8,6 +8,8 @@ import android.media.Image;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -18,8 +20,11 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
+import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import com.justplaingoatappsgmail.phonesilencer.AppConstants;
 import com.justplaingoatappsgmail.phonesilencer.PhoneSilencerApplication;
 import com.justplaingoatappsgmail.phonesilencer.R;
 import com.justplaingoatappsgmail.phonesilencer.contracts.EventPostContract;
@@ -36,6 +41,10 @@ import butterknife.OnClick;
 
 public class EventPostActivity extends AppCompatActivity implements EventPostContract.View {
 
+    @BindView(R.id.event_post_coordinator_layout) CoordinatorLayout coordinatorLayout;
+    @BindView(R.id.event_post_event_name_title) TextView eventNameTitle;
+    @BindView(R.id.event_post_time_title) TextView timeTitle;
+    @BindView(R.id.event_post_schedule_title) TextView scheduleTitle;
     @BindView(R.id.event_post_name) EditText eventName;
     @BindView(R.id.event_post_silence_button) RadioButton silenceButton;
     @BindView(R.id.event_post_vibrate_button) RadioButton vibrateButton;
@@ -79,7 +88,7 @@ public class EventPostActivity extends AppCompatActivity implements EventPostCon
         addEventButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                presenter.saveEvent(eventName.getText().toString(), startTimeHour, startTimeMinute, endTimeHour, endTimeMinute,
+                presenter.saveEvent(eventName.getText().toString().trim(), startTimeHour, startTimeMinute, endTimeHour, endTimeMinute,
                         vibrateButton.isChecked() ? AudioManager.RINGER_MODE_VIBRATE : AudioManager.RINGER_MODE_SILENT,
                         getDays(), repeatSpinner.getSelectedItem().toString());
             }
@@ -89,7 +98,8 @@ public class EventPostActivity extends AppCompatActivity implements EventPostCon
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // do something
+                setResult(Activity.RESULT_CANCELED);
+                finish();
             }
         });
         // actionbar
@@ -113,22 +123,34 @@ public class EventPostActivity extends AppCompatActivity implements EventPostCon
 
     @Override
     public void showEventNameError() {
-
+        eventNameTitle.setTextColor(ContextCompat.getColor(context, R.color.red_color));
+        timeTitle.setTextColor(ContextCompat.getColor(context, R.color.colorPrimary));
+        scheduleTitle.setTextColor(ContextCompat.getColor(context, R.color.colorPrimary));
+        AppConstants.showSnackBarMessage(coordinatorLayout, "Error: Event name is invalid!", context, R.color.red_color);
     }
 
     @Override
     public void showEventNameDuplicateError() {
-
+        eventNameTitle.setTextColor(ContextCompat.getColor(context, R.color.red_color));
+        timeTitle.setTextColor(ContextCompat.getColor(context, R.color.colorPrimary));
+        scheduleTitle.setTextColor(ContextCompat.getColor(context, R.color.colorPrimary));
+        AppConstants.showSnackBarMessage(coordinatorLayout, "Error: There is already an event with that name!", context, R.color.red_color);
     }
 
     @Override
     public void showStartEndTimeConflictError() {
-
+        timeTitle.setTextColor(ContextCompat.getColor(context, R.color.red_color));
+        eventNameTitle.setTextColor(ContextCompat.getColor(context, R.color.colorPrimary));
+        scheduleTitle.setTextColor(ContextCompat.getColor(context, R.color.colorPrimary));
+        AppConstants.showSnackBarMessage(coordinatorLayout, "Error: Start and end time are the same!", context, R.color.red_color);
     }
 
     @Override
     public void showNoDaysSelectedError() {
-
+        scheduleTitle.setTextColor(ContextCompat.getColor(context, R.color.red_color));
+        eventNameTitle.setTextColor(ContextCompat.getColor(context, R.color.colorPrimary));
+        timeTitle.setTextColor(ContextCompat.getColor(context, R.color.colorPrimary));
+        AppConstants.showSnackBarMessage(coordinatorLayout, "Error: No days have been selected!", context, R.color.red_color);
     }
 
     @Override
@@ -136,13 +158,6 @@ public class EventPostActivity extends AppCompatActivity implements EventPostCon
         setResult(Activity.RESULT_OK);
         finish();
     }
-
-//    @OnClick(R.id.event_post_add_event)
-//    public void onAddEventClick() {
-//        presenter.saveEvent(eventName.getText().toString(), startTimeHour, startTimeMinute, endTimeHour, endTimeMinute,
-//                vibrateButton.isChecked() ? AudioManager.RINGER_MODE_VIBRATE : AudioManager.RINGER_MODE_SILENT,
-//                getDays(), repeatSpinner.getSelectedItem().toString());
-//    }
 
     @OnClick({R.id.event_post_start_time, R.id.event_post_end_time})
     public void onTimeClick(View timeView) {

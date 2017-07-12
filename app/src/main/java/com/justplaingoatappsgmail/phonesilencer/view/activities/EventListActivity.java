@@ -161,7 +161,7 @@ public class EventListActivity extends AppCompatActivity implements EventListCon
      */
     @Override
     public void showSnackBarNoEventsMessage() {
-        showSnackBarMessage("No events created. Go make some!");
+        AppConstants.showSnackBarMessage(coordinatorLayout, "No events created. Go make some!", context, R.color.yellow_color);
     }
 
     /**
@@ -175,23 +175,12 @@ public class EventListActivity extends AppCompatActivity implements EventListCon
 
     @Override
     public void showEventEnabledMessage(String eventName) {
-        showSnackBarMessage(eventName + " has been enabled.");
+        AppConstants.showSnackBarMessage(coordinatorLayout, eventName + " has been enabled.", context, R.color.yellow_color);
     }
 
     @Override
     public void showEventDisabledMessage(String eventName) {
-        showSnackBarMessage(eventName + " has been disabled.");
-    }
-
-    private void showSnackBarMessage(String str) {
-        snackBar = Snackbar.make(coordinatorLayout, str, Snackbar.LENGTH_LONG);
-        TextView textView = (TextView) snackBar.getView().findViewById(android.support.design.R.id.snackbar_text);
-        // set text to center
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-        else textView.setGravity(Gravity.CENTER_HORIZONTAL);
-        // set text color
-        textView.setTextColor(ContextCompat.getColor(context, R.color.yellow_color));
-        snackBar.show();
+        AppConstants.showSnackBarMessage(coordinatorLayout, eventName + " has been disabled.", context, R.color.yellow_color);
     }
 
     private PendingIntent createPendingIntentForSettingAlarms(Class service, int ringerMode, Calendar calendar, int requestCode) {
