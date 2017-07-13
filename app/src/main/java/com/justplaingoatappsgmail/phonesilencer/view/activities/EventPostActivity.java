@@ -31,6 +31,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.inject.Inject;
 import butterknife.BindView;
@@ -149,7 +150,7 @@ public class EventPostActivity extends AppCompatActivity implements EventPostCon
         }
     }
 
-    private void initActionBar(Event event) {
+    private void initActionBar(final Event event) {
         LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.activity_event_post_action_bar, null);
         // add button
@@ -160,9 +161,10 @@ public class EventPostActivity extends AppCompatActivity implements EventPostCon
         addEventButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                presenter.saveEvent(eventName.getText().toString().trim(), startTimeHour, startTimeMinute, endTimeHour, endTimeMinute,
+                presenter.saveEvent(event == null ? UUID.randomUUID().toString() : event.getId(),
+                        eventName.getText().toString().trim(), startTimeHour, startTimeMinute, endTimeHour, endTimeMinute,
                         vibrateButton.isChecked() ? AudioManager.RINGER_MODE_VIBRATE : AudioManager.RINGER_MODE_SILENT,
-                        getDays(), repeatSpinner.getSelectedItem().toString());
+                        getDays(), repeatSpinner.getSelectedItem().toString(), event == null ? false : true);
             }
         });
         // cancel button

@@ -37,13 +37,14 @@ public class RealmService {
         return event == null ? false : true;
     }
 
-    public void addEvent(final String title, final int startTimeHour, final int startTimeMinute,
+    public void addEvent(final String id, final String title, final int startTimeHour, final int startTimeMinute,
                          final int endTimeHour, final int endTimeMinute, final int ringerMode,
-                         final List<Integer> days, final String repeat) {
+                         final List<Integer> days, final String repeat, final boolean update) {
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                Event event = realm.createObject(Event.class, UUID.randomUUID().toString());
+                // event is set based on whether we are updating an event or creating a new one
+                Event event = !update ? realm.createObject(Event.class, id) : realm.where(Event.class).equalTo(Event.ID, id).findFirst();
                 event.setEventName(title);
                 event.setStartTimeHour(startTimeHour);
                 event.setStartTimeMinute(startTimeMinute);

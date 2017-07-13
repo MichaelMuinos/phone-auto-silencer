@@ -34,9 +34,9 @@ public class EventPostPresenter implements EventPostContract.Presenter {
     }
 
     @Override
-    public void saveEvent(String title, int startTimeHour, int startTimeMinute, int endTimeHour, int endTimeMinute, int ringerMode, List<Integer> days, String repeat) {
-        if(isValidName(title) && isValidTimeInterval(startTimeHour, startTimeMinute, endTimeHour, endTimeMinute) && hasAtLeastOneDaySelected(days)) {
-            realmService.addEvent(title, startTimeHour, startTimeMinute, endTimeHour, endTimeMinute, ringerMode, days, repeat);
+    public void saveEvent(String id, String title, int startTimeHour, int startTimeMinute, int endTimeHour, int endTimeMinute, int ringerMode, List<Integer> days, String repeat, boolean update) {
+        if(isValidName(title, update) && isValidTimeInterval(startTimeHour, startTimeMinute, endTimeHour, endTimeMinute) && hasAtLeastOneDaySelected(days)) {
+            realmService.addEvent(id, title, startTimeHour, startTimeMinute, endTimeHour, endTimeMinute, ringerMode, days, repeat, update);
             view.returnToEventListActivity();
         }
     }
@@ -60,13 +60,20 @@ public class EventPostPresenter implements EventPostContract.Presenter {
         realmService.closeRealmInstance();
     }
 
-    private boolean isValidName(String title) {
+    /**
+     * Method checks to see if the name entered for the event is valid or not. If the name is empty or a duplicate,
+     * we return an error message; however, if we are updating an event, we should ignore the duplicate name error.
+     * @param title
+     * @param update
+     * @return
+     */
+    private boolean isValidName(String title, boolean update) {
         // if the name is not valid, show our name error message
         if(title.isEmpty() || title.trim().length() == 0) {
             view.showEventNameError();
             return false;
         // if the name is a duplicate, show our name dup error message
-        } else if(realmService.containsName(title)) {
+        } else if(realmService.containsName(title) && !update) {
             view.showEventNameDuplicateError();
             return false;
         // otherwise, it must be a valid name

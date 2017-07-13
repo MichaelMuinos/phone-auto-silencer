@@ -15,7 +15,7 @@ public interface EventPostContract {
     }
 
     interface Presenter extends BasePresenter<View> {
-        void saveEvent(String title, int startTimeHour, int startTimeMinute, int endTimeHour, int endTimeMinute, int ringerMode, List<Integer> days, String repeat);
+        void saveEvent(String id, String title, int startTimeHour, int startTimeMinute, int endTimeHour, int endTimeMinute, int ringerMode, List<Integer> days, String repeat, boolean update);
         String convertTimeToString(int hourOfDay, int minute);
         int getDay(String day);
     }
