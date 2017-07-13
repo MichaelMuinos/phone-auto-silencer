@@ -11,6 +11,8 @@ import android.widget.TextView;
 
 public class AppConstants {
 
+    public static final int START_ACTIVITY_FOR_RESULT_CODE = 10000;
+    public static final String EVENT_OBJECT = "EVENT_OBJECT";
     public static final String RINGER_MODE_KEY = "RINGER_MODE";
     public static final String CALENDAR_KEY = "CALENDAR";
     public static final String REQUEST_CODE_KEY = "REQUEST_CODE";

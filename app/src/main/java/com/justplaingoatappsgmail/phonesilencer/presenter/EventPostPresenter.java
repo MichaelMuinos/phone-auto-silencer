@@ -2,7 +2,6 @@ package com.justplaingoatappsgmail.phonesilencer.presenter;
 
 import com.justplaingoatappsgmail.phonesilencer.contracts.EventPostContract;
 import com.justplaingoatappsgmail.phonesilencer.model.database.RealmService;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;

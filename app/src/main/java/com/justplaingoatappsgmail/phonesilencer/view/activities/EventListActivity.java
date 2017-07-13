@@ -40,9 +40,7 @@ import butterknife.OnClick;
 
 public class EventListActivity extends AppCompatActivity implements EventListContract.View, EventListListener {
 
-    private static final int CHOICE_GIVEN = 9000;
     private EventListAdapter eventListAdapter;
-    private Snackbar snackBar;
 
     @BindView(R.id.activity_event_recycler_view) RecyclerView recyclerView;
     @BindView(R.id.activity_event_coordinator_layout) CoordinatorLayout coordinatorLayout;
@@ -85,7 +83,7 @@ public class EventListActivity extends AppCompatActivity implements EventListCon
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == CHOICE_GIVEN) {
+        if (requestCode == AppConstants.START_ACTIVITY_FOR_RESULT_CODE) {
             if (resultCode == Activity.RESULT_OK) {
                 eventListAdapter.notifyDataSetChanged();
             }
@@ -99,7 +97,7 @@ public class EventListActivity extends AppCompatActivity implements EventListCon
     @OnClick(R.id.activity_event_fab)
     public void onFabClick() {
         Intent intent = new Intent(EventListActivity.this, EventPostActivity.class);
-        startActivityForResult(intent, CHOICE_GIVEN);
+        startActivityForResult(intent, AppConstants.START_ACTIVITY_FOR_RESULT_CODE);
     }
 
     /**
@@ -109,7 +107,9 @@ public class EventListActivity extends AppCompatActivity implements EventListCon
      */
     @Override
     public void onEventListCardViewClick(int position) {
-//        presenter.getEvents().get(position);
+        Intent intent = new Intent(EventListActivity.this, EventPostActivity.class);
+        intent.putExtra(AppConstants.EVENT_OBJECT, presenter.getEvents().get(position));
+        startActivityForResult(intent, AppConstants.START_ACTIVITY_FOR_RESULT_CODE);
     }
 
     @Override

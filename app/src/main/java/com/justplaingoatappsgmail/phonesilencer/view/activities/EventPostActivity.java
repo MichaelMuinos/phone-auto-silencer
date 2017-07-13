@@ -2,36 +2,36 @@ package com.justplaingoatappsgmail.phonesilencer.view.activities;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
-import android.media.Image;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
-import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
-
 import com.justplaingoatappsgmail.phonesilencer.AppConstants;
 import com.justplaingoatappsgmail.phonesilencer.PhoneSilencerApplication;
 import com.justplaingoatappsgmail.phonesilencer.R;
 import com.justplaingoatappsgmail.phonesilencer.contracts.EventPostContract;
+import com.justplaingoatappsgmail.phonesilencer.model.Event;
+import com.justplaingoatappsgmail.phonesilencer.model.RealmInteger;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
-
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.BindViews;
@@ -40,6 +40,12 @@ import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 
 public class EventPostActivity extends AppCompatActivity implements EventPostContract.View {
+
+    private int startTimeHour = 0;
+    private int startTimeMinute = 0;
+    private int endTimeHour = 0;
+    private int endTimeMinute = 0;
+    private static Map<Integer,Integer> dayMap;
 
     @BindView(R.id.event_post_coordinator_layout) CoordinatorLayout coordinatorLayout;
     @BindView(R.id.event_post_event_name_title) TextView eventNameTitle;
@@ -51,22 +57,31 @@ public class EventPostActivity extends AppCompatActivity implements EventPostCon
     @BindView(R.id.event_post_start_time) TextView startTime;
     @BindView(R.id.event_post_end_time) TextView endTime;
     @BindView(R.id.event_post_repeat_spinner) Spinner repeatSpinner;
-    @BindViews({R.id.event_post_monday_text_view,
-                R.id.event_post_tuesday_text_view,
-                R.id.event_post_wednesday_text_view,
-                R.id.event_post_thursday_text_view,
-                R.id.event_post_friday_text_view,
-                R.id.event_post_saturday_text_view,
-                R.id.event_post_sunday_text_view})
-    List<TextView> days;
+    @BindView(R.id.event_post_monday_text_view) TextView monday;
+    @BindView(R.id.event_post_tuesday_text_view) TextView tuesday;
+    @BindView(R.id.event_post_wednesday_text_view) TextView wednesday;
+    @BindView(R.id.event_post_thursday_text_view) TextView thursday;
+    @BindView(R.id.event_post_friday_text_view) TextView friday;
+    @BindView(R.id.event_post_saturday_text_view) TextView saturday;
+    @BindView(R.id.event_post_sunday_text_view) TextView sunday;
+    @BindViews({R.id.event_post_monday_text_view, R.id.event_post_tuesday_text_view,
+                R.id.event_post_wednesday_text_view, R.id.event_post_thursday_text_view,
+                R.id.event_post_friday_text_view, R.id.event_post_saturday_text_view,
+                R.id.event_post_sunday_text_view}) List<TextView> days;
 
     @Inject EventPostContract.Presenter presenter;
     @Inject Context context;
 
-    private int startTimeHour = 0;
-    private int startTimeMinute = 0;
-    private int endTimeHour = 0;
-    private int endTimeMinute = 0;
+    static {
+        dayMap = new HashMap<>();
+        dayMap.put(Calendar.SUNDAY, R.id.event_post_sunday_text_view);
+        dayMap.put(Calendar.MONDAY, R.id.event_post_monday_text_view);
+        dayMap.put(Calendar.TUESDAY, R.id.event_post_tuesday_text_view);
+        dayMap.put(Calendar.WEDNESDAY, R.id.event_post_wednesday_text_view);
+        dayMap.put(Calendar.THURSDAY, R.id.event_post_thursday_text_view);
+        dayMap.put(Calendar.FRIDAY, R.id.event_post_friday_text_view);
+        dayMap.put(Calendar.SATURDAY, R.id.event_post_saturday_text_view);
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -76,15 +91,72 @@ public class EventPostActivity extends AppCompatActivity implements EventPostCon
         ButterKnife.bind(this);
         // allow injection of presenter
         ((PhoneSilencerApplication) getApplication()).getComponent().inject(this);
+        // if user is trying to update event, set all ui elements to Event data
+        Event event = getIntent().getParcelableExtra(AppConstants.EVENT_OBJECT);
+        if(event != null) setEventDataToElements(event);
         // setup components for actionbar
-        initActionBar();
+        initActionBar(event);
     }
 
-    private void initActionBar() {
+    private void setEventDataToElements(Event event) {
+        // set our event name
+        eventName.setText(event.getEventName());
+        // set our start time
+        startTimeHour = event.getStartTimeHour();
+        startTimeMinute = event.getStartTimeMinute();
+        startTime.setText(presenter.convertTimeToString(startTimeHour, startTimeMinute));
+        // set our end time
+        endTimeHour = event.getEndTimeHour();
+        endTimeMinute = event.getEndTimeMinute();
+        endTime.setText(presenter.convertTimeToString(endTimeHour, endTimeMinute));
+        // set our day text views
+        for(RealmInteger realmInteger : event.getDays()) {
+            int id = dayMap.get(realmInteger.getRealmInt());
+            int resource = R.drawable.circle_red;
+            switch(id) {
+                case R.id.event_post_monday_text_view:
+                    monday.setBackgroundResource(resource);
+                    break;
+                case R.id.event_post_tuesday_text_view:
+                    tuesday.setBackgroundResource(resource);
+                    break;
+                case R.id.event_post_wednesday_text_view:
+                    wednesday.setBackgroundResource(resource);
+                    break;
+                case R.id.event_post_thursday_text_view:
+                    thursday.setBackgroundResource(resource);
+                    break;
+                case R.id.event_post_friday_text_view:
+                    friday.setBackgroundResource(resource);
+                    break;
+                case R.id.event_post_saturday_text_view:
+                    saturday.setBackgroundResource(resource);
+                    break;
+                case R.id.event_post_sunday_text_view:
+                    sunday.setBackgroundResource(resource);
+                    break;
+                default:
+                    break;
+            }
+        }
+        // set either vibrate or silence button
+        if(event.getRingerMode() == AudioManager.RINGER_MODE_VIBRATE) {
+            vibrateButton.setChecked(true);
+            silenceButton.setChecked(false);
+        } else {
+            vibrateButton.setChecked(false);
+            silenceButton.setChecked(true);
+        }
+    }
+
+    private void initActionBar(Event event) {
         LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.activity_event_post_action_bar, null);
         // add button
         TextView addEventButton = ButterKnife.findById(view, R.id.event_post_add_event);
+        // if event is not null, set our text to say 'update event'
+        if(event != null) addEventButton.setText("\tUPDATE EVENT");
+        // setup functionality for the add button
         addEventButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -98,7 +170,8 @@ public class EventPostActivity extends AppCompatActivity implements EventPostCon
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setResult(Activity.RESULT_CANCELED);
+                Intent returnIntent = new Intent();
+                setResult(Activity.RESULT_CANCELED, returnIntent);
                 finish();
             }
         });
@@ -155,13 +228,14 @@ public class EventPostActivity extends AppCompatActivity implements EventPostCon
 
     @Override
     public void returnToEventListActivity() {
-        setResult(Activity.RESULT_OK);
+        Intent returnIntent = new Intent();
+        setResult(Activity.RESULT_OK, returnIntent);
         finish();
     }
 
     @OnClick({R.id.event_post_start_time, R.id.event_post_end_time})
     public void onTimeClick(View timeView) {
-        // convert our view to a textview so that we can set the time.png.png.png.png.png string
+        // convert our view to a text view so that we can set the time.png.png.png.png.png string
         final TextView textView = (TextView) timeView;
         // set the callback method and call our presenter to convert what the user selected into a string
         TimePickerDialog.OnTimeSetListener listener = new TimePickerDialog.OnTimeSetListener() {
@@ -200,7 +274,7 @@ public class EventPostActivity extends AppCompatActivity implements EventPostCon
     }
 
     /**
-     * On Check Changed method for the all days check.png.png.png.png.png box.
+     * On Check Changed method for the all days check.
      * This will determine whether we need to color all of the days
      * with the red or green drawable.
      * @param isChecked

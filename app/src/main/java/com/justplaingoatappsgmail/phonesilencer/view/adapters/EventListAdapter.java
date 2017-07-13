@@ -16,6 +16,7 @@ import com.justplaingoatappsgmail.phonesilencer.model.Event;
 import com.veinhorn.tagview.TagView;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,13 +34,13 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
 
     static {
         dayMap = new HashMap<>();
-        dayMap.put(1, "SU");
-        dayMap.put(2, "M");
-        dayMap.put(3, "T");
-        dayMap.put(4, "W");
-        dayMap.put(5, "TH");
-        dayMap.put(6, "F");
-        dayMap.put(7, "SA");
+        dayMap.put(Calendar.SUNDAY, "SU");
+        dayMap.put(Calendar.MONDAY, "M");
+        dayMap.put(Calendar.TUESDAY, "T");
+        dayMap.put(Calendar.WEDNESDAY, "W");
+        dayMap.put(Calendar.THURSDAY, "TH");
+        dayMap.put(Calendar.FRIDAY, "F");
+        dayMap.put(Calendar.SATURDAY, "SA");
     }
 
     public EventListAdapter(EventListListener listener, Context context) {

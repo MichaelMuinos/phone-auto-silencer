@@ -1,7 +1,7 @@
 package com.justplaingoatappsgmail.phonesilencer.model;
 
-import java.io.Serializable;
-
+import android.os.Parcel;
+import android.os.Parcelable;
 import io.realm.RealmObject;
 import io.realm.annotations.RealmClass;
 
@@ -10,9 +10,11 @@ import io.realm.annotations.RealmClass;
  * does not support storing primitives inside of the RealmList.
  */
 @RealmClass
-public class RealmInteger extends RealmObject {
+public class RealmInteger extends RealmObject implements Parcelable {
 
     private int realmInt;
+
+    public RealmInteger() {}
 
     public void setRealmInt(int realmInt) {
         this.realmInt = realmInt;
@@ -21,5 +23,31 @@ public class RealmInteger extends RealmObject {
     public int getRealmInt() {
         return realmInt;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.realmInt);
+    }
+
+    protected RealmInteger(Parcel in) {
+        this.realmInt = in.readInt();
+    }
+
+    public static final Parcelable.Creator<RealmInteger> CREATOR = new Parcelable.Creator<RealmInteger>() {
+        @Override
+        public RealmInteger createFromParcel(Parcel source) {
+            return new RealmInteger(source);
+        }
+
+        @Override
+        public RealmInteger[] newArray(int size) {
+            return new RealmInteger[size];
+        }
+    };
 
 }
