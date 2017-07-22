@@ -126,7 +126,7 @@ public class EventListActivity extends AppCompatActivity implements EventListCon
             eventSwitch.setText("Disabled\t");
             eventTag.setText("Disabled");
             // cancel our alarms
-            cancelAlarms(event, alarmManager);
+            cancelAlarms(event, alarmManager, false);
         }
     }
 
@@ -136,7 +136,7 @@ public class EventListActivity extends AppCompatActivity implements EventListCon
      */
     @Override
     public void onEventListDeleteClickListener(Event event) {
-        if(event.isEnabled()) presenter.deleteRequestCodes(event, false);
+        if(event.isEnabled()) cancelAlarms(event, (AlarmManager) getSystemService(Context.ALARM_SERVICE), true);
         // delete the event at the particular position in the list
         presenter.deleteEvent(event);
         // reset our event list for our adapter
@@ -213,7 +213,7 @@ public class EventListActivity extends AppCompatActivity implements EventListCon
         presenter.addRequestCodes(event.getEventName(), requestCodes);
     }
 
-    private void cancelAlarms(Event event, AlarmManager alarmManager) {
+    private void cancelAlarms(Event event, AlarmManager alarmManager, boolean isDeleted) {
         List<Integer> requestCodes = presenter.getEventRequestCodes(event);
         for(int i = 0; i < requestCodes.size(); i+=2) {
             PendingIntent start = createPendingIntentForDeletingAlarms(SetRingerService.class, requestCodes.get(i));
@@ -221,8 +221,8 @@ public class EventListActivity extends AppCompatActivity implements EventListCon
             alarmManager.cancel(start);
             alarmManager.cancel(end);
         }
-        presenter.updateEvent(event, false);
-        presenter.deleteRequestCodes(event, true);
+        if(!isDeleted) presenter.updateEvent(event, false);
+        presenter.deleteRequestCodes(event, isDeleted);
     }
 
 }

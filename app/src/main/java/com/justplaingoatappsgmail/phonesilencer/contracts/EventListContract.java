@@ -25,7 +25,7 @@ public interface EventListContract {
         void addRequestCodes(String eventName, List<Integer> requestCodes);
         void updateEvent(Event event, boolean update);
         void deleteEvent(Event event);
-        void deleteRequestCodes(Event event, boolean showMessage);
+        void deleteRequestCodes(Event event, boolean isDeleted);
     }
 
 }

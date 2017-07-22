@@ -75,9 +75,9 @@ public class EventListPresenter implements EventListContract.Presenter {
     }
 
     @Override
-    public void deleteRequestCodes(Event event, boolean showMessage) {
+    public void deleteRequestCodes(Event event, boolean isDeleted) {
         realmService.deleteRealmPendingIntent(event);
-        if(showMessage) view.showEventDisabledMessage(event.getEventName());
+        if(!isDeleted) view.showEventDisabledMessage(event.getEventName());
     }
 
     @Override
