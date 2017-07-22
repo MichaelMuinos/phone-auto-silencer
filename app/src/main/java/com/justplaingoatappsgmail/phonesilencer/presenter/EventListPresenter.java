@@ -47,6 +47,11 @@ public class EventListPresenter implements EventListContract.Presenter {
     }
 
     @Override
+    public void updateEvent(Event event, boolean update) {
+        realmService.updateEventEnabled(event.getId(), update);
+    }
+
+    @Override
     public int getIncrementedRequestCode() {
         if(atomicInteger.get() == Integer.MAX_VALUE) atomicInteger.set(0);
         return atomicInteger.incrementAndGet();
@@ -70,9 +75,9 @@ public class EventListPresenter implements EventListContract.Presenter {
     }
 
     @Override
-    public void deleteRequestCodes(Event event) {
+    public void deleteRequestCodes(Event event, boolean showMessage) {
         realmService.deleteRealmPendingIntent(event);
-        view.showEventDisabledMessage(event.getEventName());
+        if(showMessage) view.showEventDisabledMessage(event.getEventName());
     }
 
     @Override

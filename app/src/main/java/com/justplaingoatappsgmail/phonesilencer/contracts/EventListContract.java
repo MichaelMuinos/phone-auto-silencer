@@ -13,7 +13,6 @@ public interface EventListContract {
     interface View extends BaseView {
         void showEvents();
         void showSnackBarNoEventsMessage();
-        void showSnackBarUndoMessage();
         void showEventEnabledMessage(String eventName);
         void showEventDisabledMessage(String eventName);
     }
@@ -24,8 +23,9 @@ public interface EventListContract {
         Calendar setCalendar(int day, int hour, int minute);
         int getIncrementedRequestCode();
         void addRequestCodes(String eventName, List<Integer> requestCodes);
+        void updateEvent(Event event, boolean update);
         void deleteEvent(Event event);
-        void deleteRequestCodes(Event event);
+        void deleteRequestCodes(Event event, boolean showMessage);
     }
 
 }

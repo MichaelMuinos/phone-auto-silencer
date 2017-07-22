@@ -9,10 +9,8 @@ import android.content.Intent;
 import android.media.AudioManager;
 import android.os.Build;
 import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
 import android.util.Log;
 import com.justplaingoatappsgmail.phonesilencer.AppConstants;
-import com.justplaingoatappsgmail.phonesilencer.model.Event;
 import java.util.Calendar;
 
 public class SetNormalService extends IntentService {
@@ -35,7 +33,7 @@ public class SetNormalService extends IntentService {
 
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
-        // set the phone ringer.png.png.png.png.png to normal
+        // set the phone ringer to normal
         AudioManager audioManager =(AudioManager) getApplicationContext().getSystemService(Context.AUDIO_SERVICE);
         audioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
         // set repeating alarm depending on build version and repeat option
@@ -56,7 +54,8 @@ public class SetNormalService extends IntentService {
         PendingIntent pendingIntent = PendingIntent.getService(getApplicationContext(), requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         // get alarm manager
         AlarmManager alarmManager = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
-        alarmManager.setExact(AlarmManager.RTC, calendar.getTimeInMillis() + 24 * 60 * 60 * 1000, pendingIntent);
+        // TODO: Plus 2 minutes test
+        alarmManager.setExact(AlarmManager.RTC, System.currentTimeMillis() + 120000, pendingIntent);
     }
 
 }

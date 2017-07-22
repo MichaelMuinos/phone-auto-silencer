@@ -77,7 +77,7 @@ public class EventListActivity extends AppCompatActivity implements EventListCon
         super.onDestroy();
         // set view to null to avoid memory leak
         presenter.setView(null);
-        // close.png.png.png.png.png our realm instance
+        // close our realm instance
         presenter.closeRealm();
     }
 
@@ -117,31 +117,26 @@ public class EventListActivity extends AppCompatActivity implements EventListCon
         Switch eventSwitch = (Switch) switchView;
         TagView eventTag = (TagView) positionTagView;
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        if(eventSwitch.isChecked()) {
+        if(eventSwitch.isChecked() && !event.isEnabled()) {
             eventSwitch.setText("Enabled\t");
             eventTag.setText("Enabled");
-
-            Log.d("Test", "Is checked = true");
-
             // set our alarms
             setAlarms(event, alarmManager);
-        } else {
+        } else if(!eventSwitch.isChecked() && event.isEnabled()){
             eventSwitch.setText("Disabled\t");
             eventTag.setText("Disabled");
-
-            Log.d("Test", "Is checked = false");
-
             // cancel our alarms
             cancelAlarms(event, alarmManager);
         }
     }
 
     /**
-     * Removes an event from the recycler view when clicking on the close.png.png.png.png.png button
+     * Removes an event from the recycler view when clicking on the close button
      * @param event
      */
     @Override
     public void onEventListDeleteClickListener(Event event) {
+        if(event.isEnabled()) presenter.deleteRequestCodes(event, false);
         // delete the event at the particular position in the list
         presenter.deleteEvent(event);
         // reset our event list for our adapter
@@ -162,15 +157,6 @@ public class EventListActivity extends AppCompatActivity implements EventListCon
     @Override
     public void showSnackBarNoEventsMessage() {
         AppConstants.showSnackBarMessage(coordinatorLayout, "No events created. Go make some!", context, R.color.yellow_color);
-    }
-
-    /**
-     * Method for the EventListContract.View
-     * Used to show our snack bar if we want to undo the deletion of an Event
-     */
-    @Override
-    public void showSnackBarUndoMessage() {
-
     }
 
     @Override
@@ -223,6 +209,7 @@ public class EventListActivity extends AppCompatActivity implements EventListCon
                 alarmManager.setExact(AlarmManager.RTC, endCalendar.getTimeInMillis(), end);
             }
         }
+        presenter.updateEvent(event, true);
         presenter.addRequestCodes(event.getEventName(), requestCodes);
     }
 
@@ -234,7 +221,8 @@ public class EventListActivity extends AppCompatActivity implements EventListCon
             alarmManager.cancel(start);
             alarmManager.cancel(end);
         }
-        presenter.deleteRequestCodes(event);
+        presenter.updateEvent(event, false);
+        presenter.deleteRequestCodes(event, true);
     }
 
 }

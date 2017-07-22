@@ -262,7 +262,7 @@ public class EventPostActivity extends AppCompatActivity implements EventPostCon
 
     /**
      * On click for the monday - sunday text views. When clicked, they will transition into a different drawable.
-     * The method will check.png.png.png.png.png to see if the current drawable in the view is equal to the circle_green drawable.
+     * The method will check to see if the current drawable in the view is equal to the circle_green drawable.
      * This is my workaround currently because the getColor method part of GradientDrawable is only available in API 24
      * and above.
      * https://stackoverflow.com/questions/9125229/comparing-two-drawables-in-android

@@ -67,21 +67,27 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
             sb.append(dayMap.get(event.getDays().get(i).getRealmInt()));
             if(i != event.getDays().size() - 1) sb.append("-");
         }
+        // set our switch and tag based on if it was enabled or not
+        if(event.isEnabled()) {
+            holder.switchEvent.setChecked(true);
+            holder.switchEvent.setText("Enabled\t");
+            holder.positionTag.setText("Enabled");
+        }
         // set days tag
         holder.daysTag.setText(sb.toString());
-        // create start time.png.png.png.png.png string
+        // create start time string
         String startTime = convertTimeToString(event.getStartTimeHour(), event.getStartTimeMinute());
-        // create end time.png.png.png.png.png string
+        // create end time string
         String endTime = convertTimeToString(event.getEndTimeHour(), event.getEndTimeMinute());
-        // set time.png.png.png.png.png tag
+        // set time tag
         holder.timeTag.setText(startTime + " to " + endTime);
-        // set ringer.png.png.png.png.png tag
+        // set ringer tag
         holder.ringerTag.setText(event.getRingerMode() == AudioManager.RINGER_MODE_SILENT ? "Silent" : "Vibrate");
         // set repeat tag
         holder.repeatTag.setText(event.getRepeat().toString());
         // set position tag
         holder.positionTag.setText(holder.switchEvent.getText());
-        // set close.png.png.png.png.png button color
+        // set close button color
         holder.closeButton.setColorFilter(ContextCompat.getColor(context, R.color.colorAccent));
     }
 

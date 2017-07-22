@@ -47,9 +47,9 @@ public class SetRingerService extends IntentService {
     private void setAlarm() {
 
         Log.d("Test", "Reset alarm confirmed");
-
+        Log.d("Test", "Time: " + calendar.getTimeInMillis());
         // create intent and put extras
-        Intent intent = new Intent(getApplicationContext(), SetNormalService.class);
+        Intent intent = new Intent(getApplicationContext(), SetRingerService.class);
         intent.putExtra(AppConstants.RINGER_MODE_KEY, ringerMode);
         intent.putExtra(AppConstants.CALENDAR_KEY, calendar);
         intent.putExtra(AppConstants.REQUEST_CODE_KEY, requestCode);
@@ -57,7 +57,8 @@ public class SetRingerService extends IntentService {
         PendingIntent pendingIntent = PendingIntent.getService(getApplicationContext(), requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         // get alarm manager
         AlarmManager alarmManager = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
-        alarmManager.setExact(AlarmManager.RTC, calendar.getTimeInMillis() + 24 * 60 * 60 * 1000, pendingIntent);
+        // TODO: plus 2 minutes: test
+        alarmManager.setExact(AlarmManager.RTC, System.currentTimeMillis() + 120000, pendingIntent);
     }
 
 }

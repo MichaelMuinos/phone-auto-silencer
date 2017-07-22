@@ -29,6 +29,7 @@ public class Event extends RealmObject implements Parcelable {
     private int endTimeHour;
     private int endTimeMinute;
     private int ringerMode;
+    private boolean isEnabled;
     private RealmList<RealmInteger> days;
 
     public Event() {}
@@ -105,6 +106,14 @@ public class Event extends RealmObject implements Parcelable {
         this.ringerMode = ringerMode;
     }
 
+    public boolean isEnabled() {
+        return isEnabled;
+    }
+
+    public void setEnabled(boolean isEnabled) {
+        this.isEnabled = isEnabled;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -120,6 +129,7 @@ public class Event extends RealmObject implements Parcelable {
         dest.writeInt(this.endTimeHour);
         dest.writeInt(this.endTimeMinute);
         dest.writeInt(this.ringerMode);
+        dest.writeByte(this.isEnabled ? (byte) 1 : (byte) 0);
         dest.writeTypedList(this.days);
     }
 
@@ -132,11 +142,12 @@ public class Event extends RealmObject implements Parcelable {
         this.endTimeHour = in.readInt();
         this.endTimeMinute = in.readInt();
         this.ringerMode = in.readInt();
+        this.isEnabled = in.readByte() != 0;
         this.days = new RealmList<>();
         this.days.addAll(in.createTypedArrayList(RealmInteger.CREATOR));
     }
 
-    public static final Parcelable.Creator<Event> CREATOR = new Parcelable.Creator<Event>() {
+    public static final Creator<Event> CREATOR = new Creator<Event>() {
         @Override
         public Event createFromParcel(Parcel source) {
             return new Event(source);

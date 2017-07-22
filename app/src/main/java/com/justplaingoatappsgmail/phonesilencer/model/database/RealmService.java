@@ -39,7 +39,7 @@ public class RealmService {
 
     public void addEvent(final String id, final String title, final int startTimeHour, final int startTimeMinute,
                          final int endTimeHour, final int endTimeMinute, final int ringerMode,
-                         final List<Integer> days, final String repeat, final boolean update) {
+                         final List<Integer> days, final String repeat, final boolean isEnabled, final boolean update) {
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
@@ -52,6 +52,7 @@ public class RealmService {
                 event.setEndTimeMinute(endTimeMinute);
                 event.setRingerMode(ringerMode);
                 event.setRepeat(repeat);
+                event.setEnabled(isEnabled);
                 // generate RealmList of RealmIntegers for the days. Need to create RealmInteger objects first
                 // before adding them to the RealmList
                 RealmList<RealmInteger> dayList = new RealmList<>();
@@ -61,6 +62,16 @@ public class RealmService {
                     dayList.add(realmInteger);
                 }
                 event.setDays(dayList);
+            }
+        });
+    }
+
+    public void updateEventEnabled(final String id, final boolean isEnabled) {
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                Event event = realm.where(Event.class).equalTo(Event.ID, id).findFirst();
+                event.setEnabled(isEnabled);
             }
         });
     }
