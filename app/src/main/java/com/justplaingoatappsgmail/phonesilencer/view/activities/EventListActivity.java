@@ -169,10 +169,11 @@ public class EventListActivity extends AppCompatActivity implements EventListCon
         AppConstants.showSnackBarMessage(coordinatorLayout, eventName + " has been disabled.", context, R.color.yellow_color);
     }
 
-    private PendingIntent createPendingIntentForSettingAlarms(Class service, int ringerMode, Calendar calendar, int requestCode) {
+    private PendingIntent createPendingIntentForSettingAlarms(Class service, int ringerMode, Calendar calendar, String repeat, int requestCode) {
         Intent intent = new Intent(context, service);
         intent.putExtra(AppConstants.RINGER_MODE_KEY, ringerMode);
         intent.putExtra(AppConstants.CALENDAR_KEY, calendar);
+        intent.putExtra(AppConstants.REPEAT_KEY, repeat);
         intent.putExtra(AppConstants.REQUEST_CODE_KEY, requestCode);
         return PendingIntent.getService(context, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
@@ -194,16 +195,26 @@ public class EventListActivity extends AppCompatActivity implements EventListCon
             // create calendars
             Calendar startCalendar = presenter.setCalendar(event.getDays().get(i).getRealmInt(), event.getStartTimeHour(), event.getStartTimeMinute());
             Calendar endCalendar = presenter.setCalendar(event.getDays().get(i).getRealmInt(), event.getEndTimeHour(), event.getEndTimeMinute());
+            // if we are attempting to set a time that has already passed, set both alarms forward by a week
+            if(System.currentTimeMillis() > startCalendar.getTimeInMillis() && System.currentTimeMillis() > endCalendar.getTimeInMillis()) {
+                startCalendar.setTimeInMillis(startCalendar.getTimeInMillis() + AppConstants.WEEK_IN_MILLISECONDS);
+                endCalendar.setTimeInMillis(endCalendar.getTimeInMillis() + AppConstants.WEEK_IN_MILLISECONDS);
+            }
             // create pending intent
-            PendingIntent start = createPendingIntentForSettingAlarms(SetRingerService.class, event.getRingerMode(), startCalendar, startRequestCode);
-            PendingIntent end = createPendingIntentForSettingAlarms(SetNormalService.class, AudioManager.RINGER_MODE_NORMAL, endCalendar, endRequestCode);
+            PendingIntent start = createPendingIntentForSettingAlarms(SetRingerService.class, event.getRingerMode(), startCalendar, event.getRepeat(), startRequestCode);
+            PendingIntent end = createPendingIntentForSettingAlarms(SetNormalService.class, AudioManager.RINGER_MODE_NORMAL, endCalendar, event.getRepeat(), endRequestCode);
             // set our alarm manager triggers
             // RTC: Fires pending intent but does not wake up device
             // if build version is less than 19, we can use set repeating. If it is greater than 19, setRepeating is unreliable
             // and will cause an inexact repeating alarm, thus we must use setExact.
             if(Build.VERSION.SDK_INT < 19) {
-                alarmManager.setRepeating(AlarmManager.RTC, startCalendar.getTimeInMillis(), 24 * 60 * 60 * 1000, start);
-                alarmManager.setRepeating(AlarmManager.RTC, endCalendar.getTimeInMillis(), 24 * 60 * 60 * 1000, end);
+                if(event.getRepeat().equals("Once")) {
+                    alarmManager.set(AlarmManager.RTC, startCalendar.getTimeInMillis(), start);
+                    alarmManager.set(AlarmManager.RTC, endCalendar.getTimeInMillis(), end);
+                } else {
+                    alarmManager.setRepeating(AlarmManager.RTC, startCalendar.getTimeInMillis(), AppConstants.REPEAT_MAP.get(event.getRepeat()), start);
+                    alarmManager.setRepeating(AlarmManager.RTC, endCalendar.getTimeInMillis(), AppConstants.REPEAT_MAP.get(event.getRepeat()), end);
+                }
             } else {
                 alarmManager.setExact(AlarmManager.RTC, startCalendar.getTimeInMillis(), start);
                 alarmManager.setExact(AlarmManager.RTC, endCalendar.getTimeInMillis(), end);

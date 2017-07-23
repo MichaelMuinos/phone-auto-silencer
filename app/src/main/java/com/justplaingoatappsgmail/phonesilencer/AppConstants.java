@@ -9,6 +9,10 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
 public class AppConstants {
 
     public static final int START_ACTIVITY_FOR_RESULT_CODE = 10000;
@@ -16,6 +20,17 @@ public class AppConstants {
     public static final String RINGER_MODE_KEY = "RINGER_MODE";
     public static final String CALENDAR_KEY = "CALENDAR";
     public static final String REQUEST_CODE_KEY = "REQUEST_CODE";
+    public static final String REPEAT_KEY = "REPEAT_KEY";
+    public static Map<String,Long> REPEAT_MAP = createMap();
+    public static long WEEK_IN_MILLISECONDS = 604800000L;
+
+    private static Map<String, Long> createMap() {
+        Map<String, Long> result = new HashMap<>();
+        result.put("Weekly", 604800000L);
+        result.put("Bi-Weekly", 1209600000L);
+        result.put("Monthly", 2592000000L);
+        return Collections.unmodifiableMap(result);
+    }
 
     public static void showSnackBarMessage(CoordinatorLayout coordinatorLayout, String str, Context context, int color) {
         Snackbar snackBar = Snackbar.make(coordinatorLayout, str, Snackbar.LENGTH_LONG);

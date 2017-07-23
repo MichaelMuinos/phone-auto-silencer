@@ -18,6 +18,7 @@ public class SetRingerService extends IntentService {
     private Calendar calendar;
     private int ringerMode;
     private int requestCode;
+    private String repeat;
 
     public SetRingerService() {
         super(null);
@@ -28,6 +29,7 @@ public class SetRingerService extends IntentService {
         calendar = (Calendar) intent.getExtras().get(AppConstants.CALENDAR_KEY);
         ringerMode = (int) intent.getExtras().get(AppConstants.RINGER_MODE_KEY);
         requestCode = (int) intent.getExtras().get(AppConstants.REQUEST_CODE_KEY);
+        repeat = (String) intent.getExtras().get(AppConstants.REPEAT_KEY);
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -37,7 +39,7 @@ public class SetRingerService extends IntentService {
         AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         audioManager.setRingerMode(ringerMode);
         // set repeating alarm depending on build version and repeat option
-        if(Build.VERSION.SDK_INT >= 19) setAlarm();
+        if(Build.VERSION.SDK_INT >= 19 && !repeat.equals("Once")) setAlarm();
 
         Log.d("Test", "Silenced");
 
@@ -47,7 +49,6 @@ public class SetRingerService extends IntentService {
     private void setAlarm() {
 
         Log.d("Test", "Reset alarm confirmed");
-        Log.d("Test", "Time: " + calendar.getTimeInMillis());
         // create intent and put extras
         Intent intent = new Intent(getApplicationContext(), SetRingerService.class);
         intent.putExtra(AppConstants.RINGER_MODE_KEY, ringerMode);
@@ -57,8 +58,7 @@ public class SetRingerService extends IntentService {
         PendingIntent pendingIntent = PendingIntent.getService(getApplicationContext(), requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         // get alarm manager
         AlarmManager alarmManager = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
-        // TODO: plus 2 minutes: test
-        alarmManager.setExact(AlarmManager.RTC, System.currentTimeMillis() + 120000, pendingIntent);
+        alarmManager.setExact(AlarmManager.RTC, System.currentTimeMillis() + AppConstants.REPEAT_MAP.get(repeat), pendingIntent);
     }
 
 }

@@ -18,6 +18,7 @@ public class SetNormalService extends IntentService {
     private Calendar calendar;
     private int ringerMode;
     private int requestCode;
+    private String repeat;
 
     public SetNormalService() {
         super(null);
@@ -28,6 +29,7 @@ public class SetNormalService extends IntentService {
         calendar = (Calendar) intent.getExtras().get(AppConstants.CALENDAR_KEY);
         ringerMode = (int) intent.getExtras().get(AppConstants.RINGER_MODE_KEY);
         requestCode = (int) intent.getExtras().get(AppConstants.REQUEST_CODE_KEY);
+        repeat = (String) intent.getExtras().get(AppConstants.REPEAT_KEY);
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -37,7 +39,7 @@ public class SetNormalService extends IntentService {
         AudioManager audioManager =(AudioManager) getApplicationContext().getSystemService(Context.AUDIO_SERVICE);
         audioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
         // set repeating alarm depending on build version and repeat option
-        if(Build.VERSION.SDK_INT >= 19) setAlarm();
+        if(Build.VERSION.SDK_INT >= 19 && !repeat.equals("Once")) setAlarm();
 
         Log.d("Test", "Back to normal");
 
@@ -54,8 +56,7 @@ public class SetNormalService extends IntentService {
         PendingIntent pendingIntent = PendingIntent.getService(getApplicationContext(), requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         // get alarm manager
         AlarmManager alarmManager = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
-        // TODO: Plus 2 minutes test
-        alarmManager.setExact(AlarmManager.RTC, System.currentTimeMillis() + 120000, pendingIntent);
+        alarmManager.setExact(AlarmManager.RTC, System.currentTimeMillis() + AppConstants.REPEAT_MAP.get(repeat), pendingIntent);
     }
 
 }

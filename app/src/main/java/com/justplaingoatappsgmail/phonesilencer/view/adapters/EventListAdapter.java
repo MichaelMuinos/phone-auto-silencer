@@ -84,7 +84,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
         // set ringer tag
         holder.ringerTag.setText(event.getRingerMode() == AudioManager.RINGER_MODE_SILENT ? "Silent" : "Vibrate");
         // set repeat tag
-        holder.repeatTag.setText(event.getRepeat().toString());
+        holder.repeatTag.setText(event.getRepeat());
         // set position tag
         holder.positionTag.setText(holder.switchEvent.getText());
         // set close button color
