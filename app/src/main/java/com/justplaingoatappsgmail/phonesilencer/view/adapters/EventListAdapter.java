@@ -63,10 +63,17 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
         holder.eventName.setText(event.getEventName());
         // create days string
         StringBuilder sb = new StringBuilder();
-        for(int i = 0; i < event.getDays().size(); i++) {
-            sb.append(dayMap.get(event.getDays().get(i).getRealmInt()));
-            if(i != event.getDays().size() - 1) sb.append("-");
+        // if our list is of size 7, that means all days have been selected
+        if(event.getDays().size() == 7) {
+            sb.append("All Days");
+        } else {
+            for (int i = 0; i < event.getDays().size(); i++) {
+                sb.append(dayMap.get(event.getDays().get(i).getRealmInt()));
+                if (i != event.getDays().size() - 1) sb.append("-");
+            }
         }
+        // set days tag
+        holder.daysTag.setText(sb.toString());
         // set our switch and tag based on if it was enabled or not
         if(event.isEnabled()) {
             holder.switchEvent.setChecked(true);
@@ -77,8 +84,6 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
             holder.switchEvent.setText("Disabled\t");
             holder.positionTag.setText("Disabled");
         }
-        // set days tag
-        holder.daysTag.setText(sb.toString());
         // create start time string
         String startTime = convertTimeToString(event.getStartTimeHour(), event.getStartTimeMinute());
         // create end time string

@@ -163,17 +163,18 @@ public class EventPostActivity extends AppCompatActivity implements EventPostCon
             @Override
             public void onClick(View v) {
                 // now save our event with our new or updated data
-                presenter.saveEvent(event == null ? UUID.randomUUID().toString() : event.getId(),
+                boolean executed = presenter.saveEvent(event == null ? UUID.randomUUID().toString() : event.getId(),
                         eventName.getText().toString().trim(), startTimeHour, startTimeMinute, endTimeHour, endTimeMinute,
                         vibrateButton.isChecked() ? AudioManager.RINGER_MODE_VIBRATE : AudioManager.RINGER_MODE_SILENT,
                         getDays(), repeatSpinner.getSelectedItem().toString(), event == null ? false : true);
-                // if we are updating an event and it is enabled, cancel all alarms for that event and set our event to not enabled
-                if(event != null && event.isEnabled()) {
-                    Log.d("Test", "here");
-                    presenter.deleteRequestCodes(event);
-                    presenter.updateEvent(event);
+                if(executed) {
+                    // if we are updating an event and it is enabled, cancel all alarms for that event and set our event to not enabled
+                    if (event != null && event.isEnabled()) {
+                        presenter.deleteRequestCodes(event);
+                        presenter.updateEvent(event);
+                    }
+                    returnToEventListActivity(Activity.RESULT_OK);
                 }
-                returnToEventListActivity(Activity.RESULT_OK);
             }
         });
         // cancel button
@@ -209,6 +210,14 @@ public class EventPostActivity extends AppCompatActivity implements EventPostCon
         timeTitle.setTextColor(ContextCompat.getColor(context, R.color.colorPrimary));
         scheduleTitle.setTextColor(ContextCompat.getColor(context, R.color.colorPrimary));
         AppConstants.showSnackBarMessage(coordinatorLayout, "Error: Event name is invalid!", context, R.color.red_color);
+    }
+
+    @Override
+    public void showEventNameLengthError() {
+        eventNameTitle.setTextColor(ContextCompat.getColor(context, R.color.red_color));
+        timeTitle.setTextColor(ContextCompat.getColor(context, R.color.colorPrimary));
+        scheduleTitle.setTextColor(ContextCompat.getColor(context, R.color.colorPrimary));
+        AppConstants.showSnackBarMessage(coordinatorLayout, "Error: Event name is too long (20 character max)!", context, R.color.red_color);
     }
 
     @Override

@@ -10,6 +10,8 @@ import java.util.Map;
 
 public class EventPostPresenter implements EventPostContract.Presenter {
 
+    private static final int MAX_NAME_LENGTH = 20;
+
     private EventPostContract.View view;
     private RealmService realmService;
     private static Map<String,Integer> dayMap;
@@ -35,10 +37,12 @@ public class EventPostPresenter implements EventPostContract.Presenter {
     }
 
     @Override
-    public void saveEvent(String id, String title, int startTimeHour, int startTimeMinute, int endTimeHour, int endTimeMinute, int ringerMode, List<Integer> days, String repeat, boolean update) {
+    public boolean saveEvent(String id, String title, int startTimeHour, int startTimeMinute, int endTimeHour, int endTimeMinute, int ringerMode, List<Integer> days, String repeat, boolean update) {
         if(isValidName(title, update) && isValidTimeInterval(startTimeHour, startTimeMinute, endTimeHour, endTimeMinute) && hasAtLeastOneDaySelected(days)) {
             realmService.addEvent(id, title, startTimeHour, startTimeMinute, endTimeHour, endTimeMinute, ringerMode, days, repeat, false, update);
+            return true;
         }
+        return false;
     }
 
     @Override
@@ -81,6 +85,10 @@ public class EventPostPresenter implements EventPostContract.Presenter {
         // if the name is not valid, show our name error message
         if(title.isEmpty() || title.trim().length() == 0) {
             view.showEventNameError();
+            return false;
+        // of our name of the event is too long, display error
+        } else if(title.length() > MAX_NAME_LENGTH) {
+            view.showEventNameLengthError();
             return false;
         // if the name is a duplicate, show our name dup error message
         } else if(realmService.containsName(title) && !update) {
