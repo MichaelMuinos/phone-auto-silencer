@@ -1,6 +1,7 @@
 package com.justplaingoatappsgmail.phonesilencer.presenter;
 
 import com.justplaingoatappsgmail.phonesilencer.contracts.EventPostContract;
+import com.justplaingoatappsgmail.phonesilencer.model.Event;
 import com.justplaingoatappsgmail.phonesilencer.model.database.RealmService;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -37,8 +38,17 @@ public class EventPostPresenter implements EventPostContract.Presenter {
     public void saveEvent(String id, String title, int startTimeHour, int startTimeMinute, int endTimeHour, int endTimeMinute, int ringerMode, List<Integer> days, String repeat, boolean update) {
         if(isValidName(title, update) && isValidTimeInterval(startTimeHour, startTimeMinute, endTimeHour, endTimeMinute) && hasAtLeastOneDaySelected(days)) {
             realmService.addEvent(id, title, startTimeHour, startTimeMinute, endTimeHour, endTimeMinute, ringerMode, days, repeat, false, update);
-            view.returnToEventListActivity();
         }
+    }
+
+    @Override
+    public void deleteRequestCodes(Event event) {
+        realmService.deleteRealmPendingIntent(event);
+    }
+
+    @Override
+    public void updateEvent(Event event) {
+        realmService.updateEventEnabled(event.getId(), false);
     }
 
     @Override

@@ -72,6 +72,10 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
             holder.switchEvent.setChecked(true);
             holder.switchEvent.setText("Enabled\t");
             holder.positionTag.setText("Enabled");
+        } else {
+            holder.switchEvent.setChecked(false);
+            holder.switchEvent.setText("Disabled\t");
+            holder.positionTag.setText("Disabled");
         }
         // set days tag
         holder.daysTag.setText(sb.toString());

@@ -12,6 +12,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -161,10 +162,18 @@ public class EventPostActivity extends AppCompatActivity implements EventPostCon
         addEventButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // now save our event with our new or updated data
                 presenter.saveEvent(event == null ? UUID.randomUUID().toString() : event.getId(),
                         eventName.getText().toString().trim(), startTimeHour, startTimeMinute, endTimeHour, endTimeMinute,
                         vibrateButton.isChecked() ? AudioManager.RINGER_MODE_VIBRATE : AudioManager.RINGER_MODE_SILENT,
                         getDays(), repeatSpinner.getSelectedItem().toString(), event == null ? false : true);
+                // if we are updating an event and it is enabled, cancel all alarms for that event and set our event to not enabled
+                if(event != null && event.isEnabled()) {
+                    Log.d("Test", "here");
+                    presenter.deleteRequestCodes(event);
+                    presenter.updateEvent(event);
+                }
+                returnToEventListActivity(Activity.RESULT_OK);
             }
         });
         // cancel button
@@ -172,9 +181,7 @@ public class EventPostActivity extends AppCompatActivity implements EventPostCon
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent returnIntent = new Intent();
-                setResult(Activity.RESULT_CANCELED, returnIntent);
-                finish();
+                returnToEventListActivity(Activity.RESULT_CANCELED);
             }
         });
         // actionbar
@@ -226,13 +233,6 @@ public class EventPostActivity extends AppCompatActivity implements EventPostCon
         eventNameTitle.setTextColor(ContextCompat.getColor(context, R.color.colorPrimary));
         timeTitle.setTextColor(ContextCompat.getColor(context, R.color.colorPrimary));
         AppConstants.showSnackBarMessage(coordinatorLayout, "Error: No days have been selected!", context, R.color.red_color);
-    }
-
-    @Override
-    public void returnToEventListActivity() {
-        Intent returnIntent = new Intent();
-        setResult(Activity.RESULT_OK, returnIntent);
-        finish();
     }
 
     @OnClick({R.id.event_post_start_time, R.id.event_post_end_time})
@@ -299,6 +299,17 @@ public class EventPostActivity extends AppCompatActivity implements EventPostCon
             default:
                 break;
         }
+    }
+
+    /**
+     * Method used to return us back to our list activity depending on if we created
+     * a new event / updated event or not
+     * @param code
+     */
+    private void returnToEventListActivity(int code) {
+        Intent returnIntent = new Intent();
+        setResult(code, returnIntent);
+        finish();
     }
 
     /**
