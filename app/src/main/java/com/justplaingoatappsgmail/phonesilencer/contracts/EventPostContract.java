@@ -20,7 +20,6 @@ public interface EventPostContract {
         boolean saveEvent(String id, String title, int startTimeHour, int startTimeMinute, int endTimeHour, int endTimeMinute, int ringerMode, List<Integer> days, String repeat, boolean update);
         void deleteRequestCodes(Event event);
         void updateEvent(Event event);
-        String convertTimeToString(int hourOfDay, int minute);
         int getDay(String day);
     }
 

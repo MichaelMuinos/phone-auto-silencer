@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
+
+import com.justplaingoatappsgmail.phonesilencer.AppConstants;
 import com.justplaingoatappsgmail.phonesilencer.R;
 import com.justplaingoatappsgmail.phonesilencer.customlisteners.EventListListener;
 import com.justplaingoatappsgmail.phonesilencer.model.Event;
@@ -85,9 +87,9 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
             holder.positionTag.setText("Disabled");
         }
         // create start time string
-        String startTime = convertTimeToString(event.getStartTimeHour(), event.getStartTimeMinute());
+        String startTime = AppConstants.convertTimeToString(event.getStartTimeHour(), event.getStartTimeMinute());
         // create end time string
-        String endTime = convertTimeToString(event.getEndTimeHour(), event.getEndTimeMinute());
+        String endTime = AppConstants.convertTimeToString(event.getEndTimeHour(), event.getEndTimeMinute());
         // set time tag
         holder.timeTag.setText(startTime + " to " + endTime);
         // set ringer tag
@@ -108,14 +110,6 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
     public void setEventList(List<Event> eventList) {
         this.eventList.clear();
         this.eventList.addAll(eventList);
-    }
-
-    private String convertTimeToString(int hourOfDay, int minute) {
-        String partOfDay = hourOfDay < 12 ? "AM" : "PM";
-        int hour = hourOfDay % 12;
-        String hourToString = hour == 0 ? "12" : (hour < 10 ? "0" + String.valueOf(hour) : String.valueOf(hour));
-        String minuteToString = minute < 10 ? "0" + String.valueOf(minute) : String.valueOf(minute);
-        return hourToString + ":" + minuteToString + " " + partOfDay;
     }
 
     public static class EventListViewHolder extends RecyclerView.ViewHolder {

@@ -106,11 +106,11 @@ public class EventPostActivity extends AppCompatActivity implements EventPostCon
         // set our start time
         startTimeHour = event.getStartTimeHour();
         startTimeMinute = event.getStartTimeMinute();
-        startTime.setText(presenter.convertTimeToString(startTimeHour, startTimeMinute));
+        startTime.setText(AppConstants.convertTimeToString(startTimeHour, startTimeMinute));
         // set our end time
         endTimeHour = event.getEndTimeHour();
         endTimeMinute = event.getEndTimeMinute();
-        endTime.setText(presenter.convertTimeToString(endTimeHour, endTimeMinute));
+        endTime.setText(AppConstants.convertTimeToString(endTimeHour, endTimeMinute));
         // set our day text views
         for(RealmInteger realmInteger : event.getDays()) {
             int id = dayMap.get(realmInteger.getRealmInt());
@@ -252,7 +252,7 @@ public class EventPostActivity extends AppCompatActivity implements EventPostCon
         TimePickerDialog.OnTimeSetListener listener = new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePickerDialog view, int hourOfDay, int minute, int second) {
-                textView.setText(presenter.convertTimeToString(hourOfDay, minute));
+                textView.setText(AppConstants.convertTimeToString(hourOfDay, minute));
                 if(textView.getId() == R.id.event_post_start_time) {
                     startTimeHour = hourOfDay;
                     startTimeMinute = minute;

@@ -17,6 +17,7 @@ public class AppConstants {
 
     public static final int START_ACTIVITY_FOR_RESULT_CODE = 10000;
     public static final String EVENT_OBJECT = "EVENT_OBJECT";
+    public static final String EVENT_OBJECT_FOR_SERVICE = "EVENT_OBJECT_FOR_SERVICE";
     public static final String RINGER_MODE_KEY = "RINGER_MODE";
     public static final String CALENDAR_KEY = "CALENDAR";
     public static final String REQUEST_CODE_KEY = "REQUEST_CODE";
@@ -41,6 +42,14 @@ public class AppConstants {
         // set text color
         textView.setTextColor(ContextCompat.getColor(context, color));
         snackBar.show();
+    }
+
+    public static String convertTimeToString(int hourOfDay, int minute) {
+        String partOfDay = hourOfDay < 12 ? "AM" : "PM";
+        int hour = hourOfDay % 12;
+        String hourToString = hour == 0 ? "12" : (hour < 10 ? "0" + String.valueOf(hour) : String.valueOf(hour));
+        String minuteToString = minute < 10 ? "0" + String.valueOf(minute) : String.valueOf(minute);
+        return hourToString + ":" + minuteToString + " " + partOfDay;
     }
 
 }

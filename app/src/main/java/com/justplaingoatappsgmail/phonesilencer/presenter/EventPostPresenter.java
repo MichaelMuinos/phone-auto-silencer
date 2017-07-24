@@ -56,15 +56,6 @@ public class EventPostPresenter implements EventPostContract.Presenter {
     }
 
     @Override
-    public String convertTimeToString(int hourOfDay, int minute) {
-        String partOfDay = hourOfDay < 12 ? "AM" : "PM";
-        int hour = hourOfDay % 12;
-        String hourToString = hour == 0 ? "12" : (hour < 10 ? "0" + String.valueOf(hour) : String.valueOf(hour));
-        String minuteToString = minute < 10 ? "0" + String.valueOf(minute) : String.valueOf(minute);
-        return hourToString + ":" + minuteToString + " " + partOfDay;
-    }
-
-    @Override
     public int getDay(String day) {
         return dayMap.get(day);
     }

@@ -150,10 +150,6 @@ public class EventListActivity extends AppCompatActivity implements EventListCon
         eventListAdapter.setEventList(presenter.getEvents());
     }
 
-    /**
-     * Method for the EventListContract.View
-     * Used to show our snack bar if we do not have any Events
-     */
     @Override
     public void showSnackBarNoEventsMessage() {
         AppConstants.showSnackBarMessage(coordinatorLayout, "No events created. Go make some!", context, R.color.yellow_color);
@@ -169,11 +165,10 @@ public class EventListActivity extends AppCompatActivity implements EventListCon
         AppConstants.showSnackBarMessage(coordinatorLayout, eventName + " has been disabled.", context, R.color.yellow_color);
     }
 
-    private PendingIntent createPendingIntentForSettingAlarms(Class service, int ringerMode, Calendar calendar, String repeat, int requestCode) {
+    private PendingIntent createPendingIntentForSettingAlarms(Class service, Event event, Calendar calendar, int requestCode) {
         Intent intent = new Intent(context, service);
-        intent.putExtra(AppConstants.RINGER_MODE_KEY, ringerMode);
+        intent.putExtra(AppConstants.EVENT_OBJECT_FOR_SERVICE, event);
         intent.putExtra(AppConstants.CALENDAR_KEY, calendar);
-        intent.putExtra(AppConstants.REPEAT_KEY, repeat);
         intent.putExtra(AppConstants.REQUEST_CODE_KEY, requestCode);
         return PendingIntent.getService(context, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
@@ -201,8 +196,8 @@ public class EventListActivity extends AppCompatActivity implements EventListCon
                 endCalendar.setTimeInMillis(endCalendar.getTimeInMillis() + AppConstants.WEEK_IN_MILLISECONDS);
             }
             // create pending intent
-            PendingIntent start = createPendingIntentForSettingAlarms(SetRingerService.class, event.getRingerMode(), startCalendar, event.getRepeat(), startRequestCode);
-            PendingIntent end = createPendingIntentForSettingAlarms(SetNormalService.class, AudioManager.RINGER_MODE_NORMAL, endCalendar, event.getRepeat(), endRequestCode);
+            PendingIntent start = createPendingIntentForSettingAlarms(SetRingerService.class, event, startCalendar, startRequestCode);
+            PendingIntent end = createPendingIntentForSettingAlarms(SetNormalService.class, event, endCalendar, endRequestCode);
             // set our alarm manager triggers
             // RTC: Fires pending intent but does not wake up device
             // if build version is less than 19, we can use set repeating. If it is greater than 19, setRepeating is unreliable
