@@ -74,7 +74,7 @@ public class EventPostPresenter implements EventPostContract.Presenter {
     }
 
     /**
-     * Method checks to see if the name entered for the event is valid or not. If the name is empty or a duplicate,
+     * Method checks to see if the name entered for the event is valid or not. If the name is empty or a duplicate or too long,
      * we return an error message; however, if we are updating an event, we should ignore the duplicate name error.
      * @param title
      * @param update
@@ -85,7 +85,7 @@ public class EventPostPresenter implements EventPostContract.Presenter {
         if(title.isEmpty() || title.trim().length() == 0) {
             view.showEventNameError();
             return false;
-        // of our name of the event is too long, display error
+        // if our name of the event is too long, display error
         } else if(title.length() > MAX_NAME_LENGTH) {
             view.showEventNameLengthError();
             return false;
