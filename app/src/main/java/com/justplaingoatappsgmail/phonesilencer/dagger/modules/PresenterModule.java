@@ -16,28 +16,20 @@ import dagger.Provides;
 public class PresenterModule {
 
     @Provides
-    @Singleton
     public EventListContract.Presenter provideEventListPresenter(RealmService realmService, AtomicInteger atomicInteger) {
         return new EventListPresenter(realmService, atomicInteger);
     }
 
     @Provides
-    @Singleton
     public EventPostContract.Presenter provideEventPostPresenter(RealmService realmService) {
         return new EventPostPresenter(realmService);
     }
 
-    /**
-     * Not a singleton because the presenter could be created multiple times by the service
-     */
     @Provides
     public SetRingerServicePresenter provideSetRingerServicePresenter(RealmService realmService, AtomicInteger atomicInteger) {
         return new SetRingerServicePresenter(realmService, atomicInteger);
     }
 
-    /**
-     * Not a singleton because the presenter could be created multiple times by the service
-     */
     @Provides
     public SetNormalServicePresenter provideSetNormalServicePresenter(RealmService realmService) {
         return new SetNormalServicePresenter(realmService);
