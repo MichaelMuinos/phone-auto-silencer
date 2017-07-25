@@ -149,17 +149,17 @@ public class EventListActivity extends AppCompatActivity implements EventListCon
 
     @Override
     public void showSnackBarNoEventsMessage() {
-        AppConstants.showSnackBarMessage(coordinatorLayout, "No events created. Go make some!", context, R.color.yellow_color);
+        AppConstants.showSnackBarMessage(coordinatorLayout, "No events created. Go make some!", context, R.color.white_color);
     }
 
     @Override
     public void showEventEnabledMessage(String eventName) {
-        AppConstants.showSnackBarMessage(coordinatorLayout, eventName + " has been enabled.", context, R.color.yellow_color);
+        AppConstants.showSnackBarMessage(coordinatorLayout, eventName + " has been enabled.", context, R.color.white_color);
     }
 
     @Override
     public void showEventDisabledMessage(String eventName) {
-        AppConstants.showSnackBarMessage(coordinatorLayout, eventName + " has been disabled.", context, R.color.yellow_color);
+        AppConstants.showSnackBarMessage(coordinatorLayout, eventName + " has been disabled.", context, R.color.white_color);
     }
 
     @Override
