@@ -5,9 +5,9 @@ import com.justplaingoatappsgmail.phonesilencer.contracts.EventPostContract;
 import com.justplaingoatappsgmail.phonesilencer.model.database.RealmService;
 import com.justplaingoatappsgmail.phonesilencer.presenter.EventListPresenter;
 import com.justplaingoatappsgmail.phonesilencer.presenter.EventPostPresenter;
-
+import com.justplaingoatappsgmail.phonesilencer.presenter.SetNormalServicePresenter;
+import com.justplaingoatappsgmail.phonesilencer.presenter.SetRingerServicePresenter;
 import java.util.concurrent.atomic.AtomicInteger;
-
 import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
@@ -25,6 +25,18 @@ public class PresenterModule {
     @Singleton
     public EventPostContract.Presenter provideEventPostPresenter(RealmService realmService) {
         return new EventPostPresenter(realmService);
+    }
+
+    @Provides
+    @Singleton
+    public SetRingerServicePresenter provideSetRingerServicePresenter(RealmService realmService, AtomicInteger atomicInteger) {
+        return new SetRingerServicePresenter(realmService, atomicInteger);
+    }
+
+    @Provides
+    @Singleton
+    public SetNormalServicePresenter provideSetNormalServicePresenter(RealmService realmService) {
+        return new SetNormalServicePresenter(realmService);
     }
 
 }

@@ -12,15 +12,19 @@ import android.os.Build;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import com.justplaingoatappsgmail.phonesilencer.AppConstants;
+import com.justplaingoatappsgmail.phonesilencer.PhoneSilencerApplication;
 import com.justplaingoatappsgmail.phonesilencer.model.Event;
-
+import com.justplaingoatappsgmail.phonesilencer.presenter.SetNormalServicePresenter;
 import java.util.Calendar;
+import javax.inject.Inject;
 
 public class SetNormalService extends IntentService {
 
     private Event event;
     private Calendar calendar;
     private int requestCode;
+
+    @Inject SetNormalServicePresenter presenter;
 
     public SetNormalService() {
         super(null);
@@ -36,14 +40,20 @@ public class SetNormalService extends IntentService {
 
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
+        // setup injection target here because we need to create the Realm instance in the same thread
+        // as where we retrieve data
+        ((PhoneSilencerApplication) getApplication()).getComponent().inject(this);
         // set the phone ringer to normal
         AudioManager audioManager =(AudioManager) getApplicationContext().getSystemService(Context.AUDIO_SERVICE);
         audioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
         // clear notification
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.cancel(0);
+        notificationManager.cancel(presenter.retrieveNotificationIdAndDelete(event));
         // set repeating alarm depending on build version and repeat option
         if(Build.VERSION.SDK_INT >= 19 && !event.getRepeat().equals("Once")) setAlarm();
+        // close realm instance
+        // https://github.com/realm/realm-java/issues/1910
+        presenter.closeRealm();
 
         Log.d("Test", "Back to normal");
 

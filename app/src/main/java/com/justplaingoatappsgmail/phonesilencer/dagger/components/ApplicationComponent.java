@@ -5,6 +5,9 @@ import com.justplaingoatappsgmail.phonesilencer.dagger.modules.PresenterModule;
 import com.justplaingoatappsgmail.phonesilencer.dagger.modules.RealmModule;
 import com.justplaingoatappsgmail.phonesilencer.view.activities.EventListActivity;
 import com.justplaingoatappsgmail.phonesilencer.view.activities.EventPostActivity;
+import com.justplaingoatappsgmail.phonesilencer.model.services.SetNormalService;
+import com.justplaingoatappsgmail.phonesilencer.model.services.SetRingerService;
+
 import javax.inject.Singleton;
 import dagger.Component;
 
@@ -16,4 +19,6 @@ import dagger.Component;
 public interface ApplicationComponent {
     void inject(EventListActivity target);
     void inject(EventPostActivity target);
+    void inject(SetRingerService target);
+    void inject(SetNormalService target);
 }

@@ -2,6 +2,7 @@ package com.justplaingoatappsgmail.phonesilencer.model.database;
 
 import android.content.Context;
 import com.justplaingoatappsgmail.phonesilencer.model.Event;
+import com.justplaingoatappsgmail.phonesilencer.model.Notification;
 import com.justplaingoatappsgmail.phonesilencer.model.RealmPendingIntent;
 import com.justplaingoatappsgmail.phonesilencer.model.RealmInteger;
 import java.util.ArrayList;
@@ -80,8 +81,8 @@ public class RealmService {
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                RealmResults<Event> deleteEvent = realm.where(Event.class).equalTo(Event.ID, event.getId()).findAll();
-                deleteEvent.deleteAllFromRealm();
+                Event deleteEvent = realm.where(Event.class).equalTo(Event.ID, event.getId()).findFirst();
+                deleteEvent.deleteFromRealm();
             }
         });
     }
@@ -107,10 +108,33 @@ public class RealmService {
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                RealmResults<RealmPendingIntent> pendingIntentCodes = realm.where(RealmPendingIntent.class).equalTo(RealmPendingIntent.EVENT_NAME, event.getEventName()).findAll();
-                pendingIntentCodes.deleteAllFromRealm();
+                RealmPendingIntent pendingIntentCodes = realm.where(RealmPendingIntent.class).equalTo(RealmPendingIntent.EVENT_NAME, event.getEventName()).findFirst();
+                pendingIntentCodes.deleteFromRealm();
             }
         });
+    }
+
+    public void saveNotification(final String eventId, final int notificationId) {
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                Notification notification = realm.createObject(Notification.class, UUID.randomUUID().toString());
+                notification.setEventId(eventId);
+                notification.setNotificationId(notificationId);
+            }
+        });
+    }
+
+    public int retrieveAndDeleteNotification(final Event event) {
+        final Notification notification = realm.where(Notification.class).equalTo(Notification.EVENT_ID, event.getId()).findFirst();
+        int notificationId = notification.getNotificationId();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                notification.deleteFromRealm();
+            }
+        });
+        return notificationId;
     }
 
     public List<Event> getAllEvents() {

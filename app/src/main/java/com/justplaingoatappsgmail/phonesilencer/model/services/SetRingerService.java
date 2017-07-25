@@ -13,17 +13,21 @@ import android.os.Build;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import com.justplaingoatappsgmail.phonesilencer.AppConstants;
+import com.justplaingoatappsgmail.phonesilencer.PhoneSilencerApplication;
 import com.justplaingoatappsgmail.phonesilencer.R;
 import com.justplaingoatappsgmail.phonesilencer.model.Event;
+import com.justplaingoatappsgmail.phonesilencer.presenter.SetRingerServicePresenter;
 import com.justplaingoatappsgmail.phonesilencer.view.activities.EventListActivity;
-
 import java.util.Calendar;
+import javax.inject.Inject;
 
 public class SetRingerService extends IntentService {
 
     private Event event;
     private Calendar calendar;
     private int requestCode;
+
+    @Inject SetRingerServicePresenter presenter;
 
     public SetRingerService() {
         super(null);
@@ -39,6 +43,9 @@ public class SetRingerService extends IntentService {
 
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
+        // setup injection target here because we need to create the Realm instance in the same thread
+        // as where we retrieve data
+        ((PhoneSilencerApplication) getApplication()).getComponent().inject(this);
         // set phone silent
         AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         audioManager.setRingerMode(event.getRingerMode());
@@ -53,9 +60,16 @@ public class SetRingerService extends IntentService {
                 .build();
         NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         notification.flags |= Notification.FLAG_NO_CLEAR;
-        notificationManager.notify(0, notification);
+        // get our unique notification id
+        int notificationId = presenter.incrementAndGetInteger();
+        notificationManager.notify(notificationId, notification);
+        // save our notification id
+        presenter.saveNotificationId(event.getId(), notificationId);
         // set repeating alarm depending on build version and repeat option
         if(Build.VERSION.SDK_INT >= 19 && !event.getRepeat().equals("Once")) setAlarm();
+        // close realm instance
+        // https://github.com/realm/realm-java/issues/1910
+        presenter.closeRealm();
 
         Log.d("Test", "Silenced");
 
