@@ -2,6 +2,7 @@ package com.justplaingoatappsgmail.phonesilencer.view.activities;
 
 import android.app.Activity;
 import android.app.AlarmManager;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -20,6 +21,7 @@ import com.justplaingoatappsgmail.phonesilencer.PhoneSilencerApplication;
 import com.justplaingoatappsgmail.phonesilencer.R;
 import com.justplaingoatappsgmail.phonesilencer.customlisteners.EventListListener;
 import com.justplaingoatappsgmail.phonesilencer.model.Event;
+import com.justplaingoatappsgmail.phonesilencer.model.Notification;
 import com.justplaingoatappsgmail.phonesilencer.model.services.SetNormalService;
 import com.justplaingoatappsgmail.phonesilencer.model.services.SetRingerService;
 import com.justplaingoatappsgmail.phonesilencer.view.adapters.EventListAdapter;
@@ -160,6 +162,12 @@ public class EventListActivity extends AppCompatActivity implements EventListCon
         AppConstants.showSnackBarMessage(coordinatorLayout, eventName + " has been disabled.", context, R.color.yellow_color);
     }
 
+    @Override
+    public void removeNotification(int notificationId) {
+        NotificationManager notification = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notification.cancel(notificationId);
+    }
+
     private PendingIntent createPendingIntentForSettingAlarms(Class service, Event event, Calendar calendar, int requestCode) {
         Intent intent = new Intent(context, service);
         intent.putExtra(AppConstants.EVENT_OBJECT_FOR_SERVICE, event);
@@ -223,6 +231,7 @@ public class EventListActivity extends AppCompatActivity implements EventListCon
             alarmManager.cancel(end);
         }
         if(!isDeleted) presenter.updateEvent(event, false);
+        presenter.deleteAndRemoveShowingNotificationIfActive(event);
         presenter.deleteRequestCodes(event, isDeleted);
     }
 

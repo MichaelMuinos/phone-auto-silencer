@@ -15,6 +15,7 @@ public interface EventListContract {
         void showSnackBarNoEventsMessage();
         void showEventEnabledMessage(String eventName);
         void showEventDisabledMessage(String eventName);
+        void removeNotification(int notificationId);
     }
 
     interface Presenter extends BasePresenter<View> {

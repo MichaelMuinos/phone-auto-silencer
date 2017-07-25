@@ -52,6 +52,14 @@ public class EventListPresenter implements EventListContract.Presenter {
     }
 
     @Override
+    public void deleteAndRemoveShowingNotificationIfActive(Event event) {
+        if(realmService.notificationIsPresent(event)) {
+            int notificationId = realmService.retrieveAndDeleteNotification(event);
+            view.removeNotification(notificationId);
+        }
+    }
+
+    @Override
     public int getIncrementedRequestCode() {
         if(atomicInteger.get() == Integer.MAX_VALUE) atomicInteger.set(0);
         return atomicInteger.incrementAndGet();

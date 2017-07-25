@@ -137,6 +137,12 @@ public class RealmService {
         return notificationId;
     }
 
+    public boolean notificationIsPresent(final Event event) {
+        final Notification notification = realm.where(Notification.class).equalTo(Notification.EVENT_ID, event.getId()).findFirst();
+        if(notification == null) return false;
+        return true;
+    }
+
     public List<Event> getAllEvents() {
         return realm.isEmpty() ? new ArrayList<Event>() : new ArrayList<>(realm.where(Event.class).findAll().sort(Event.EVENT_NAME));
     }

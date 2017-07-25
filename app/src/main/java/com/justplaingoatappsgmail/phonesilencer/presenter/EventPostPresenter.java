@@ -56,6 +56,14 @@ public class EventPostPresenter implements EventPostContract.Presenter {
     }
 
     @Override
+    public void deleteAndRemoveShowingNotificationIfActive(Event event) {
+        if(realmService.notificationIsPresent(event)) {
+            int notificationId = realmService.retrieveAndDeleteNotification(event);
+            view.removeNotification(notificationId);
+        }
+    }
+
+    @Override
     public int getDay(String day) {
         return dayMap.get(day);
     }

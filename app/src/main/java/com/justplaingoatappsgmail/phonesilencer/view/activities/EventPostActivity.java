@@ -1,6 +1,7 @@
 package com.justplaingoatappsgmail.phonesilencer.view.activities;
 
 import android.app.Activity;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -170,6 +171,7 @@ public class EventPostActivity extends AppCompatActivity implements EventPostCon
                 if(executed) {
                     // if we are updating an event and it is enabled, cancel all alarms for that event and set our event to not enabled
                     if (event != null && event.isEnabled()) {
+                        presenter.deleteAndRemoveShowingNotificationIfActive(event);
                         presenter.deleteRequestCodes(event);
                         presenter.updateEvent(event);
                     }
@@ -342,6 +344,12 @@ public class EventPostActivity extends AppCompatActivity implements EventPostCon
             }
         }
         return list;
+    }
+
+    @Override
+    public void removeNotification(int notificationId) {
+        NotificationManager notification = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notification.cancel(notificationId);
     }
 
 }
