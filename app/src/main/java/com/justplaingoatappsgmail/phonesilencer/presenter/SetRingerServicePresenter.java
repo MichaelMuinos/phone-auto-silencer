@@ -1,5 +1,6 @@
 package com.justplaingoatappsgmail.phonesilencer.presenter;
 
+import com.justplaingoatappsgmail.phonesilencer.model.Event;
 import com.justplaingoatappsgmail.phonesilencer.model.database.RealmService;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -24,6 +25,10 @@ public class SetRingerServicePresenter {
 
     public void saveNotificationId(String eventId, int notificationId) {
         realmService.saveNotification(eventId, notificationId);
+    }
+
+    public Event getEventById(String id) {
+        return realmService.getEventById(id);
     }
 
 }

@@ -17,11 +17,9 @@ public class AppConstants {
 
     public static final int START_ACTIVITY_FOR_RESULT_CODE = 10000;
     public static final String EVENT_OBJECT = "EVENT_OBJECT";
-    public static final String EVENT_OBJECT_FOR_SERVICE = "EVENT_OBJECT_FOR_SERVICE";
-    public static final String RINGER_MODE_KEY = "RINGER_MODE";
+    public static final String EVENT_KEY_ID = "EVENT_KEY_ID";
     public static final String CALENDAR_KEY = "CALENDAR";
     public static final String REQUEST_CODE_KEY = "REQUEST_CODE";
-    public static final String REPEAT_KEY = "REPEAT_KEY";
     public static Map<String,Long> REPEAT_MAP = createMap();
     public static long WEEK_IN_MILLISECONDS = 604800000L;
 

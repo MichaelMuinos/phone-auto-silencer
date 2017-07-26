@@ -19,4 +19,8 @@ public class SetNormalServicePresenter {
         return realmService.retrieveAndDeleteNotification(event);
     }
 
+    public Event getEventById(String id) {
+        return realmService.getEventById(id);
+    }
+
 }
