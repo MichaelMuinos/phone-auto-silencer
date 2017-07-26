@@ -87,6 +87,10 @@ public class RealmService {
         });
     }
 
+    public Event getEventById(String id) {
+        return realm.where(Event.class).equalTo(Event.ID, id).findFirst();
+    }
+
     public void addPendingIntentRequestCodes(final String eventName, final List<Integer> requestCodes) {
         realm.executeTransaction(new Realm.Transaction() {
             @Override

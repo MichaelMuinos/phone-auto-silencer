@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.justplaingoatappsgmail.phonesilencer">
 
+    <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
+
     <application
         android:name=".PhoneSilencerApplication"
         android:allowBackup="true"

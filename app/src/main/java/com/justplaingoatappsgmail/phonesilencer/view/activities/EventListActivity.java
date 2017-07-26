@@ -6,6 +6,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
@@ -13,9 +14,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Switch;
 
+import com.google.gson.Gson;
 import com.justplaingoatappsgmail.phonesilencer.AppConstants;
 import com.justplaingoatappsgmail.phonesilencer.PhoneSilencerApplication;
 import com.justplaingoatappsgmail.phonesilencer.R;
@@ -93,8 +96,15 @@ public class EventListActivity extends AppCompatActivity implements EventListCon
      */
     @OnClick(R.id.activity_event_fab)
     public void onFabClick() {
-        Intent intent = new Intent(EventListActivity.this, EventPostActivity.class);
-        startActivityForResult(intent, AppConstants.START_ACTIVITY_FOR_RESULT_CODE);
+        // retrieve notification manager and check if we have permission to change ringer mode
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && !notificationManager.isNotificationPolicyAccessGranted()) {
+            Intent settingsIntent = new Intent(android.provider.Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS);
+            startActivity(settingsIntent);
+        } else {
+            Intent intent = new Intent(EventListActivity.this, EventPostActivity.class);
+            startActivityForResult(intent, AppConstants.START_ACTIVITY_FOR_RESULT_CODE);
+        }
     }
 
     /**
@@ -170,7 +180,7 @@ public class EventListActivity extends AppCompatActivity implements EventListCon
 
     private PendingIntent createPendingIntentForSettingAlarms(Class service, Event event, Calendar calendar, int requestCode) {
         Intent intent = new Intent(context, service);
-        intent.putExtra(AppConstants.EVENT_OBJECT_FOR_SERVICE, event);
+        intent.putExtra(AppConstants.EVENT_KEY_ID, event.getId());
         intent.putExtra(AppConstants.CALENDAR_KEY, calendar);
         intent.putExtra(AppConstants.REQUEST_CODE_KEY, requestCode);
         return PendingIntent.getService(context, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT);

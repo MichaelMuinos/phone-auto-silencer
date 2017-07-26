@@ -7,10 +7,13 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.os.Build;
 import android.support.annotation.Nullable;
 import android.util.Log;
+
+import com.google.gson.Gson;
 import com.justplaingoatappsgmail.phonesilencer.AppConstants;
 import com.justplaingoatappsgmail.phonesilencer.PhoneSilencerApplication;
 import com.justplaingoatappsgmail.phonesilencer.model.Event;
@@ -20,6 +23,7 @@ import javax.inject.Inject;
 
 public class SetNormalService extends IntentService {
 
+    private String eventId;
     private Event event;
     private Calendar calendar;
     private int requestCode;
@@ -32,7 +36,7 @@ public class SetNormalService extends IntentService {
 
     @Override
     public int onStartCommand(@Nullable Intent intent, int flags, int startId) {
-        event = (Event) intent.getExtras().get(AppConstants.EVENT_OBJECT_FOR_SERVICE);
+        eventId = (String) intent.getExtras().get(AppConstants.EVENT_KEY_ID);
         calendar = (Calendar) intent.getExtras().get(AppConstants.CALENDAR_KEY);
         requestCode = (int) intent.getExtras().get(AppConstants.REQUEST_CODE_KEY);
         return super.onStartCommand(intent, flags, startId);
@@ -43,6 +47,8 @@ public class SetNormalService extends IntentService {
         // setup injection target here because we need to create the Realm instance in the same thread
         // as where we retrieve data
         ((PhoneSilencerApplication) getApplication()).getComponent().inject(this);
+        // grab our event by id from our database
+        event = presenter.getEventById(eventId);
         // set the phone ringer to normal
         AudioManager audioManager =(AudioManager) getApplicationContext().getSystemService(Context.AUDIO_SERVICE);
         audioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
@@ -63,7 +69,7 @@ public class SetNormalService extends IntentService {
     private void setAlarm() {
         // create intent and put extras
         Intent intent = new Intent(getApplicationContext(), SetNormalService.class);
-        intent.putExtra(AppConstants.EVENT_OBJECT_FOR_SERVICE, event);
+        intent.putExtra(AppConstants.EVENT_KEY_ID, event.getId());
         intent.putExtra(AppConstants.CALENDAR_KEY, calendar);
         intent.putExtra(AppConstants.REQUEST_CODE_KEY, requestCode);
         // create our pending intent
