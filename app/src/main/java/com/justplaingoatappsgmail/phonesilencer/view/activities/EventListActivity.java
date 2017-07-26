@@ -215,7 +215,7 @@ public class EventListActivity extends AppCompatActivity implements EventListCon
             // RTC: Fires pending intent but does not wake up device
             // if build version is less than 19, we can use set repeating. If it is greater than 19, setRepeating is unreliable
             // and will cause an inexact repeating alarm, thus we must use setExact.
-            if(Build.VERSION.SDK_INT < 19) {
+            if(Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
                 if(event.getRepeat().equals("Once")) {
                     alarmManager.set(AlarmManager.RTC, startCalendar.getTimeInMillis(), start);
                     alarmManager.set(AlarmManager.RTC, endCalendar.getTimeInMillis(), end);

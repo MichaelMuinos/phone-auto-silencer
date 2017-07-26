@@ -72,19 +72,13 @@ public class SetRingerService extends IntentService {
         // save our notification id
         presenter.saveNotificationId(event.getId(), notificationId);
         // set repeating alarm depending on build version and repeat option
-        if(Build.VERSION.SDK_INT >= 19 && !event.getRepeat().equals("Once")) setAlarm();
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && !event.getRepeat().equals("Once")) setAlarm();
         // close realm instance
         // https://github.com/realm/realm-java/issues/1910
         presenter.closeRealm();
-
-        Log.d("Test", "Silenced");
-
     }
 
-    @TargetApi(Build.VERSION_CODES.KITKAT)
     private void setAlarm() {
-
-        Log.d("Test", "Reset alarm confirmed");
         // create intent and put extras
         Intent intent = new Intent(getApplicationContext(), SetRingerService.class);
         intent.putExtra(AppConstants.EVENT_KEY_ID, event.getId());

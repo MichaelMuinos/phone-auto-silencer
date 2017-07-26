@@ -71,9 +71,6 @@ public class EventListPresenter implements EventListContract.Presenter {
         calendar.set(Calendar.DAY_OF_WEEK, day);
         calendar.set(Calendar.HOUR_OF_DAY, hour);
         calendar.set(Calendar.MINUTE, minute);
-
-        Log.d("Test", "Calender Time: " + calendar.getTime().toString());
-
         return calendar;
     }
 
