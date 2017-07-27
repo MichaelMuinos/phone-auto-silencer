@@ -1,19 +1,15 @@
 package com.justplaingoatappsgmail.phonesilencer.model.services;
 
-import android.annotation.TargetApi;
 import android.app.AlarmManager;
 import android.app.IntentService;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.os.Build;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
-import com.google.gson.Gson;
 import com.justplaingoatappsgmail.phonesilencer.AppConstants;
 import com.justplaingoatappsgmail.phonesilencer.PhoneSilencerApplication;
 import com.justplaingoatappsgmail.phonesilencer.model.Event;

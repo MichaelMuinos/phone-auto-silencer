@@ -9,12 +9,12 @@ import io.realm.annotations.RealmClass;
 public class RealmPendingIntent extends RealmObject {
 
     public static final String ID = "id";
-    public static final String EVENT_NAME = "eventName";
+    public static final String EVENT_ID = "eventId";
     public static final String REQUEST_CODES = "requestCodes";
 
     @PrimaryKey
     private String id;
-    private String eventName;
+    private String eventId;
     private RealmList<RealmInteger> requestCodes;
 
     public void setId(String id) {
@@ -25,12 +25,12 @@ public class RealmPendingIntent extends RealmObject {
         return id;
     }
 
-    public void setEventName(String eventName) {
-        this.eventName = eventName;
+    public void setEventId(String eventId) {
+        this.eventId = eventId;
     }
 
-    public String getEventName() {
-        return eventName;
+    public String getEventId() {
+        return eventId;
     }
 
     public void setRequestCodes(RealmList<RealmInteger> requestCodes) {

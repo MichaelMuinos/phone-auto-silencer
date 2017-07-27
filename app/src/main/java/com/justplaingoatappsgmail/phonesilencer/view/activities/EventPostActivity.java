@@ -1,7 +1,9 @@
 package com.justplaingoatappsgmail.phonesilencer.view.activities;
 
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -9,11 +11,9 @@ import android.media.AudioManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -27,6 +27,8 @@ import com.justplaingoatappsgmail.phonesilencer.R;
 import com.justplaingoatappsgmail.phonesilencer.contracts.EventPostContract;
 import com.justplaingoatappsgmail.phonesilencer.model.Event;
 import com.justplaingoatappsgmail.phonesilencer.model.RealmInteger;
+import com.justplaingoatappsgmail.phonesilencer.model.services.SetNormalService;
+import com.justplaingoatappsgmail.phonesilencer.model.services.SetRingerService;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -163,18 +165,18 @@ public class EventPostActivity extends AppCompatActivity implements EventPostCon
         addEventButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // now save our event with our new or updated data
-                boolean executed = presenter.saveEvent(event == null ? UUID.randomUUID().toString() : event.getId(),
-                        eventName.getText().toString().trim(), startTimeHour, startTimeMinute, endTimeHour, endTimeMinute,
-                        vibrateButton.isChecked() ? AudioManager.RINGER_MODE_VIBRATE : AudioManager.RINGER_MODE_SILENT,
-                        getDays(), repeatSpinner.getSelectedItem().toString(), event == null ? false : true);
-                if(executed) {
-                    // if we are updating an event and it is enabled, cancel all alarms for that event and set our event to not enabled
-                    if (event != null && event.isEnabled()) {
-                        presenter.deleteAndRemoveShowingNotificationIfActive(event);
-                        presenter.deleteRequestCodes(event);
-                        presenter.updateEvent(event);
-                    }
+                // check if what we entered is valid
+                boolean isValidEvent = presenter.isValidEvent(eventName.getText().toString().trim(), startTimeHour, startTimeMinute,
+                        endTimeHour, endTimeMinute, getDays(), event == null ? false : true);
+                if(isValidEvent) {
+                    // if we are updating and it is enabled, cancel alarms for that event
+                    if(event != null && event.isEnabled()) cancelAlarms(event, (AlarmManager) getSystemService(Context.ALARM_SERVICE));
+                    // save our event
+                    presenter.saveEvent(event == null ? UUID.randomUUID().toString() : event.getId(),
+                            eventName.getText().toString().trim(), startTimeHour, startTimeMinute, endTimeHour, endTimeMinute,
+                            vibrateButton.isChecked() ? AudioManager.RINGER_MODE_VIBRATE : AudioManager.RINGER_MODE_SILENT,
+                            getDays(), repeatSpinner.getSelectedItem().toString(), event == null ? false : true);
+                    // return to our list activity
                     returnToEventListActivity(Activity.RESULT_OK);
                 }
             }
@@ -244,6 +246,12 @@ public class EventPostActivity extends AppCompatActivity implements EventPostCon
         eventNameTitle.setTextColor(ContextCompat.getColor(context, R.color.colorPrimary));
         timeTitle.setTextColor(ContextCompat.getColor(context, R.color.colorPrimary));
         AppConstants.showSnackBarMessage(coordinatorLayout, "Error: No days have been selected!", context, R.color.red_color);
+    }
+
+    @Override
+    public void removeNotification(int notificationId) {
+        NotificationManager notification = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notification.cancel(notificationId);
     }
 
     @OnClick({R.id.event_post_start_time, R.id.event_post_end_time})
@@ -346,10 +354,17 @@ public class EventPostActivity extends AppCompatActivity implements EventPostCon
         return list;
     }
 
-    @Override
-    public void removeNotification(int notificationId) {
-        NotificationManager notification = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        notification.cancel(notificationId);
+    private void cancelAlarms(Event event, AlarmManager alarmManager) {
+        List<Integer> requestCodes = presenter.getEventRequestCodes(event);
+        for(int i = 0; i < requestCodes.size(); i += 2) {
+            PendingIntent start = AppConstants.createPendingIntentForDeletingAlarms(SetRingerService.class, context, requestCodes.get(i));
+            PendingIntent end = AppConstants.createPendingIntentForDeletingAlarms(SetNormalService.class, context, requestCodes.get(i + 1));
+            alarmManager.cancel(start);
+            alarmManager.cancel(end);
+        }
+        presenter.updateEvent(event);
+        presenter.deleteAndRemoveShowingNotificationIfActive(event);
+        presenter.deleteRequestCodes(event);
     }
 
 }

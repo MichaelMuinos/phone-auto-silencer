@@ -24,7 +24,7 @@ public class EventListPresenter implements EventListContract.Presenter {
         this.view = view;
         // call getEvents from our view and set the list to our adapter
         // in the activity
-        view.showEvents();
+        if(view != null) view.showEvents();
     }
 
     @Override
@@ -41,9 +41,9 @@ public class EventListPresenter implements EventListContract.Presenter {
     }
 
     @Override
-    public void addRequestCodes(String eventName, List<Integer> requestCodes) {
-        realmService.addPendingIntentRequestCodes(eventName, requestCodes);
-        view.showEventEnabledMessage(eventName);
+    public void addRequestCodes(Event event, List<Integer> requestCodes) {
+        realmService.addPendingIntentRequestCodes(event.getId(), requestCodes);
+        view.showEventEnabledMessage(event.getEventName());
     }
 
     @Override

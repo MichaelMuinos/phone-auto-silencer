@@ -1,6 +1,8 @@
 package com.justplaingoatappsgmail.phonesilencer;
 
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
@@ -48,6 +50,10 @@ public class AppConstants {
         String hourToString = hour == 0 ? "12" : (hour < 10 ? "0" + String.valueOf(hour) : String.valueOf(hour));
         String minuteToString = minute < 10 ? "0" + String.valueOf(minute) : String.valueOf(minute);
         return hourToString + ":" + minuteToString + " " + partOfDay;
+    }
+
+    public static PendingIntent createPendingIntentForDeletingAlarms(Class service, Context context, int requestCode) {
+        return PendingIntent.getService(context, requestCode, new Intent(context, service), PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
 }

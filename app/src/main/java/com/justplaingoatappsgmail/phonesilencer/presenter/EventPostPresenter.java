@@ -37,12 +37,18 @@ public class EventPostPresenter implements EventPostContract.Presenter {
     }
 
     @Override
-    public boolean saveEvent(String id, String title, int startTimeHour, int startTimeMinute, int endTimeHour, int endTimeMinute, int ringerMode, List<Integer> days, String repeat, boolean update) {
-        if(isValidName(title, update) && isValidTimeInterval(startTimeHour, startTimeMinute, endTimeHour, endTimeMinute) && hasAtLeastOneDaySelected(days)) {
-            realmService.addEvent(id, title, startTimeHour, startTimeMinute, endTimeHour, endTimeMinute, ringerMode, days, repeat, false, update);
-            return true;
-        }
-        return false;
+    public boolean isValidEvent(String title, int startTimeHour, int startTimeMinute, int endTimeHour, int endTimeMinute, List<Integer> days, boolean update) {
+        return isValidName(title, update) && isValidTimeInterval(startTimeHour, startTimeMinute, endTimeHour, endTimeMinute) && hasAtLeastOneDaySelected(days);
+    }
+
+    @Override
+    public void saveEvent(String id, String title, int startTimeHour, int startTimeMinute, int endTimeHour, int endTimeMinute, int ringerMode, List<Integer> days, String repeat, boolean update) {
+        realmService.addEvent(id, title, startTimeHour, startTimeMinute, endTimeHour, endTimeMinute, ringerMode, days, repeat, false, update);
+    }
+
+    @Override
+    public List<Integer> getEventRequestCodes(Event event) {
+        return realmService.getRealmPendingIntentRequestCodes(event);
     }
 
     @Override

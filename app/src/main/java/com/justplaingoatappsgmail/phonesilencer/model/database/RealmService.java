@@ -1,6 +1,8 @@
 package com.justplaingoatappsgmail.phonesilencer.model.database;
 
 import android.content.Context;
+import android.util.Log;
+
 import com.justplaingoatappsgmail.phonesilencer.model.Event;
 import com.justplaingoatappsgmail.phonesilencer.model.Notification;
 import com.justplaingoatappsgmail.phonesilencer.model.RealmPendingIntent;
@@ -91,12 +93,12 @@ public class RealmService {
         return realm.where(Event.class).equalTo(Event.ID, id).findFirst();
     }
 
-    public void addPendingIntentRequestCodes(final String eventName, final List<Integer> requestCodes) {
+    public void addPendingIntentRequestCodes(final String eventId, final List<Integer> requestCodes) {
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
                 RealmPendingIntent realmPendingIntent = realm.createObject(RealmPendingIntent.class, UUID.randomUUID().toString());
-                realmPendingIntent.setEventName(eventName);
+                realmPendingIntent.setEventId(eventId);
                 RealmList<RealmInteger> realmListRequestCodes = new RealmList<>();
                 for(int i : requestCodes) {
                     RealmInteger realmInteger = realm.createObject(RealmInteger.class);
@@ -112,7 +114,7 @@ public class RealmService {
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                RealmPendingIntent pendingIntentCodes = realm.where(RealmPendingIntent.class).equalTo(RealmPendingIntent.EVENT_NAME, event.getEventName()).findFirst();
+                RealmPendingIntent pendingIntentCodes = realm.where(RealmPendingIntent.class).equalTo(RealmPendingIntent.EVENT_ID, event.getId()).findFirst();
                 pendingIntentCodes.deleteFromRealm();
             }
         });
@@ -152,7 +154,7 @@ public class RealmService {
     }
 
     public List<Integer> getRealmPendingIntentRequestCodes(Event event) {
-        RealmPendingIntent realmPendingIntent = realm.where(RealmPendingIntent.class).equalTo(RealmPendingIntent.EVENT_NAME, event.getEventName()).findFirst();
+        RealmPendingIntent realmPendingIntent = realm.where(RealmPendingIntent.class).equalTo(RealmPendingIntent.EVENT_ID, event.getId()).findFirst();
         List<Integer> list = new ArrayList<>();
         for(RealmInteger realmInteger : realmPendingIntent.getRequestCodes()) list.add(realmInteger.getRealmInt());
         return list;

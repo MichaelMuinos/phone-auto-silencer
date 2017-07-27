@@ -6,7 +6,6 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
@@ -14,17 +13,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.Switch;
 
-import com.google.gson.Gson;
 import com.justplaingoatappsgmail.phonesilencer.AppConstants;
 import com.justplaingoatappsgmail.phonesilencer.PhoneSilencerApplication;
 import com.justplaingoatappsgmail.phonesilencer.R;
 import com.justplaingoatappsgmail.phonesilencer.customlisteners.EventListListener;
 import com.justplaingoatappsgmail.phonesilencer.model.Event;
-import com.justplaingoatappsgmail.phonesilencer.model.Notification;
 import com.justplaingoatappsgmail.phonesilencer.model.services.SetNormalService;
 import com.justplaingoatappsgmail.phonesilencer.model.services.SetRingerService;
 import com.justplaingoatappsgmail.phonesilencer.view.adapters.EventListAdapter;
@@ -186,10 +182,6 @@ public class EventListActivity extends AppCompatActivity implements EventListCon
         return PendingIntent.getService(context, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
-    private PendingIntent createPendingIntentForDeletingAlarms(Class service, int requestCode) {
-        return PendingIntent.getService(context, requestCode, new Intent(context, service), PendingIntent.FLAG_UPDATE_CURRENT);
-    }
-
     private void setAlarms(Event event, AlarmManager alarmManager) {
         List<Integer> requestCodes = new ArrayList<>();
         // cycle through our days and set the calendars
@@ -229,14 +221,14 @@ public class EventListActivity extends AppCompatActivity implements EventListCon
             }
         }
         presenter.updateEvent(event, true);
-        presenter.addRequestCodes(event.getEventName(), requestCodes);
+        presenter.addRequestCodes(event, requestCodes);
     }
 
     private void cancelAlarms(Event event, AlarmManager alarmManager, boolean isDeleted) {
         List<Integer> requestCodes = presenter.getEventRequestCodes(event);
-        for(int i = 0; i < requestCodes.size(); i+=2) {
-            PendingIntent start = createPendingIntentForDeletingAlarms(SetRingerService.class, requestCodes.get(i));
-            PendingIntent end = createPendingIntentForDeletingAlarms(SetNormalService.class, requestCodes.get(i + 1));
+        for(int i = 0; i < requestCodes.size(); i += 2) {
+            PendingIntent start = AppConstants.createPendingIntentForDeletingAlarms(SetRingerService.class, context, requestCodes.get(i));
+            PendingIntent end = AppConstants.createPendingIntentForDeletingAlarms(SetNormalService.class, context, requestCodes.get(i + 1));
             alarmManager.cancel(start);
             alarmManager.cancel(end);
         }
