@@ -1,6 +1,5 @@
 # About
 An application that will automatically silence your phone at specific time intervals on whatever days you choose.
-I plan to implement geolocation as a way to automatically silence the phone in addition to scheduled days.
 
 # Libraries + Design Pattern being used
 * Model View Presenter (MVP) pattern
