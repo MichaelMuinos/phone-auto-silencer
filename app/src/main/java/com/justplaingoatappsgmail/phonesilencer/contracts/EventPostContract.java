@@ -17,7 +17,7 @@ public interface EventPostContract {
     }
 
     interface Presenter extends BasePresenter<View> {
-        boolean isValidEvent(String title, int startTimeHour, int startTimeMinute, int endTimeHour, int endTimeMinute, List<Integer> days, boolean update);
+        boolean isValidEvent(String previousTitle, String title, int startTimeHour, int startTimeMinute, int endTimeHour, int endTimeMinute, List<Integer> days, boolean update);
         void saveEvent(String id, String title, int startTimeHour, int startTimeMinute, int endTimeHour, int endTimeMinute, int ringerMode, List<Integer> days, String repeat, boolean update);
         List<Integer> getEventRequestCodes(Event event);
         void deleteRequestCodes(Event event);

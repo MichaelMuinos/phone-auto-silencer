@@ -37,8 +37,8 @@ public class EventPostPresenter implements EventPostContract.Presenter {
     }
 
     @Override
-    public boolean isValidEvent(String title, int startTimeHour, int startTimeMinute, int endTimeHour, int endTimeMinute, List<Integer> days, boolean update) {
-        return isValidName(title, update) && isValidTimeInterval(startTimeHour, startTimeMinute, endTimeHour, endTimeMinute) && hasAtLeastOneDaySelected(days);
+    public boolean isValidEvent(String previousTitle, String title, int startTimeHour, int startTimeMinute, int endTimeHour, int endTimeMinute, List<Integer> days, boolean update) {
+        return isValidName(previousTitle, title, update) && isValidTimeInterval(startTimeHour, startTimeMinute, endTimeHour, endTimeMinute) && hasAtLeastOneDaySelected(days);
     }
 
     @Override
@@ -86,7 +86,7 @@ public class EventPostPresenter implements EventPostContract.Presenter {
      * @param update
      * @return
      */
-    private boolean isValidName(String title, boolean update) {
+    private boolean isValidName(String previousTitle, String title, boolean update) {
         // if the name is not valid, show our name error message
         if(title.isEmpty() || title.trim().length() == 0) {
             view.showEventNameError();
@@ -95,8 +95,10 @@ public class EventPostPresenter implements EventPostContract.Presenter {
         } else if(title.length() > MAX_NAME_LENGTH) {
             view.showEventNameLengthError();
             return false;
-        // if the name is a duplicate, show our name dup error message
-        } else if(realmService.containsName(title) && !update) {
+        // if the name is a duplicate and we are creating a new event
+        // or we are updating an event name and the name is a duplicate of other events
+        // then show error message
+        } else if(realmService.containsName(title) && !update || realmService.containsName(title) && !previousTitle.equals(title) && update) {
             view.showEventNameDuplicateError();
             return false;
         // otherwise, it must be a valid name
@@ -106,7 +108,7 @@ public class EventPostPresenter implements EventPostContract.Presenter {
     }
 
     /**
-     * Method checks to see if the time.png.png.png.png interval is the exact same. If so, it is invalid.
+     * Method checks to see if the time interval is the exact same. If so, it is invalid.
      * @return
      */
     private boolean isValidTimeInterval(int startTimeHour, int startTimeMinute, int endTimeHour, int endTimeMinute) {

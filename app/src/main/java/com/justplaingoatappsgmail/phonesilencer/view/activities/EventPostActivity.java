@@ -166,7 +166,7 @@ public class EventPostActivity extends AppCompatActivity implements EventPostCon
             @Override
             public void onClick(View v) {
                 // check if what we entered is valid
-                boolean isValidEvent = presenter.isValidEvent(eventName.getText().toString().trim(), startTimeHour, startTimeMinute,
+                boolean isValidEvent = presenter.isValidEvent(event == null ? "" : event.getEventName(), eventName.getText().toString().trim(), startTimeHour, startTimeMinute,
                         endTimeHour, endTimeMinute, getDays(), event == null ? false : true);
                 if(isValidEvent) {
                     // if we are updating and it is enabled, cancel alarms for that event
