@@ -23,4 +23,8 @@ public class SetNormalServicePresenter {
         return realmService.getEventById(id);
     }
 
+    public void updateEvent(Event event) {
+        realmService.updateEventEnabled(event.getId(), false);
+    }
+
 }

@@ -16,6 +16,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
@@ -114,6 +115,12 @@ public class EventPostActivity extends AppCompatActivity implements EventPostCon
         endTimeHour = event.getEndTimeHour();
         endTimeMinute = event.getEndTimeMinute();
         endTime.setText(AppConstants.convertTimeToString(endTimeHour, endTimeMinute));
+        // set our repeat option
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.repeat_array, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        repeatSpinner.setAdapter(adapter);
+        int spinnerPosition = adapter.getPosition(event.getRepeat());
+        repeatSpinner.setSelection(spinnerPosition);
         // set our day text views
         for(RealmInteger realmInteger : event.getDays()) {
             int id = dayMap.get(realmInteger.getRealmInt());

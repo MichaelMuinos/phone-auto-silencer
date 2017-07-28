@@ -53,6 +53,8 @@ public class SetNormalService extends IntentService {
         notificationManager.cancel(presenter.retrieveNotificationIdAndDelete(event));
         // set repeating alarm depending on build version and repeat option
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && !event.getRepeat().equals("Once")) setAlarm();
+        // if our repeat is once, then we need to set our event to disabled
+        if(event.getRepeat().equals("Once")) presenter.updateEvent(event);
         // close realm instance
         // https://github.com/realm/realm-java/issues/1910
         presenter.closeRealm();
