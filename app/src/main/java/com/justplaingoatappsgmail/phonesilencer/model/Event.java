@@ -12,13 +12,6 @@ public class Event extends RealmObject implements Parcelable {
 
     public static final String ID = "id";
     public static final String EVENT_NAME = "eventName";
-    public static final String REPEAT = "repeat";
-    public static final String START_TIME_HOUR = "startTimeHour";
-    public static final String START_TIME_MINUTE = "startTimeMinute";
-    public static final String END_TIME_HOUR = "endTimeHour";
-    public static final String END_TIME_MINUTE = "endTimeMinute";
-    public static final String RINGER_MODE = "ringerMode";
-    public static final String DAYS = "days";
 
     @PrimaryKey
     private String id;
