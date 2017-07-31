@@ -79,6 +79,10 @@ public class RealmService {
         });
     }
 
+    public List<Event> getEnabledEvents() {
+        return new ArrayList<>(realm.where(Event.class).equalTo(Event.IS_ENABLED, true).findAll());
+    }
+
     public void deleteEvent(final Event event) {
         realm.executeTransaction(new Realm.Transaction() {
             @Override
@@ -141,6 +145,16 @@ public class RealmService {
             }
         });
         return notificationId;
+    }
+
+    public void deleteNotification(final Event event) {
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                Notification notification = realm.where(Notification.class).equalTo(Notification.EVENT_ID, event.getId()).findFirst();
+                notification.deleteFromRealm();
+            }
+        });
     }
 
     public boolean notificationIsPresent(final Event event) {

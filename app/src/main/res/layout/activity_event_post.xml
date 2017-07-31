@@ -44,6 +44,10 @@
                     android:id="@+id/event_post_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:minLines="1"
+                    android:lines="1"
+                    android:singleLine="true"
                     android:layout_marginLeft="13dp" />
 
             </LinearLayout>

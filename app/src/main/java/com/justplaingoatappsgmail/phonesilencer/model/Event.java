@@ -12,6 +12,7 @@ public class Event extends RealmObject implements Parcelable {
 
     public static final String ID = "id";
     public static final String EVENT_NAME = "eventName";
+    public static final String IS_ENABLED = "isEnabled";
 
     @PrimaryKey
     private String id;

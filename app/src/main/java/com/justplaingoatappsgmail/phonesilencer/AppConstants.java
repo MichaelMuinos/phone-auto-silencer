@@ -11,6 +11,9 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
 
+import com.justplaingoatappsgmail.phonesilencer.model.Event;
+
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -50,6 +53,14 @@ public class AppConstants {
         String hourToString = hour == 0 ? "12" : (hour < 10 ? "0" + String.valueOf(hour) : String.valueOf(hour));
         String minuteToString = minute < 10 ? "0" + String.valueOf(minute) : String.valueOf(minute);
         return hourToString + ":" + minuteToString + " " + partOfDay;
+    }
+
+    public static PendingIntent createPendingIntentForSettingAlarms(Class service, Context context, Event event, Calendar calendar, int requestCode) {
+        Intent intent = new Intent(context, service);
+        intent.putExtra(AppConstants.EVENT_KEY_ID, event.getId());
+        intent.putExtra(AppConstants.CALENDAR_KEY, calendar);
+        intent.putExtra(AppConstants.REQUEST_CODE_KEY, requestCode);
+        return PendingIntent.getService(context, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
     public static PendingIntent createPendingIntentForDeletingAlarms(Class service, Context context, int requestCode) {

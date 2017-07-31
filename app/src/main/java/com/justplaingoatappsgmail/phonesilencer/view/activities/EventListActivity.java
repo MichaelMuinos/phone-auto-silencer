@@ -174,14 +174,6 @@ public class EventListActivity extends AppCompatActivity implements EventListCon
         notification.cancel(notificationId);
     }
 
-    private PendingIntent createPendingIntentForSettingAlarms(Class service, Event event, Calendar calendar, int requestCode) {
-        Intent intent = new Intent(context, service);
-        intent.putExtra(AppConstants.EVENT_KEY_ID, event.getId());
-        intent.putExtra(AppConstants.CALENDAR_KEY, calendar);
-        intent.putExtra(AppConstants.REQUEST_CODE_KEY, requestCode);
-        return PendingIntent.getService(context, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-    }
-
     private void setAlarms(Event event, AlarmManager alarmManager) {
         List<Integer> requestCodes = new ArrayList<>();
         // cycle through our days and set the calendars
@@ -201,8 +193,8 @@ public class EventListActivity extends AppCompatActivity implements EventListCon
                 endCalendar.setTimeInMillis(endCalendar.getTimeInMillis() + AppConstants.WEEK_IN_MILLISECONDS);
             }
             // create pending intent
-            PendingIntent start = createPendingIntentForSettingAlarms(SetRingerService.class, event, startCalendar, startRequestCode);
-            PendingIntent end = createPendingIntentForSettingAlarms(SetNormalService.class, event, endCalendar, endRequestCode);
+            PendingIntent start = AppConstants.createPendingIntentForSettingAlarms(SetRingerService.class, context, event, startCalendar, startRequestCode);
+            PendingIntent end = AppConstants.createPendingIntentForSettingAlarms(SetNormalService.class, context, event, endCalendar, endRequestCode);
             // set our alarm manager triggers
             // RTC: Fires pending intent but does not wake up device
             // if build version is less than 19, we can use set repeating. If it is greater than 19, setRepeating is unreliable
