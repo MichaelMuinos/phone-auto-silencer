@@ -20,6 +20,10 @@
     <string name="silence_post">Silence</string>
     <string name="vibrate_post">Vibrate</string>
     <string name="cancel_post">Cancel</string>
+    <string name="buy_premium_title">Buy Premium</string>
+    <string name="buy_premium_content">You have reached a max amount of events. Buy premium for an unlimited amount of events!</string>
+    <string name="buy_premium_positive">BUY PREMIUM</string>
+    <string name="buy_premium_negative">CANCEL</string>
     <string-array name="repeat_array">
         <item>Weekly</item>
         <item>Once</item>

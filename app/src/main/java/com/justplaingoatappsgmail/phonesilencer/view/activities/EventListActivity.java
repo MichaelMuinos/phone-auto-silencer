@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,6 +17,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Switch;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.justplaingoatappsgmail.phonesilencer.AppConstants;
 import com.justplaingoatappsgmail.phonesilencer.PhoneSilencerApplication;
 import com.justplaingoatappsgmail.phonesilencer.R;
@@ -98,8 +101,33 @@ public class EventListActivity extends AppCompatActivity implements EventListCon
             Intent settingsIntent = new Intent(android.provider.Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS);
             startActivity(settingsIntent);
         } else {
-            Intent intent = new Intent(EventListActivity.this, EventPostActivity.class);
-            startActivityForResult(intent, AppConstants.START_ACTIVITY_FOR_RESULT_CODE);
+            // if there is less than 2 events, the user may create another
+            if(presenter.getNumberOfEvents() < 2) {
+                Intent intent = new Intent(EventListActivity.this, EventPostActivity.class);
+                startActivityForResult(intent, AppConstants.START_ACTIVITY_FOR_RESULT_CODE);
+            // start the pay for premium popup
+            } else {
+                new MaterialDialog.Builder(this)
+                        .title(R.string.buy_premium_title)
+                        .content(R.string.buy_premium_content)
+                        .positiveText(R.string.buy_premium_positive)
+                        // on click for the buy premium button
+                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                            }
+                        })
+                        .negativeText(R.string.buy_premium_negative)
+                        // on click for cancel button
+                        .onNegative(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .show();
+            }
         }
     }
 
