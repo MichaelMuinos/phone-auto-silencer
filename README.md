@@ -1,6 +1,7 @@
 # About
 An application that will automatically silence your phone at specific time intervals on whatever days you choose.
-https://play.google.com/store/apps/details?id=com.justplaingoatappsgmail.phonesilencer
+Free Version (max of 2 events): https://play.google.com/store/apps/details?id=com.justplaingoatappsgmail.phonesilencer
+Paid Version (unlimited events): https://play.google.com/store/apps/details?id=com.justplaingoatappsgmail.phonesilencerpremium
 
 # Libraries + Design Pattern being used
 * Model View Presenter (MVP) pattern
