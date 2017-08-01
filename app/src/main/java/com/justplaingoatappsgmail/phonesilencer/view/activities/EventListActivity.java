@@ -4,8 +4,10 @@ import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -39,6 +41,7 @@ import butterknife.OnClick;
 
 public class EventListActivity extends AppCompatActivity implements EventListContract.View, EventListListener {
 
+    private static final int MAX_EVENTS = 2;
     private EventListAdapter eventListAdapter;
 
     @BindView(R.id.activity_event_recycler_view) RecyclerView recyclerView;
@@ -102,7 +105,7 @@ public class EventListActivity extends AppCompatActivity implements EventListCon
             startActivity(settingsIntent);
         } else {
             // if there is less than 2 events, the user may create another
-            if(presenter.getNumberOfEvents() < 2) {
+            if(presenter.getNumberOfEvents() < MAX_EVENTS) {
                 Intent intent = new Intent(EventListActivity.this, EventPostActivity.class);
                 startActivityForResult(intent, AppConstants.START_ACTIVITY_FOR_RESULT_CODE);
             // start the pay for premium popup
@@ -112,10 +115,20 @@ public class EventListActivity extends AppCompatActivity implements EventListCon
                         .content(R.string.buy_premium_content)
                         .positiveText(R.string.buy_premium_positive)
                         // on click for the buy premium button
+                        // take user to the page of the premium app in google play
                         .onPositive(new MaterialDialog.SingleButtonCallback() {
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-
+                                Intent intent = new Intent(Intent.ACTION_VIEW);
+                                intent.setData(Uri.parse(getString(R.string.market_id)));
+                                if (!canStartActivity(intent)) {
+                                    // Market (Google play) app seems not installed, let's try to open a web browser
+                                    intent.setData(Uri.parse(getString(R.string.market_id_browser)));
+                                    if (!canStartActivity(intent)) {
+                                        // Well if this also fails, we have run out of options, inform the user.
+                                        AppConstants.showSnackBarMessage(coordinatorLayout, getString(R.string.play_store_error), context, R.color.red_color);
+                                    }
+                                }
                             }
                         })
                         .negativeText(R.string.buy_premium_negative)
@@ -255,6 +268,15 @@ public class EventListActivity extends AppCompatActivity implements EventListCon
         if(!isDeleted) presenter.updateEvent(event, false);
         presenter.deleteAndRemoveShowingNotificationIfActive(event);
         presenter.deleteRequestCodes(event, isDeleted);
+    }
+
+    private boolean canStartActivity(Intent intent) {
+        try {
+            startActivity(intent);
+            return true;
+        } catch (ActivityNotFoundException e) {
+            return false;
+        }
     }
 
 }
