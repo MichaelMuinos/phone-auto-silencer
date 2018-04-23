@@ -52,6 +52,7 @@ public class EventPostActivity extends AppCompatActivity implements EventPostCon
     private int endTimeHour = 0;
     private int endTimeMinute = 0;
     private static Map<Integer,Integer> dayMap;
+    private static Map<Integer,Boolean> daySelectedMap;
 
     @BindView(R.id.event_post_coordinator_layout) CoordinatorLayout coordinatorLayout;
     @BindView(R.id.event_post_event_name_title) TextView eventNameTitle;
@@ -87,6 +88,15 @@ public class EventPostActivity extends AppCompatActivity implements EventPostCon
         dayMap.put(Calendar.THURSDAY, R.id.event_post_thursday_text_view);
         dayMap.put(Calendar.FRIDAY, R.id.event_post_friday_text_view);
         dayMap.put(Calendar.SATURDAY, R.id.event_post_saturday_text_view);
+
+        daySelectedMap = new HashMap<>();
+        daySelectedMap.put(R.id.event_post_sunday_text_view, false);
+        daySelectedMap.put(R.id.event_post_monday_text_view, false);
+        daySelectedMap.put(R.id.event_post_tuesday_text_view, false);
+        daySelectedMap.put(R.id.event_post_wednesday_text_view, false);
+        daySelectedMap.put(R.id.event_post_thursday_text_view, false);
+        daySelectedMap.put(R.id.event_post_friday_text_view, false);
+        daySelectedMap.put(R.id.event_post_saturday_text_view, false);
     }
 
     @Override
@@ -124,6 +134,7 @@ public class EventPostActivity extends AppCompatActivity implements EventPostCon
         // set our day text views
         for(RealmInteger realmInteger : event.getDays()) {
             int id = dayMap.get(realmInteger.getRealmInt());
+            daySelectedMap.put(id, true);
             int resource = R.drawable.circle_red;
             switch(id) {
                 case R.id.event_post_monday_text_view:
@@ -288,17 +299,12 @@ public class EventPostActivity extends AppCompatActivity implements EventPostCon
 
     /**
      * On click for the monday - sunday text views. When clicked, they will transition into a different drawable.
-     * The method will check to see if the current drawable in the view is equal to the circle_green drawable.
-     * This is my workaround currently because the getColor method part of GradientDrawable is only available in API 24
-     * and above.
-     * https://stackoverflow.com/questions/9125229/comparing-two-drawables-in-android
      * @param view
      */
     @OnClick({R.id.event_post_monday_text_view, R.id.event_post_tuesday_text_view, R.id.event_post_wednesday_text_view, R.id.event_post_thursday_text_view, R.id.event_post_friday_text_view, R.id.event_post_saturday_text_view, R.id.event_post_sunday_text_view})
     public void onDayClick(View view) {
-        Drawable.ConstantState circleGreenDrawable = ContextCompat.getDrawable(context, R.drawable.circle_green).getConstantState();
-        int drawable = view.getBackground().getConstantState().equals(circleGreenDrawable) ? R.drawable.circle_red : R.drawable.circle_green;
-        view.setBackgroundResource(drawable);
+        view.setBackgroundResource(daySelectedMap.get(view.getId()) ? R.drawable.circle_green : R.drawable.circle_red);
+        daySelectedMap.put(view.getId(), !daySelectedMap.get(view.getId()));
     }
 
     /**
@@ -309,8 +315,8 @@ public class EventPostActivity extends AppCompatActivity implements EventPostCon
      */
     @OnCheckedChanged(R.id.event_post_check_box)
     public void onCheckBoxCheckedChanged(boolean isChecked) {
-        if(isChecked) setDrawableForAllDays(ContextCompat.getDrawable(context, R.drawable.circle_red));
-        else setDrawableForAllDays(ContextCompat.getDrawable(context, R.drawable.circle_green));
+        if(isChecked) setDrawableForAllDays(ContextCompat.getDrawable(context, R.drawable.circle_red), true);
+        else setDrawableForAllDays(ContextCompat.getDrawable(context, R.drawable.circle_green), false);
     }
 
     @OnClick({R.id.event_post_vibrate_button, R.id.event_post_silence_button})
@@ -343,21 +349,16 @@ public class EventPostActivity extends AppCompatActivity implements EventPostCon
      * are not already containing that drawable
      * @param drawable
      */
-    private void setDrawableForAllDays(Drawable drawable) {
+    private void setDrawableForAllDays(Drawable drawable, boolean selected) {
         for(TextView textView : days) {
-            if(!textView.getBackground().getConstantState().equals(drawable.getConstantState())) {
-                textView.setBackground(drawable);
-            }
+            textView.setBackground(drawable);
+            daySelectedMap.put(textView.getId(), selected);
         }
     }
 
     private List<Integer> getDays() {
         List<Integer> list = new ArrayList<>();
-        for(TextView textView : days) {
-            if(textView.getBackground().getConstantState().equals(ContextCompat.getDrawable(context, R.drawable.circle_red).getConstantState())) {
-                list.add(presenter.getDay(textView.getText().toString()));
-            }
-        }
+        for(TextView textView : days) if (daySelectedMap.get(textView.getId())) list.add(presenter.getDay(textView.getText().toString()));
         return list;
     }
 

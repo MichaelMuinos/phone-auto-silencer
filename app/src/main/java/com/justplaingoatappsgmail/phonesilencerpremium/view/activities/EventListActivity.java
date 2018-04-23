@@ -4,10 +4,13 @@ import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,6 +19,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Switch;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.justplaingoatappsgmail.phonesilencerpremium.AppConstants;
 import com.justplaingoatappsgmail.phonesilencerpremium.PhoneSilencerApplication;
 import com.justplaingoatappsgmail.phonesilencerpremium.R;
@@ -36,6 +41,7 @@ import butterknife.OnClick;
 
 public class EventListActivity extends AppCompatActivity implements EventListContract.View, EventListListener {
 
+    private static final int MAX_EVENTS = 2;
     private EventListAdapter eventListAdapter;
 
     @BindView(R.id.activity_event_recycler_view) RecyclerView recyclerView;
@@ -227,6 +233,15 @@ public class EventListActivity extends AppCompatActivity implements EventListCon
         if(!isDeleted) presenter.updateEvent(event, false);
         presenter.deleteAndRemoveShowingNotificationIfActive(event);
         presenter.deleteRequestCodes(event, isDeleted);
+    }
+
+    private boolean canStartActivity(Intent intent) {
+        try {
+            startActivity(intent);
+            return true;
+        } catch (ActivityNotFoundException e) {
+            return false;
+        }
     }
 
 }

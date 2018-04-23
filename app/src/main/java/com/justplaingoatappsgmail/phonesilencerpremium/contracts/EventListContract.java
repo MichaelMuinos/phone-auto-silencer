@@ -23,6 +23,7 @@ public interface EventListContract {
         List<Integer> getEventRequestCodes(Event event);
         Calendar setCalendar(int day, int hour, int minute);
         int getIncrementedRequestCode();
+        int getNumberOfEvents();
         void addRequestCodes(Event event, List<Integer> requestCodes);
         void updateEvent(Event event, boolean update);
         void deleteEvent(Event event);
