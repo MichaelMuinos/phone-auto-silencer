@@ -9,8 +9,8 @@ android {
         applicationId "com.justplaingoatappsgmail.phonesilencerpremium"
         minSdkVersion 16
         targetSdkVersion 25
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "1.1"
     }
     buildTypes {
         release {
@@ -39,8 +39,6 @@ dependencies {
     compile 'com.wdullaer:materialdatetimepicker:3.2.2'
     // tag view
     compile 'com.veinhorn.tagview:library:1.0.4'
-    // dialog view
-    compile 'com.afollestad.material-dialogs:core:0.9.4.5'
     // realm adapters
     compile 'io.realm:android-adapters:2.0.0'
 }
